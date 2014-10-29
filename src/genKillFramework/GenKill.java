@@ -2,52 +2,60 @@ package genKillFramework;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import CFG.ControlFlowGraph;
 import CFG.ControlFlowInformation;
 import CFG.Node;
+import IntermediateLanguage.Register;
 
-public class GenKill<T>
+public class GenKill
 {
 	private ControlFlowGraph cfg;
-	private Optimisation<T> opt;
+	private Optimisation<Register> opt;
 	private Map<Node, ControlFlowInformation> outMap;
 	private Map<Node, ControlFlowInformation> inMap; 
 	
 	
-	public GenKill(ControlFlowGraph cfg, Optimisation<T> opt)
+	public GenKill(ControlFlowGraph cfg, Optimisation<Register> opt)
 	{
 		this.cfg = cfg; 
 		this.opt = opt;
 	}
 	
-	public Set<T> optimiseBackward(Node n)
+	public Set<Register> optimiseBackward(Node n)
 	{
-		Set<T> result = new HashSet<T>();
-		List<Node> nextNodes = new ArrayList<Node>();
- 		
-		if(opt.isForward)
-			nextNodes = n.getAllPredecessors();
- 		else
- 			nextNodes = n.getAllSuccessors();
- 		
-		for(Node next : nextNodes)
+		boolean isChanged = true; 
+		
+		/*From the end of the CFG*/
+		List<Node> bfsOrdering = cfg.bfs(false);
+		
+		while(isChanged)
 		{
-			Set<T> genNodes = opt.gen(next);
-			Set<T> killNodes = opt.kill(next);
-			Set<T> nextNodeResult = optimise(next);
-			nextNodeResult.removeAll(killNodes);
-			nextNodeResult.addAll(genNodes);
-			
-			opt.merge(result, nextNodeResult);
+			isChanged = false;
+			for(Node i : bfsOrdering)
+			{
+				Set<Register> result = new HashSet<Register>();
+				for(Node j : n.getAllSuccessors())
+				{
+					result = opt.merge(result, opt.transfer(i));
+				}
+				//Union with old to keep monotonicity 
+				int oldCount = n.getOut().size();
+				n.getOut().addAll(result);
+				if(oldCount != n.getOut().size())
+					isChanged = true; 
+			}
 		}
-		return result;
+		
 	}
+}
 	
-	public Set<T> optimiseForward()
+/*	public Set<T> optimiseForward()
 	{
 		Node next = cfg.start.getAllSuccessors()
 		
@@ -73,5 +81,5 @@ public class GenKill<T>
 		
 		
 		return result;
-	}
-}
+	}*/
+

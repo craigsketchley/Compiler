@@ -45,5 +45,15 @@ public class LiveVariableOptimisation extends Optimisation<Register>
 		return result;
 		
 	}
+	
+	public Set<Register> transfer(Node n)
+	{
+		Set<Register> result = new HashSet<Register>();
+		result.addAll(n.getOut());
+		result.removeAll(kill(n));
+		result.addAll(gen(n));
+		return result;
+		
+	}
 
 }

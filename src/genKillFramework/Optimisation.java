@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import CFG.*;
+import IntermediateLanguage.Register;
 
 public abstract class Optimisation<T>
 {
@@ -16,8 +17,10 @@ public abstract class Optimisation<T>
 	public abstract Set<T> kill(Node n);
 
 	public abstract Set<T> merge(Set<T> s1, Set<T> s2);
-		
-	public void optimise(Node n, Node next)
+	
+	public abstract Set<Register> transfer(Node n);
+	
+	/*public void optimise(Node n, Node next)
 	{
 		//The Out of node n should be the result
 		n.getOutCfInfo();
@@ -38,5 +41,5 @@ public abstract class Optimisation<T>
 		
 		
 		return result;
-	}
+	}*/
 }

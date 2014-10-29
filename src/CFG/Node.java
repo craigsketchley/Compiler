@@ -1,5 +1,6 @@
 package CFG;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,6 +73,14 @@ public class Node
 	@Override
 	public String toString()
 	{
-		return blockId + " " + st;
+		return blockId + " " + st + " : " + " set " + out;
 	}
+
+	public Set<Register> getOut()
+	{
+		// TODO Auto-generated method stub
+		return out;
+	}
+	
+	
 }
