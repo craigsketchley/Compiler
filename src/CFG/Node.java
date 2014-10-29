@@ -34,6 +34,13 @@ public class Node
 		out = new HashSet<Register>();
 	}
 	
+	public boolean isPlaceholder()
+	{
+		if(st == null)
+			return true;
+		return false;
+	}
+	
 	public Instruction getInstruction()
 	{
 		return st;
@@ -57,6 +64,11 @@ public class Node
 	public void clearPredecessors()
 	{
 		predecessors = new HashSet<Node>();
+	}
+	
+	public void removePredecessor(Node p)
+	{
+		predecessors.remove(p);
 	}
 	
 	public int getBlockId()

@@ -18,7 +18,7 @@ public class ControlFlowGraphTest
 		Function function = new Function("test1", Arrays.asList("x"));
 		Block block = new Block(0);
 		block.instructions.add(new LdInstruction(new Register(1), "x"));
-		block.instructions.add(new BrInstruction(new Register(1), 1, 2));
+		block.instructions.add(new BrInstruction(new Register(1), 1, 1));
 		function.blocks.add(block);
 		
 		block = new Block(1);
@@ -38,14 +38,25 @@ public class ControlFlowGraphTest
 		function.blocks.add(block);
 	
 		
-//		System.out.println(function);
-//		System.out.println("OPTIMIZING");
+		System.out.println(function);
+		System.out.println("OPTIMIZING");
 		ControlFlowGraph cfg = new ControlFlowGraph(function);
-		System.out.println(cfg);
+		//System.out.println(cfg);
 		
 		cfg.removeUnreachableCode();
 		Function f2 = cfg.convertToFunction();
-//		System.out.println(f2);
+		System.out.println(f2);
+		
+	}
+	
+	@Test
+	public void testCFGPrint()
+	{
+		Program program = Parser.parse("input/example");
+		for (Function f : program.functions) {
+			ControlFlowGraph cfg = new ControlFlowGraph(f);
+			System.out.println(cfg);			
+		}
 		
 	}
 

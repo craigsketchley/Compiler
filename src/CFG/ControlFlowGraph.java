@@ -5,6 +5,7 @@ import genKillFramework.Optimisation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -94,27 +95,18 @@ public class ControlFlowGraph
 	 */
 	public void removeUnreachableCode()
 	{
+		//perform a dfs to find all reachable nodes
+		List<Node> ordering = dfs(true);
 		
-		
-		Queue<Node> queue = new LinkedList<Node>();
-		
-		List<Node> visited = new ArrayList<Node>();
-		
-		queue.add(start);
-		while(!queue.isEmpty())
-		{
-			Node n = queue.poll();
-			visited.add(n);
-			
-			for(Node s : n.getAllSuccessors())
-			{
-				if(!visited.contains(s))
-				{	
-					s.clearPredecessors();
-					queue.add(s);
+		//for each reachable node
+		for(Node n : ordering) {
+			//iterate over all predecessors, cutting links from unreachable nodes
+			Iterator<Node> it = n.getAllPredecessors().iterator();
+			while(it.hasNext()) {
+				if(!ordering.contains(it.next())) {
+					it.remove();
 				}
-				s.addPredecessor(n);
-			}			
+			}
 		}
 	}
 	
