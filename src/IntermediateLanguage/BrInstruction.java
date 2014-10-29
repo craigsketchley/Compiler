@@ -1,12 +1,12 @@
 package IntermediateLanguage;
 
-public class BranchInstruction implements Instruction {
+public class BrInstruction implements Instruction {
 	
-	public String register;
+	public int register;
 	public int blockTrue;
 	public int blockFalse;
 	
-	BranchInstruction(String register, int block_true, int block_false) {
+	public BrInstruction(int register, int block_true, int block_false) {
 		this.register = register;
 		this.blockTrue = block_true;
 		this.blockFalse = block_false;

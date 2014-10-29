@@ -4,11 +4,11 @@ import java.util.List;
 
 public class CallInstruction implements Instruction {
 	
-	public String register;
+	public int register;
 	public String functionId;
-	public List<String> args;
+	public List<Integer> args;
 	
-	CallInstruction(String register, String functionId, List<String> args) {
+	public CallInstruction(int register, String functionId, List<Integer> args) {
 		this.register = register;
 		this.functionId = functionId;
 		this.args = args;

@@ -5,11 +5,11 @@ package IntermediateLanguage;
 public class BinOpInstruction implements Instruction {
 	
 	public String op;
-	public String dest;
-	public String lhs;
-	public String rhs;
+	public int dest;
+	public int lhs;
+	public int rhs;
 	
-	BinOpInstruction(String op, String dest, String lhs, String rhs) {
+	public BinOpInstruction(String op, int dest, int lhs, int rhs) {
 		this.op = op;
 		this.dest = dest;
 		this.rhs = lhs;
