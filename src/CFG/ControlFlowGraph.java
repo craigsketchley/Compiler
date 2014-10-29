@@ -55,9 +55,12 @@ public class ControlFlowGraph
 				if(j == 0)
 				{
 					tempBlockMap.put(blocks.get(i).id, n);
-					if(i==0)
+					if(i == 0)
+					{
 						//This is the root node
 						start.addSuccessor(n);
+						n.addPredecessor(start);
+					}
 				}
 				tempNodeList.add(n);		
 			}
@@ -78,14 +81,16 @@ public class ControlFlowGraph
 				if(falseId != trueId)
 				{
 					n.addSuccessor(tempBlockMap.get(trueId));
+					tempBlockMap.get(trueId).addPredecessor(n);
 				}
 				n.addSuccessor(tempBlockMap.get(falseId));
-				
+				tempBlockMap.get(falseId).addPredecessor(n);
 			}
 			
 			//otherwise, if the statement is a return instruction, it is followed by end
 			else if(st instanceof RetInstruction)
 			{
+				n.addSuccessor(end);
 				end.addPredecessor(n);
 			}
 			
@@ -93,6 +98,7 @@ public class ControlFlowGraph
 			else if(i < tempNodeList.size() - 1)
 			{
 				n.addSuccessor(tempNodeList.get(i + 1));
+				tempNodeList.get(i + 1).addPredecessor(n);
 			}
 			
 			//otherwise, error? or end of function without return?

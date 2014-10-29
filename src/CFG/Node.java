@@ -10,40 +10,42 @@ import IntermediateLanguage.Register;
 public class Node
 {
 	private int blockId; 
-	private Instruction st;
+	private Instruction instruction;
 	//private ControlFlowInformation in;
 	private Set<Register> out; 
 	private Set<Node> successors; 
 	private Set<Node> predecessors; 
 	
+	/**
+	 * default constructor
+	 * returns a sentinel node with invalid block id (-1) and null statement
+	 */
 	public Node()
 	{
-		this.blockId = -1;
-		this.st = null;
-		successors = new HashSet<Node>();
-		predecessors = new HashSet<Node>();
-		out = new HashSet<Register>();
+		this(-1, null);
 	}
 	
-	public Node(int blockId, Instruction st)
+	/**
+	 * @param blockId
+	 * @param st
+	 */
+	public Node(int blockId, Instruction instruction)
 	{
 		this.blockId = blockId;
-		this.st = st;
+		this.instruction = instruction;
 		successors = new HashSet<Node>();
 		predecessors = new HashSet<Node>();
 		out = new HashSet<Register>();
 	}
 	
-	public boolean isPlaceholder()
+	public boolean isSentinel()
 	{
-		if(st == null)
-			return true;
-		return false;
+		return instruction == null;
 	}
 	
 	public Instruction getInstruction()
 	{
-		return st;
+		return instruction;
 	}
 	
 	public Set<Node> getAllSuccessors()
@@ -58,7 +60,6 @@ public class Node
 	public void addPredecessor(Node p)
 	{
 		this.predecessors.add(p);
-		p.successors.add(this);
 	}
 	
 	public void clearPredecessors()
@@ -76,23 +77,20 @@ public class Node
 		return blockId;
 	}
 	
-	public void addSuccessor(Node s)
+	public void addSuccessor(Node successor)
 	{
-		this.successors.add(s);
-		s.predecessors.add(this);
+		this.successors.add(successor);
 	}
 	
 	@Override
 	public String toString()
 	{
-		return blockId + " " + st + " : " + " set " + out;
+		return String.format("%d %s : set %s", blockId, instruction, out);
 	}
 
 	public Set<Register> getOut()
 	{
-		// TODO Auto-generated method stub
 		return out;
 	}
-	
-	
+		
 }
