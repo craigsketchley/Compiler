@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface Instruction 
 {
-	public List<Integer> getReferencedRegisters();
+	public List<Register> getReferencedRegisters();
 	
-	public List<Integer> getAssignedRegisters();
-
+	public List<Register> getAssignedRegisters();
 }

@@ -3,41 +3,42 @@ package genKillFramework;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import IntermediateLanguage.*;
 
 import CFG.Node;
 import IntermediateLanguage.Instruction;
 
-public class LiveVariableOptimisation extends Optimisation<Integer>
+public class LiveVariableOptimisation extends Optimisation<Register>
 {
 
 	@Override
-	public Set<Integer> gen(Node n)
+	public Set<Register> gen(Node n)
 	{
-		Set<Integer> result = new HashSet<Integer>();
+		Set<Register> result = new HashSet<Register>();
 		
 		Instruction instruction = n.getInstruction();
-		List<Integer> usedRegisters = instruction.getReferencedRegisters();	
+		List<Register> usedRegisters = instruction.getReferencedRegisters();	
 		result.addAll(usedRegisters);
 		
 		return result;
 	}
 
 	@Override
-	public Set<Integer> kill(Node n)
+	public Set<Register> kill(Node n)
 	{
-		Set<Integer> result = new HashSet<Integer>();
+		Set<Register> result = new HashSet<Register>();
 		
 		Instruction instruction = n.getInstruction();
-		List<Integer> killedRegisters = instruction.getAssignedRegisters();	
+		List<Register> killedRegisters = instruction.getAssignedRegisters();	
 		result.addAll(killedRegisters);
 		
 		return result;
 	}
 
 	@Override
-	public Set<Integer> merge(Set<Integer> s1, Set<Integer> s2)
+	public Set<Register> merge(Set<Register> s1, Set<Register> s2)
 	{
-		Set<Integer> result = new HashSet<Integer>();
+		Set<Register> result = new HashSet<Register>();
 		result.addAll(s1);
 		result.addAll(s2);
 		
