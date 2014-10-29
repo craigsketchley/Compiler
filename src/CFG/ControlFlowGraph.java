@@ -24,7 +24,7 @@ public class ControlFlowGraph
 		//ASSUME BLOCKS ARE NOT EMPTY
 		for(int i = 0; i < blocks.size(); ++i)
 		{	
-			List<Instruction> instructions = blocks.get(i).insts;
+			List<Instruction> instructions = blocks.get(i).instructions;
 			
 			for(int j=0; j < instructions.size(); ++j)
 			{
@@ -69,47 +69,7 @@ public class ControlFlowGraph
 	}
 	
 	
-	public class Node
-	{
-		private int blockId; 
-		private Instruction st;
-		private ArrayList<Node> successors; 
-		private ArrayList<Node> predecessors; 
-		
-		public Node(int blockId, Instruction st)
-		{
-			this.blockId = blockId;
-			this.st = st;
-			successors = new ArrayList<Node>();
-			predecessors = new ArrayList<Node>();
-		}
-		
-		public Instruction getInstruction()
-		{
-			return st;
-		}
-		
-		public ArrayList<Node> getAllSuccessors()
-		{
-			return successors;
-		}
-		public ArrayList<Node> getAllPredecessors() 
-		{
-			return predecessors;
-		}
-		
-		public void addPredecessor(Node p)
-		{
-			this.predecessors.add(p);
-			p.successors.add(this);
-		}
-		
-		public void addSuccessor(Node s)
-		{
-			this.successors.add(s);
-			s.predecessors.add(this);
-		}
-	}
+	
 	
 	
 	
