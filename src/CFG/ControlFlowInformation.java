@@ -1,6 +1,12 @@
 package CFG;
 
-public class ControlFlowInformation
-{
+import genKillFramework.Optimisation;
 
+public interface ControlFlowInformation
+{
+	public void addInfo();
+	
+	public void deleteInfo();
+	
+	public void clearInfo();
 }

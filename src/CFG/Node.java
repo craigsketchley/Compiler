@@ -10,6 +10,8 @@ public class Node
 {
 	private int blockId; 
 	private Instruction st;
+	private ControlFlowInformation in;
+	private ControlFlowInformation out; 
 	private Set<Node> successors; 
 	private Set<Node> predecessors; 
 	

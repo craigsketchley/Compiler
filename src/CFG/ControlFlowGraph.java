@@ -141,7 +141,10 @@ public class ControlFlowGraph
 		return f;
 	}
 	
-	
+	public (Optimiser opt)
+	{
+		
+	}
 	
 	
 	
