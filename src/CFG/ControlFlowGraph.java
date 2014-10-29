@@ -4,6 +4,7 @@ import genKillFramework.Optimisation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -87,8 +88,14 @@ public class ControlFlowGraph
 		}
 	}
 	
+	/**
+	 * This optimisation attempts to remove any unreachable code,
+	 * using a DFS
+	 */
 	public void removeUnreachableCode()
 	{
+		
+		
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		List<Node> visited = new ArrayList<Node>();
@@ -203,5 +210,82 @@ public class ControlFlowGraph
 		return output;
 	}
 	
+	/**
+	 * for liveness
+	 * 
+	 * 2 point lattice (live or not live)
+	 * - represented as the set "out", where existence in set == live
+	 * 
+	 * at node n, each iteration:
+	 * 	union for each successor node m:
+	 * 			{registers_referenced_by_m} union { out_m / registers_set_by_m }
+	 *  union out_n (allowing for fixed-point iteration)
+	 *  
+	 *  Note that the order in which we evaluate the nodes in each iteration is irrelevant
+	 *  as registers_referenced_by_m will build up eventually.
+	 *  going from end to start will be faster, but we can't guarantee a perfect order, since
+	 *  the graph may have cycles.
+	 *  
+	 *  A BFS would be a reasonable heuristic for an ordering
+	 */
+	
+	/**
+	 * @param forward
+	 * @return returns a breadth first search ordering from start->end or end->start
+	 */
+	public List<Node> bfs(boolean forward) {
+
+		Queue<Node> queue = new LinkedList<Node>(); //pending nodes
+		Set<Node> visited = new HashSet<Node>(); //visited nodes, set for fast lookup
+		List<Node> ordered = new ArrayList<Node>(); //the ordering of the nodes
+
+		Node node = forward ? start : end; //current node
+		Set<Node> children = null; //children of current node
+		queue.add(node);
+
+		while(!queue.isEmpty()) {
+			node = queue.poll();
+			visited.add(node);
+			ordered.add(node);
+			//choose successors or predecessors depending on direction of search
+			children = forward ? node.getAllSuccessors() : node.getAllPredecessors();
+			for(Node child : children) {
+				if(!visited.contains(child)) {	
+					queue.add(child);
+				}
+			}
+		}
+		return ordered;
+	}
+
+	/**
+	 * @param forward
+	 * @return returns a depth first search ordering from start->end or end->start
+	 */
+	public List<Node> dfs(boolean forward) {
+
+		Stack<Node> stack = new Stack<Node>(); //pending nodes
+		Set<Node> visited = new HashSet<Node>(); //visited nodes, set for fast lookup
+		List<Node> ordered = new ArrayList<Node>(); //the ordering of the nodes
+
+		Node node = forward ? start : end; //current node
+		Set<Node> children = null; //children of current node
+		stack.add(node);
+
+		while(!stack.isEmpty()) {
+			node = stack.pop();
+			visited.add(node);
+			ordered.add(node);
+			//choose successors or predecessors depending on direction of search
+			children = forward ? node.getAllSuccessors() : node.getAllPredecessors();
+			for(Node child : children) {
+				if(!visited.contains(child)) {	
+					stack.add(child);
+				}
+			}
+		}
+		return ordered;
+	}
+
 
 } 
