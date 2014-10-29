@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class Function {
 
-	public List<Block> blocks;
 	public String id;
-	public List<String> vars;
+	public List<String> args;
+	public List<Block> blocks;
 	
-	public Function(String id, List<String> vars) {
+	public Function(String id, List<String> args) {
 		this.id = id;
-		this.vars = vars;
+		this.args = args;
 		this.blocks = new ArrayList<Block>(); //add blocks later
 	}	
 }

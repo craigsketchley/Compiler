@@ -1,6 +1,6 @@
 package IntermediateLanguage;
 
-public interface Statement {
+public interface Instruction {
 		
 
 }
