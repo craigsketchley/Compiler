@@ -34,6 +34,13 @@ public class Node
 		out = new HashSet<Register>();
 	}
 	
+	public boolean isPlaceholder()
+	{
+		if(st == null)
+			return true;
+		return false;
+	}
+	
 	public Instruction getInstruction()
 	{
 		return st;

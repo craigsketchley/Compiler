@@ -16,9 +16,12 @@ public class LiveVariableOptimisation extends Optimisation<Register>
 	{
 		Set<Register> result = new HashSet<Register>();
 		
-		Instruction instruction = n.getInstruction();
-		List<Register> usedRegisters = instruction.getReferencedRegisters();	
-		result.addAll(usedRegisters);
+		if(!n.isPlaceholder())
+		{
+			Instruction instruction = n.getInstruction();
+			List<Register> usedRegisters = instruction.getReferencedRegisters();	
+			result.addAll(usedRegisters);
+		}
 		
 		return result;
 	}
@@ -28,9 +31,12 @@ public class LiveVariableOptimisation extends Optimisation<Register>
 	{
 		Set<Register> result = new HashSet<Register>();
 		
-		Instruction instruction = n.getInstruction();
-		List<Register> killedRegisters = instruction.getAssignedRegisters();	
-		result.addAll(killedRegisters);
+		if(!n.isPlaceholder())
+		{
+			Instruction instruction = n.getInstruction();
+			List<Register> killedRegisters = instruction.getAssignedRegisters();	
+			result.addAll(killedRegisters);
+		}
 		
 		return result;
 	}
