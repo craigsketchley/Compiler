@@ -16,4 +16,8 @@ public class BinOpInstruction implements Instruction {
 		this.rhs = rhs;
 	}
 
+	public String toString() {
+		return String.format("(%s r%d r%d r%d)", op, dest, lhs, rhs);
+	}
+	
 }

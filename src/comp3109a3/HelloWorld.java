@@ -50,6 +50,7 @@ public class HelloWorld {
 		program.functions.add(function);
 		
 		//program now is the AST for factorial program
+		System.out.println(program);
 
 	}
 

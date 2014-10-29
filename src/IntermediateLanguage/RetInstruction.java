@@ -8,4 +8,8 @@ public class RetInstruction implements Instruction {
 		this.register = register;
 	}
 
+	public String toString() {
+		return String.format("(ret r%d)", register);
+	}
+
 }

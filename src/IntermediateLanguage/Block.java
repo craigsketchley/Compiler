@@ -11,5 +11,14 @@ public class Block {
 	public Block(int id) {
 		this.id = id;
 		this.instructions = new ArrayList<Instruction>();
-	}	
+	}
+	
+	public String toString() {
+		String output = String.format("(%d  ", id);
+		for(Instruction i : instructions) {
+			output += i.toString() + "\n        ";
+		}
+		return output + ")";
+	}
+	
 }

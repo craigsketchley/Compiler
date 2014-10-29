@@ -9,5 +9,9 @@ public class LcInstruction implements Instruction {
 		this.register = register;
 		this.value = value;
 	}
+	
+	public String toString() {
+		return String.format("(lc r%d %d)", register, value);
+	}
 
 }

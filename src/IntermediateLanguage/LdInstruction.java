@@ -10,4 +10,8 @@ public class LdInstruction implements Instruction {
 		this.variable = variable;
 	}
 
+	public String toString() {
+		return String.format("(ld r%d %s)", register, variable);
+	}
+
 }
