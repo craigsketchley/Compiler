@@ -15,11 +15,10 @@ public class ControlFlowGraphTest
 	@Test
 	public void test()
 	{
-		Program program = new Program();
 		Function function = new Function("test1", Arrays.asList("x"));
 		Block block = new Block(0);
 		block.instructions.add(new LdInstruction(new Register(1), "x"));
-		block.instructions.add(new BrInstruction(new Register(1), 1, 1));
+		block.instructions.add(new BrInstruction(new Register(1), 1, 2));
 		function.blocks.add(block);
 		
 		block = new Block(1);
@@ -39,14 +38,14 @@ public class ControlFlowGraphTest
 		function.blocks.add(block);
 	
 		
-		System.out.println(function);
-		System.out.println("OPTIMIZING");
+//		System.out.println(function);
+//		System.out.println("OPTIMIZING");
 		ControlFlowGraph cfg = new ControlFlowGraph(function);
+		System.out.println(cfg);
+		
 		cfg.removeUnreachableCode();
 		Function f2 = cfg.convertToFunction();
-		if(f2 == null)
-			System.out.println("is null");
-		System.out.println(f2);
+//		System.out.println(f2);
 		
 	}
 

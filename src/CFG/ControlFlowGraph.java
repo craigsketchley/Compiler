@@ -147,7 +147,7 @@ public class ControlFlowGraph
 	
 	public String toString()
 	{
-		StringBuffer output = new StringBuffer("digraph " + originalFunction.id + " {\n\t");
+		String output = "digraph " + originalFunction.id + " {\n";
 		
 		LinkedList<Node> queue = new LinkedList<>();
 		ArrayList<Node> visited = new ArrayList<>();
@@ -163,7 +163,10 @@ public class ControlFlowGraph
 		{
 			Node n = queue.poll();
 			visited.add(n);
-			output.append("\t" + current + "[label=\"" + n.toString() + "\"];\n");
+			
+			// Watch out for the start/end nodes with no instructions...
+			output += "\t" + current + " [label=\"" + n + "\"];\n";				
+			
 			nodeChars.put(n, current++);
 			
 			for (Node s : n.getAllSuccessors())
@@ -174,17 +177,23 @@ public class ControlFlowGraph
 			}
 		}
 		
+		output += '\n';
+				
 		// Iterate through visited nodes, print all the links...
 		for (Node currentNode : visited) {
 			Set<Node> successors = currentNode.getAllSuccessors();
 			
+//			System.out.println(currentNode);
+//			System.out.println(successors);
 			for (Node neighbour : successors) {
-				output.append("\t" + nodeChars.get(currentNode) + " -> " + nodeChars.get(neighbour) + ";\n");
+				output += "\t" +
+						nodeChars.get(currentNode) + " -> " +
+						nodeChars.get(neighbour) + ";\n";
 			}
 		}
+		output += "}\n";
 		
-		
-		return output.toString();
+		return output;
 	}
 	
 

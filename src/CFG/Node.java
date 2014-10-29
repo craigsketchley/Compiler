@@ -63,4 +63,10 @@ public class Node
 		this.successors.add(s);
 		s.predecessors.add(this);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return blockId + " " + st;
+	}
 }
