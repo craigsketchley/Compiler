@@ -7,19 +7,31 @@ import java.util.List;
 public class BinOpInstruction implements Instruction {
 	
 	public String op;
-	public int dest;
-	public int lhs;
-	public int rhs;
+	public Register dest;
+	public Register lhs;
+	public Register rhs;
 	
-	public BinOpInstruction(String op, int dest, int lhs, int rhs) {
+	public BinOpInstruction(String op, Register dest, Register lhs, Register rhs) {
 		this.op = op;
 		this.dest = dest;
-		this.rhs = lhs;
+		this.lhs = lhs;
 		this.rhs = rhs;
 	}
 
 	public String toString() {
-		return String.format("(%s r%d r%d r%d)", op, dest, lhs, rhs);
+		return String.format("(%s %s %s %s)", op, dest, lhs, rhs);
+	}
+
+	@Override
+	public List<Integer> getReferencedRegisters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> getAssignedRegisters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

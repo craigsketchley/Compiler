@@ -4,18 +4,30 @@ import java.util.List;
 
 public class BrInstruction implements Instruction {
 	
-	public int register;
+	public Register register;
 	public int blockTrue;
 	public int blockFalse;
 	
-	public BrInstruction(int register, int block_true, int block_false) {
+	public BrInstruction(Register register, int blockTrue, int blockFalse) {
 		this.register = register;
-		this.blockTrue = block_true;
-		this.blockFalse = block_false;
+		this.blockTrue = blockTrue;
+		this.blockFalse = blockFalse;
 	}
 
 	public String toString() {
-		return String.format("(br r%d %d %d)", register, blockTrue, blockFalse);
+		return String.format("(br %s %d %d)", register, blockTrue, blockFalse);
+	}
+
+	@Override
+	public List<Integer> getReferencedRegisters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> getAssignedRegisters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
