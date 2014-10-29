@@ -27,7 +27,7 @@ public class GenKill
 		this.opt = opt;
 	}
 	
-	public Set<Register> optimiseBackward(Node n)
+	public void optimiseBackward()
 	{
 		boolean isChanged = true; 
 		
@@ -37,12 +37,12 @@ public class GenKill
 		while(isChanged)
 		{
 			isChanged = false;
-			for(Node i : bfsOrdering)
+			for(Node n : bfsOrdering)
 			{
 				Set<Register> result = new HashSet<Register>();
 				for(Node j : n.getAllSuccessors())
 				{
-					result = opt.merge(result, opt.transfer(i));
+					result = opt.merge(result, opt.transfer(n));
 				}
 				//Union with old to keep monotonicity 
 				int oldCount = n.getOut().size();
