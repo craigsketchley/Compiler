@@ -10,4 +10,8 @@ public class StInstruction implements Instruction {
 		this.register = register;
 	}
 
+	public String toString() {
+		return String.format("(st %s r%d)", id, register);
+	}
+
 }

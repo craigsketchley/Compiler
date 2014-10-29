@@ -12,4 +12,8 @@ public class BrInstruction implements Instruction {
 		this.blockFalse = block_false;
 	}
 
+	public String toString() {
+		return String.format("(br r%d %d %d)", register, blockTrue, blockFalse);
+	}
+
 }

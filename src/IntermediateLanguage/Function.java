@@ -14,6 +14,13 @@ public class Function {
 		this.args = args;
 		this.blocks = new ArrayList<Block>(); //add blocks later
 	}
-	
+
+	public String toString() {
+		String output = String.format("(%s (%s)\n    ", id, args.toString());
+		for(Block b : blocks) {
+			output += b.toString() + "\n    ";
+		}
+		return output + " )";
+	}
 	
 }

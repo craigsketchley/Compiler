@@ -11,4 +11,12 @@ public class Program {
 		functions = new ArrayList<Function>();
 	}
 	
+	public String toString() {
+		String output = "( ";
+		for(Function f : functions) {
+			output += f.toString() + "\n  ";
+		}
+		return output + " )";
+	}
+	
 }
