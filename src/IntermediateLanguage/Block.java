@@ -6,10 +6,10 @@ import java.util.ArrayList;
 public class Block {
 
 	public int id;
-	public List<Instruction> statements;
+	public List<Instruction> insts;
 	
 	public Block(int id) {
 		this.id = id;
-		this.statements = new ArrayList<Instruction>();
+		this.insts = new ArrayList<Instruction>();
 	}	
 }

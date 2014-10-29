@@ -1,9 +1,14 @@
 package CFG;
 
-import java.beans.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Function;
+import java.util.List;
+
+import IntermediateLanguage.Block;
+import IntermediateLanguage.BranchInstruction;
+import IntermediateLanguage.Function;
+import IntermediateLanguage.Instruction;
+import IntermediateLanguage.ReturnInstruction;
 
 public class ControlFlowGraph 
 {
@@ -15,18 +20,18 @@ public class ControlFlowGraph
 		HashMap<Integer, Node> tempBlockMap = new HashMap<Integer, Node>(); 
 		
 		
-		ArrayList<Block> blocks = f.getBlocks();
+		List<Block> blocks = f.blocks;
 		//ASSUME BLOCKS ARE NOT EMPTY
 		for(int i = 0; i < blocks.size(); ++i)
 		{	
-			ArrayList<Statement> statements = blocks.get(i).getStatements();
+			List<Instruction> instructions = blocks.get(i).insts;
 			
-			for(int j=0; j < statements.size(); ++j)
+			for(int j=0; j < instructions.size(); ++j)
 			{
-				Node n = new Node(blocks.get(i).getBlockId(), statements.get(j));	
+				Node n = new Node(blocks.get(i).id, instructions.get(j));	
 				if(j == 0)
 				{
-					tempBlockMap.put(blocks.get(i).getBlockId(), n);
+					tempBlockMap.put(blocks.get(i).id, n);
 					if(i==0)
 						root = n;
 				}
@@ -39,19 +44,19 @@ public class ControlFlowGraph
 		for(int i = 0; i < tempNodeList.size(); ++i)
 		{
 			Node n = tempNodeList.get(i);
-			Statement st = n.getStatement();
-			if(st instanceof BranchStatement)
+			Instruction st = n.getInstruction();
+			if(st instanceof BranchInstruction)
 			{
-				int firstId = ((BranchStatement) st).getFirstBranch();
-				int secondId = ((BranchStatement) st).getSecondBranch();
-				if(firstId != secondId)
+				int trueId = ((BranchInstruction) st).blockTrue;
+				int falseId = ((BranchInstruction) st).blockFalse;
+				if(falseId != trueId)
 				{
-					n.addSuccessor(tempBlockMap.get(secondId));
+					n.addSuccessor(tempBlockMap.get(trueId));
 				}
-				n.addSuccessor(tempBlockMap.get(firstId));
+				n.addSuccessor(tempBlockMap.get(falseId));
 				
 			}
-			else if(st instanceof ReturnStatement)
+			else if(st instanceof ReturnInstruction)
 			{
 				
 			}
@@ -67,11 +72,11 @@ public class ControlFlowGraph
 	public class Node
 	{
 		private int blockId; 
-		private Statement st;
+		private Instruction st;
 		private ArrayList<Node> successors; 
 		private ArrayList<Node> predecessors; 
 		
-		public Node(int blockId, Statement st)
+		public Node(int blockId, Instruction st)
 		{
 			this.blockId = blockId;
 			this.st = st;
@@ -79,16 +84,16 @@ public class ControlFlowGraph
 			predecessors = new ArrayList<Node>();
 		}
 		
-		public Statement getStatement()
+		public Instruction getInstruction()
 		{
 			return st;
 		}
 		
-		public ArrayList<Node> getAllSuccessors();
+		public ArrayList<Node> getAllSuccessors()
 		{
 			return successors;
 		}
-		public ArrayList<Node> getAllPredecessors(); 
+		public ArrayList<Node> getAllPredecessors() 
 		{
 			return predecessors;
 		}
