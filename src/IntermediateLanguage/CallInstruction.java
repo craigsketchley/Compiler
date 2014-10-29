@@ -20,4 +20,18 @@ public class CallInstruction implements Instruction {
 		return String.format("(call r%d %s %s)", register, functionId, argString);
 	}
 
+	@Override
+	public List<Integer> getReferencedRegisters()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> getAssignedRegisters()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

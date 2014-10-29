@@ -134,7 +134,8 @@ public class ControlFlowGraph
 		/*Insert into the Function in the original order*/
 		for(int id : originalBlockIdSequence)
 		{
-			f.blocks.add(blockMap.get(id));
+			if(blockMap.containsKey(id))
+				f.blocks.add(blockMap.get(id));
 		}
 		
 		return f;
