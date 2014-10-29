@@ -4,7 +4,7 @@ import genKillFramework.Optimisation;
 
 public interface ControlFlowInformation
 {
-	public void addInfo();
+	public void addInfo(ControlFlow);
 	
 	public void deleteInfo();
 	

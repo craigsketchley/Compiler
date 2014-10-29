@@ -1,5 +1,7 @@
 package CFG;
 
+import genKillFramework.Optimisation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,13 +10,16 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import IntermediateLanguage.*;
+import IntermediateLanguage.Block;
+import IntermediateLanguage.BrInstruction;
+import IntermediateLanguage.Function;
+import IntermediateLanguage.Instruction;
+import IntermediateLanguage.RetInstruction;
 
 public class ControlFlowGraph 
 {
 	public Node start; 
 	public Node end;
-	public Node root;
 	public Function originalFunction;
 	public ArrayList<Integer> originalBlockIdSequence;
 	
@@ -142,11 +147,10 @@ public class ControlFlowGraph
 		return f;
 	}
 	
-	public (Optimiser opt)
+	public void flushControlFlowInfo()
 	{
 		
 	}
-	
 	
 	public String toString()
 	{

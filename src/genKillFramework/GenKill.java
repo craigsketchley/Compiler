@@ -3,15 +3,19 @@ package genKillFramework;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import CFG.ControlFlowGraph;
+import CFG.ControlFlowInformation;
 import CFG.Node;
 
 public class GenKill<T>
 {
 	private ControlFlowGraph cfg;
 	private Optimisation<T> opt;
+	private Map<Node, ControlFlowInformation> outMap;
+	private Map<Node, ControlFlowInformation> inMap; 
 	
 	
 	public GenKill(ControlFlowGraph cfg, Optimisation<T> opt)
@@ -43,8 +47,13 @@ public class GenKill<T>
 		return result;
 	}
 	
-	public Set<T> optimiseForward(Node n, Set)
+	public Set<T> optimiseForward()
 	{
+		Node next = cfg.start.getAllSuccessors()
+		
+		
+		
+		
 		Set<T> result = new HashSet<T>();
 		List<Node> nextNodes = new ArrayList<Node>();
  		

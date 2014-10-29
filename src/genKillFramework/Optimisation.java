@@ -10,14 +10,13 @@ import CFG.*;
 public abstract class Optimisation<T>
 {
 	public boolean isForward;
-	public ControlFlowInformation cfInfoType;
 	
 	public abstract Set<T> gen(Node n);
 	
 	public abstract Set<T> kill(Node n);
 
 	public abstract Set<T> merge(Set<T> s1, Set<T> s2);
-	
+		
 	public void optimise(Node n, Node next)
 	{
 		//The Out of node n should be the result
