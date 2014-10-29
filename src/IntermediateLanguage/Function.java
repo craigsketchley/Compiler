@@ -15,5 +15,5 @@ public class Function {
 		this.blocks = new ArrayList<Block>(); //add blocks later
 	}
 	
-	
+
 }

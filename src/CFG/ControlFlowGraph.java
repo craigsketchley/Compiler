@@ -2,29 +2,41 @@ package CFG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
-import IntermediateLanguage.Block;
-import IntermediateLanguage.BranchInstruction;
-import IntermediateLanguage.Function;
-import IntermediateLanguage.Instruction;
-import IntermediateLanguage.ReturnInstruction;
+import IntermediateLanguage.*;
 
 public class ControlFlowGraph 
 {
-	private Node root;
+	public Node start; 
+	public Node end;
+	public Node root;
+	public Function originalFunction;
+	public ArrayList<Integer> originalBlockIdSequence;
+	
 		
 	public ControlFlowGraph(Function f)
 	{
+		start = new Node();
+		end = new Node();
+		originalFunction = f;
+		originalBlockIdSequence = new ArrayList<>();
+		
 		ArrayList<Node> tempNodeList = new ArrayList<Node>();
 		HashMap<Integer, Node> tempBlockMap = new HashMap<Integer, Node>(); 
 		
 		
 		List<Block> blocks = f.blocks;
-		//ASSUME BLOCKS ARE NOT EMPTY
+
 		for(int i = 0; i < blocks.size(); ++i)
 		{	
 			List<Instruction> instructions = blocks.get(i).instructions;
+			
+			// Add the block id to the sequence, to store the block ordering
+			originalBlockIdSequence.add(blocks.get(i).id);
 			
 			for(int j=0; j < instructions.size(); ++j)
 			{
@@ -33,7 +45,8 @@ public class ControlFlowGraph
 				{
 					tempBlockMap.put(blocks.get(i).id, n);
 					if(i==0)
-						root = n;
+						//This is the root node
+						start.addSuccessor(n);
 				}
 				tempNodeList.add(n);		
 			}
@@ -45,10 +58,10 @@ public class ControlFlowGraph
 		{
 			Node n = tempNodeList.get(i);
 			Instruction st = n.getInstruction();
-			if(st instanceof BranchInstruction)
+			if(st instanceof BrInstruction)
 			{
-				int trueId = ((BranchInstruction) st).blockTrue;
-				int falseId = ((BranchInstruction) st).blockFalse;
+				int trueId = ((BrInstruction) st).blockTrue;
+				int falseId = ((BrInstruction) st).blockFalse;
 				if(falseId != trueId)
 				{
 					n.addSuccessor(tempBlockMap.get(trueId));
@@ -56,9 +69,9 @@ public class ControlFlowGraph
 				n.addSuccessor(tempBlockMap.get(falseId));
 				
 			}
-			else if(st instanceof ReturnInstruction)
+			else if(st instanceof RetInstruction)
 			{
-				
+				end.addPredecessor(n);
 			}
 			else if(i < tempNodeList.size() - 1)
 			{
@@ -66,6 +79,65 @@ public class ControlFlowGraph
 			}
 			//Error ? or end of function without return?
 		}
+	}
+	
+	public void removeUnreachableCode()
+	{
+		Queue<Node> queue = new LinkedList<Node>();
+		
+		List<Node> visited = new ArrayList<Node>();
+		
+		queue.add(start);
+		while(!queue.isEmpty())
+		{
+			Node n = queue.poll();
+			visited.add(n);
+			
+			for(Node s : n.getAllSuccessors())
+			{
+				if(!visited.contains(s))
+				{	
+					s.clearPredecessors();
+					queue.add(s);
+				}
+				s.addPredecessor(n);
+			}			
+		}
+	}
+	
+	public Function convertToFunction()
+	{
+		Function f = new Function(originalFunction.id, originalFunction.args);
+		HashMap<Integer, Block> blockMap = new HashMap<Integer, Block>();
+		
+		Stack<Node> stack = new Stack<Node>();
+		List<Node> visited = new ArrayList<Node>();
+		
+		stack.push(start);
+		while(!stack.isEmpty())
+		{
+			Node n = stack.pop();
+			visited.add(n);
+			
+			int bId = n.getBlockId();
+			if(!blockMap.containsKey(bId))
+				blockMap.put(bId, new Block(bId));				
+			blockMap.get(bId).instructions.add(n.getInstruction());
+			
+			for(Node succ : n.getAllSuccessors())
+			{
+				if(!visited.contains(succ))
+					stack.push(succ);
+			}
+		}
+		
+		/*Insert into the Function in the original order*/
+		for(int id : originalBlockIdSequence)
+		{
+			f.blocks.add(blockMap.get(id));
+		}
+		
+		return f;
 	}
 	
 	
