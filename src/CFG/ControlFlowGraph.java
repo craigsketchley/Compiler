@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 import IntermediateLanguage.*;
@@ -143,7 +144,47 @@ public class ControlFlowGraph
 	
 	
 	
-	
+	public String toString()
+	{
+		StringBuffer output = new StringBuffer("digraph " + originalFunction.id + " {\n\t");
+		
+		LinkedList<Node> queue = new LinkedList<>();
+		ArrayList<Node> visited = new ArrayList<>();
+		
+		queue.add(start);
+		
+		HashMap<Node, Character> nodeChars = new HashMap<>();
+		
+		char current = 'A';
+		
+		// Setup all nodes with unique characters...
+		while (!queue.isEmpty())
+		{
+			Node n = queue.poll();
+			visited.add(n);
+			output.append("\t" + current + "[label=\"" + n.toString() + "\"];\n");
+			nodeChars.put(n, current++);
+			
+			for (Node s : n.getAllSuccessors())
+			{
+				if (!visited.contains(s)) {
+					queue.add(s);
+				}
+			}
+		}
+		
+		// Iterate through visited nodes, print all the links...
+		for (Node currentNode : visited) {
+			Set<Node> successors = currentNode.getAllSuccessors();
+			
+			for (Node neighbour : successors) {
+				output.append("\t" + nodeChars.get(currentNode) + " -> " + nodeChars.get(neighbour) + ";\n");
+			}
+		}
+		
+		
+		return output.toString();
+	}
 	
 
 } 
