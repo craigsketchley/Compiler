@@ -20,24 +20,27 @@ import IntermediateLanguage.RetInstruction;
 
 public class ControlFlowGraph 
 {
-	public Node start; 
-	public Node end;
-	public Function originalFunction;
+	public Node start; //sentinel node before the entry point of the function
+	public Node end; //sentinel node reached from all return statements
+	public Function originalFunction; //part of the original AST 
 	public ArrayList<Integer> originalBlockIdSequence;
 	
-		
-	public ControlFlowGraph(Function f)
+
+	/**
+	 * Construct a CFG based on a given function
+	 * @param function
+	 */
+	public ControlFlowGraph(Function function)
 	{
-		start = new Node();
-		end = new Node();
-		originalFunction = f;
-		originalBlockIdSequence = new ArrayList<>();
+		this.start = new Node();
+		this.end = new Node();
+		this.originalFunction = function;
+		this.originalBlockIdSequence = new ArrayList<>();
 		
 		ArrayList<Node> tempNodeList = new ArrayList<Node>();
 		HashMap<Integer, Node> tempBlockMap = new HashMap<Integer, Node>(); 
 		
-		
-		List<Block> blocks = f.blocks;
+		List<Block> blocks = originalFunction.blocks;
 
 		for(int i = 0; i < blocks.size(); ++i)
 		{	
@@ -66,6 +69,8 @@ public class ControlFlowGraph
 		{
 			Node n = tempNodeList.get(i);
 			Instruction st = n.getInstruction();
+			
+			//if the statement is a break instruction
 			if(st instanceof BrInstruction)
 			{
 				int trueId = ((BrInstruction) st).blockTrue;
@@ -77,15 +82,20 @@ public class ControlFlowGraph
 				n.addSuccessor(tempBlockMap.get(falseId));
 				
 			}
+			
+			//otherwise, if the statement is a return instruction, it is followed by end
 			else if(st instanceof RetInstruction)
 			{
 				end.addPredecessor(n);
 			}
+			
+			//otherwise, it is followed by the next one, if we are not at the end
 			else if(i < tempNodeList.size() - 1)
 			{
 				n.addSuccessor(tempNodeList.get(i + 1));
 			}
-			//Error ? or end of function without return?
+			
+			//otherwise, error? or end of function without return?
 		}
 	}
 	
