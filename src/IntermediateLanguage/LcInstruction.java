@@ -1,5 +1,7 @@
 package IntermediateLanguage;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class LcInstruction implements Instruction {
@@ -12,22 +14,19 @@ public class LcInstruction implements Instruction {
 		this.value = value;
 	}
 	
+	@Override
 	public String toString() {
 		return String.format("(lc %s %d)", register, value);
 	}
 
 	@Override
-	public List<Register> getReferencedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public List<Register> getReferencedRegisters() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public List<Register> getAssignedRegisters() {
+		return Arrays.asList(register);
 	}
 
 }

@@ -1,5 +1,6 @@
 package IntermediateLanguage;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,12 +14,18 @@ public class Block {
 		this.instructions = new ArrayList<Instruction>();
 	}
 	
+	@Override
 	public String toString() {
-		String output = String.format("(%d  ", id);
-		for(Instruction i : instructions) {
-			output += i.toString() + "\n        ";
+		String padding = "";
+		if(id < 10) padding = "  ";
+		else if(id < 100) padding = " ";
+		Iterator<Instruction> it = instructions.iterator();
+		StringBuilder output = new StringBuilder(String.format("(%d%s%s", id, padding, it.next()));
+		while(it.hasNext()) {
+			output.append(String.format("\n        %s", it.next()));
 		}
-		return output + ")";
+		output.append(" )");
+		return output.toString();
 	}
 	
 }

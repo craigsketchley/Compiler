@@ -1,5 +1,6 @@
 package IntermediateLanguage;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,13 +16,18 @@ public class Function {
 		this.blocks = new ArrayList<Block>(); //add blocks later
 	}
 
+	@Override
 	public String toString() {
+		
 		String argString = args.toString().replace(", ", " ");
 		argString = argString.substring(1, argString.length() - 1);
-		String output = String.format("(%s (%s)\n    ", id, argString);
-		for(Block b : blocks) {
-			output += b.toString() + "\n    ";
+
+		Iterator<Block> it = blocks.iterator();
+		StringBuilder output = new StringBuilder(String.format("(%s (%s)\n    %s", id, argString, it.next()));
+		while(it.hasNext()) {
+			output.append(String.format("\n    %s", it.next()));
 		}
-		return output + " )";
+		output.append(" )");
+		return output.toString();
 	}
 }

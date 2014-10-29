@@ -1,5 +1,6 @@
 package IntermediateLanguage;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CallInstruction implements Instruction {
@@ -22,13 +23,11 @@ public class CallInstruction implements Instruction {
 
 	@Override
 	public List<Register> getReferencedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return args; //TODO: deep copy?
 	}
 
 	@Override
 	public List<Register> getAssignedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(register);
 	}
 }
