@@ -1,4 +1,4 @@
-package comp3109a3;
+package IntermediateLanguage;
 
 public interface Statement {
 		
