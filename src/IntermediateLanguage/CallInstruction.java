@@ -21,29 +21,14 @@ public class CallInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Integer> getReferencedRegisters() {
+	public List<Register> getReferencedRegisters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Integer> getAssignedRegisters() {
+	public List<Register> getAssignedRegisters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public List<Integer> getReferencedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Integer> getAssignedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
