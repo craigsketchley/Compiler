@@ -1,5 +1,6 @@
 package IntermediateLanguage;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,11 +13,12 @@ public class Program {
 	}
 	
 	public String toString() {
-		String output = "( ";
-		for(Function f : functions) {
-			output += f.toString() + "\n  ";
+		Iterator<Function> it = functions.iterator();
+		StringBuilder output = new StringBuilder(String.format("( %s", it.next()));
+		while(it.hasNext()) {
+			output.append(String.format("\n  %s", it.next()));
 		}
-		return output + " )";
+		output.append(" )");
+		return output.toString();
 	}
-	
 }
