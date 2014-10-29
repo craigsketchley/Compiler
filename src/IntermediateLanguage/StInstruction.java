@@ -1,5 +1,7 @@
 package IntermediateLanguage;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class StInstruction implements Instruction {
@@ -12,22 +14,19 @@ public class StInstruction implements Instruction {
 		this.register = register;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("(st %s %s)", id, register);
 	}
 
 	@Override
-	public List<Register> getReferencedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public List<Register> getReferencedRegisters() {
+		return Arrays.asList(register);
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters()
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public List<Register> getAssignedRegisters() {
+		return Collections.emptyList();
 	}
 
 }

@@ -1,5 +1,7 @@
 package IntermediateLanguage;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class BrInstruction implements Instruction {
@@ -14,19 +16,18 @@ public class BrInstruction implements Instruction {
 		this.blockFalse = blockFalse;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("(br %s %d %d)", register, blockTrue, blockFalse);
 	}
 
 	@Override
 	public List<Register> getReferencedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(register);
 	}
 
 	@Override
 	public List<Register> getAssignedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 }

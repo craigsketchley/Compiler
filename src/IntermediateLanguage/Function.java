@@ -16,8 +16,9 @@ public class Function {
 		this.blocks = new ArrayList<Block>(); //add blocks later
 	}
 
+	@Override
 	public String toString() {
-
+		
 		String argString = args.toString().replace(", ", " ");
 		argString = argString.substring(1, argString.length() - 1);
 
@@ -28,7 +29,5 @@ public class Function {
 		}
 		output.append(" )");
 		return output.toString();
-	
-	
 	}
 }
