@@ -38,11 +38,14 @@ type Gen node info = node -> S.Set info
 type Kill = Gen
 
 
-type Merge = S.union | S.intersection
+type Merge info = S.Set info -> S.Set info -> S.Set info
 
 
--- genKill :: G.Graph -> Gen -> Kill -> 
+-- Need some way to control the direction?
 
+
+genKill :: ControlFlowGraph -> Gen -> Kill -> Merge -> 
+genKill graph gen kill merge = 
 
 
 

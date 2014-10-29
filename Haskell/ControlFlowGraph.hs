@@ -14,7 +14,7 @@ data Node
 
 type NodeMap = M.Map G.Vertex Node
 
-{- Raf and Dylan say Ben said we can optimise each function seperately
+{- Raf and Dylan say Ben said we can optimise each function separately
   therefore, the cfg only represents a list of statements, not functions
 -}
 
