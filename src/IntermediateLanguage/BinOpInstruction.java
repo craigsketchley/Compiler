@@ -1,5 +1,6 @@
 package IntermediateLanguage;
 
+import java.util.Arrays;
 import java.util.List;
 
 /* This is likely to change later into an interface (implemented by different operations */
@@ -18,19 +19,18 @@ public class BinOpInstruction implements Instruction {
 		this.rhs = rhs;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("(%s %s %s %s)", op, dest, lhs, rhs);
 	}
 
 	@Override
 	public List<Register> getReferencedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(lhs, rhs);
 	}
 
 	@Override
 	public List<Register> getAssignedRegisters() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(dest);
 	}
 }

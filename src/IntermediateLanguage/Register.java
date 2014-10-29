@@ -8,6 +8,7 @@ public class Register {
 		this.register = register;
 	}
 	
+	@Override
 	public String toString() {
 		return "r" + register;
 	}

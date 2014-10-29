@@ -12,6 +12,7 @@ public class Program {
 		functions = new ArrayList<Function>();
 	}
 	
+	@Override
 	public String toString() {
 		Iterator<Function> it = functions.iterator();
 		StringBuilder output = new StringBuilder(String.format("( %s", it.next()));

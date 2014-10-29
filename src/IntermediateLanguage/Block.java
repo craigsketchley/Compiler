@@ -14,6 +14,7 @@ public class Block {
 		this.instructions = new ArrayList<Instruction>();
 	}
 	
+	@Override
 	public String toString() {
 		String padding = "";
 		if(id < 10) padding = "  ";
