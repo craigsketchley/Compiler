@@ -16,7 +16,9 @@ public class Function {
 	}
 
 	public String toString() {
-		String output = String.format("(%s (%s)\n    ", id, args.toString());
+		String argString = args.toString().replace(", ", " ");
+		argString = argString.substring(1, argString.length() - 1);
+		String output = String.format("(%s (%s)\n    ", id, argString);
 		for(Block b : blocks) {
 			output += b.toString() + "\n    ";
 		}

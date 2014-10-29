@@ -15,7 +15,9 @@ public class CallInstruction implements Instruction {
 	}
 
 	public String toString() {
-		return String.format("(call r%d %s %s)", register, functionId, args);
+		String argString = args.toString().replace(", ", " ");
+		argString = argString.substring(1, argString.length() - 1);
+		return String.format("(call r%d %s %s)", register, functionId, argString);
 	}
 
 }
