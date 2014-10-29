@@ -117,103 +117,82 @@ public class ControlFlowGraph
 					it.remove();
 				}
 			}
+			/* we only remember the sentinel start/end nodes,
+			 * the unreachable nodes will be garbage collected
+			 */
 		}
-	}
-	
-	public Function convertToFunction()
-	{
-		Function f = new Function(originalFunction.id, originalFunction.args);
-		HashMap<Integer, Block> blockMap = new HashMap<Integer, Block>();
-		
-		Stack<Node> stack = new Stack<Node>();
-		List<Node> visited = new ArrayList<Node>();
-		
-		stack.push(start);
-		while(!stack.isEmpty())
-		{
-			Node n = stack.pop();
-			visited.add(n);
-			
-			int bId = n.getBlockId();
-			if(!blockMap.containsKey(bId))
-				blockMap.put(bId, new Block(bId));				
-			blockMap.get(bId).instructions.add(n.getInstruction());
-			
-			for(Node succ : n.getAllSuccessors())
-			{
-				if(!visited.contains(succ))
-					stack.push(succ);
-			}
-		}
-		
-		/*Insert into the Function in the original order*/
-		for(int id : originalBlockIdSequence)
-		{
-			if(blockMap.containsKey(id))
-				f.blocks.add(blockMap.get(id));
-		}
-		
-		return f;
-	}
-	
-	public void flushControlFlowInfo()
-	{
-		
-	}
-	
-	public String toString()
-	{
-		String output = "digraph " + originalFunction.id + " {\n";
-		
-		LinkedList<Node> queue = new LinkedList<>();
-		ArrayList<Node> visited = new ArrayList<>();
-		
-		queue.add(start);
-		
-		HashMap<Node, Character> nodeChars = new HashMap<>();
-		
-		char current = 'A';
-		
-		// Setup all nodes with unique characters...
-		while (!queue.isEmpty())
-		{
-			Node n = queue.poll();
-			visited.add(n);
-			
-			// Watch out for the start/end nodes with no instructions...
-			output += "\t" + current + " [label=\"" + n + "\"];\n";				
-			
-			nodeChars.put(n, current++);
-			
-			for (Node s : n.getAllSuccessors())
-			{
-				if (!visited.contains(s)) {
-					queue.add(s);
-				}
-			}
-		}
-		
-		output += '\n';
-				
-		// Iterate through visited nodes, print all the links...
-		for (Node currentNode : visited) {
-			Set<Node> successors = currentNode.getAllSuccessors();
-			
-//			System.out.println(currentNode);
-//			System.out.println(successors);
-			for (Node neighbour : successors) {
-				output += "\t" +
-						nodeChars.get(currentNode) + " -> " +
-						nodeChars.get(neighbour) + ";\n";
-			}
-		}
-		output += "}\n";
-		
-		return output;
 	}
 	
 	/**
-	 * for liveness
+	 * @return the reachable nodes of the function as an AST
+	 * 
+	 * TODO: perhaps this should output the whole CFG, not just reachable nodes
+	 */
+	public Function convertToFunction()
+	{
+		Function function = new Function(originalFunction.id, originalFunction.args);
+		HashMap<Integer, Block> blockMap = new HashMap<Integer, Block>();
+		
+		/* For each reachable node (using a dfs), add its statement to a list
+		 * for the appropriate block. We're guaranteed to populate each block
+		 * in the correct order.
+		 */
+		for(Node n : dfs(true)) {
+			int id = n.getBlockId();
+			if(!blockMap.containsKey(id)) {
+				blockMap.put(id, new Block(id));
+			}
+			blockMap.get(id).instructions.add(n.getInstruction());
+		}
+		
+		/* Append non-empty blocks to the function in the original order */
+		for(int id : originalBlockIdSequence) {
+			if(blockMap.containsKey(id)) {
+				function.blocks.add(blockMap.get(id));
+			}
+		}
+		
+		return function;
+	}
+		
+	/**
+	 * String representation of the CFG, suitable for use with graphviz
+	 * 
+	 * TODO: perhaps this should output the whole CFG, not just reachable nodes
+	 */
+	public String toString()
+	{
+		List<Node> reachable = dfs(true);
+		HashMap<Node, Character> nodeChars = new HashMap<Node, Character>();
+		char current = 'A'; //TODO: limited to 26 values?
+
+		// Start a digraph
+		StringBuilder output = new StringBuilder(
+				String.format("digraph %s {\n", originalFunction.id));
+
+		// Setup all nodes with unique characters...
+		for(Node n : reachable) {
+			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
+			nodeChars.put(n, current);
+			current++;
+		}
+		output.append('\n');
+
+		// Iterate through visited nodes, print all the links...
+		for(Node n : reachable) {
+			for(Node m : n.getAllSuccessors()) {
+				output.append(String.format("\t%c -> %c;\n",
+						nodeChars.get(n), nodeChars.get(m)));
+			}
+		}
+		// End the digraph scope
+		output.append("}\n");
+		
+		return output.toString();
+	}
+	
+	/** TODO
+	 * (misplaced) notes for liveness
 	 * 
 	 * 2 point lattice (live or not live)
 	 * - represented as the set "out", where existence in set == live
