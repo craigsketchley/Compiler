@@ -23,7 +23,7 @@ public class GenKillTest
 			
 			LiveVariableAnalysis lv = new LiveVariableAnalysis();
 			GenKill gk = new GenKill(cfg, lv);
-			gk.optimiseBackward();
+			gk.analyseBackward();
 			
 			System.out.println(cfg);
 		}
