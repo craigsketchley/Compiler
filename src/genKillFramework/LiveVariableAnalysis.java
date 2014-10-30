@@ -11,11 +11,17 @@ import CFG.Node;
 import IntermediateLanguage.Instruction;
 import IntermediateLanguage.Register;
 
-public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
+public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {
 	public LiveVariableAnalysis(ControlFlowGraph cfg)
 	{
 		super(cfg);
+		for(Node n : cfg.getAllNodes())
+		{
+			in.put(n, new HashSet<Register>());
+			out.put(n, new HashSet<Register>());
+		}
+
 	}
 
 	@Override

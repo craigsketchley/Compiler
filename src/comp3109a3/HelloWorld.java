@@ -11,18 +11,17 @@ public class HelloWorld
 
 	public static void main(String[] args)
 	{
-		
-		System.out.println("Hello, World!");
+
+		if(args.length == 0)
+		{
+			System.out.println("No input file specified.");
+			System.out.println("Available optimisations / usage."); //TODO
+			return;
+		}
 
 		if(args.length > 2)
 		{
 			System.out.println("Too many arguments.");
-			return;
-		}
-		
-		if(args.length == 0)
-		{
-			System.out.println("No input file specified.");
 			return;
 		}
 
