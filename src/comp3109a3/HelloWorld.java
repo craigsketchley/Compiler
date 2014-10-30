@@ -29,6 +29,15 @@ public class HelloWorld {
 			System.out.println("No output file specified.");
 			return;
 		}
+		
+		/*
+		// Example use case for the Optimiser Class.
+		program = Optimiser.optimise(program, new UnreachableCodeOptimisation());
+		
+		program = Optimiser.optimise(program, new DeadCodeEliminationOptimisation());
+		
+		program = Optimiser.optimise(program, new RedundantLoadsOptimisation());
+		*/
 
 		try {
 			File outfile = new File(args[1]);
