@@ -38,8 +38,8 @@ public class LiveVariableAnalysisTest
 				
 			System.out.println(expected);
 			
-			LiveVariableAnalysis lv = new LiveVariableAnalysis();
-			lv.analyse(cfg);
+			LiveVariableAnalysis lv = new LiveVariableAnalysis(cfg);
+			lv.analyse();
 //			
 			System.out.println(cfg);
 

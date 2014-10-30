@@ -1,8 +1,12 @@
 package genKillFramework;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import CFG.*;
+import IntermediateLanguage.Register;
 
 /**
  * Encapsulates the Gen/Kill framework for a data flow analysis.
@@ -15,8 +19,30 @@ import CFG.*;
  *
  * @param <T> The type of information stored for the data flow analysis.
  */
-public interface DataFlowAnalysis<T>
+public abstract class DataFlowAnalysis<T>
 {
+	protected Map<Node, Set<T>> in;
+	protected Map<Node, Set<T>> out;
+	ControlFlowGraph cfg;
+	
+	/**
+	 * Creates the in and out information mappings for the given control flow graph
+	 * @param cfg
+	 */
+	public DataFlowAnalysis(ControlFlowGraph cfg)
+	{
+		this.cfg = cfg;
+		in = new HashMap<Node, Set<T>>();
+		out = new HashMap<Node, Set<T>>();
+		`
+		for(Node n : cfg.getAllNodes())
+		{
+			in.put(n, new HashSet<T>());
+			out.put(n, new HashSet<T>());
+		}
+		
+	}
+	
 	/**
 	 * The Gen operation of the Gen/Kill framework.
 	 * 
@@ -25,7 +51,7 @@ public interface DataFlowAnalysis<T>
 	 * @param n
 	 * @return
 	 */
-	public Set<T> gen(Node n);
+	public abstract Set<T> gen(Node n);
 	
 	/**
 	 * The Kill operation of the Gen/Kill framework.
@@ -35,7 +61,7 @@ public interface DataFlowAnalysis<T>
 	 * @param n
 	 * @return
 	 */
-	public Set<T> kill(Node n);
+	public abstract Set<T> kill(Node n);
 
 	/**
 	 * The meet operator of the Gen/Kill framework.
@@ -48,7 +74,7 @@ public interface DataFlowAnalysis<T>
 	 * 
 	 * @param n
 	 */
-	public void meet(Node n);
+	public abstract Set<T> meet(Node n);
 
 	/**
 	 * The transfer function of the Gen/Kill framework.
@@ -58,13 +84,12 @@ public interface DataFlowAnalysis<T>
 	 * 
 	 * @param n
 	 */
-	public void transfer(Node n);
+	public abstract Set<T> transfer(Node n);
 	
 	/**
 	 * Given a control flow graph, it will analyse it and produce an analysis
 	 * result as a mapping from nodes to information.
-	 * 
-	 * @param cfg
+	 * @return
 	 */
-	public void analyse(ControlFlowGraph cfg);
+	public abstract Map<Node, Set<T>> analyse();
 }

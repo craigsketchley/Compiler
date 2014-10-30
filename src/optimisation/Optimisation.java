@@ -11,11 +11,11 @@ public abstract class Optimisation
 		for(Function f : p.functions)
 		{
 			ControlFlowGraph cfg = new ControlFlowGraph(f);
-			cfg = runOptimisation(cfg);
+			runOptimisation(cfg);
 			result.functions.add(cfg.convertToFunction());
 		}
 		return result;
 	}
 	
-	public abstract ControlFlowGraph runOptimisation (ControlFlowGraph cfg) throws Exception;
+	public abstract void runOptimisation (ControlFlowGraph cfg) throws Exception;
 }

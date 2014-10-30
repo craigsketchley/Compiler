@@ -13,10 +13,10 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 {
 
 	@Override
-	public ControlFlowGraph runOptimisation(ControlFlowGraph cfg) throws Exception
+	public void runOptimisation(ControlFlowGraph cfg) throws Exception
 	{
-		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis();
-		liveVariableAnalyser.analyse(cfg);
+		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis(cfg);
+		liveVariableAnalyser.analyse();
 		List<Node> nodeList = cfg.bfs(true);
 	
 		Iterator<Node> it = nodeList.iterator();
@@ -37,7 +37,6 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 				}
 			}					
 		}	
-		return cfg;
 	}
 	
 	
