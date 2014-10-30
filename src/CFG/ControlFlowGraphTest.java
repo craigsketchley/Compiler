@@ -44,6 +44,7 @@ public class ControlFlowGraphTest
 		for (Function function : program.functions) {
 			ControlFlowGraph cfg = new ControlFlowGraph(function);
 			Function outputFunction = cfg.convertToFunction();
+			System.out.println(cfg);
 			assertEquals(function.toString(), outputFunction.toString());
 		}
 	}

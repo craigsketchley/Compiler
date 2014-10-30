@@ -38,6 +38,7 @@ public class ControlFlowGraph
 		this.originalFunction = function;
 		this.originalBlockIdSequence = new ArrayList<>();
 		this.allNodes = new ArrayList<>();
+		this.allNodes.add(this.start);
 		
 		HashMap<Integer, Node> tempBlockMap = new HashMap<Integer, Node>(); 
 		
@@ -104,6 +105,7 @@ public class ControlFlowGraph
 			
 			//otherwise, error? or end of function without return?
 		}
+		this.allNodes.add(this.end);
 	}
 	
 	/**
