@@ -42,7 +42,7 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 	}
 
 	@Override
-	public Set<Register> merge(Set<Register> s1, Set<Register> s2)
+	public Set<Register> meet(Set<Register> s1, Set<Register> s2)
 	{
 		Set<Register> result = new HashSet<Register>();
 		result.addAll(s1);

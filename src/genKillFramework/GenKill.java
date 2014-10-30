@@ -42,7 +42,7 @@ public class GenKill
 				Set<Register> result = new HashSet<Register>();
 				for(Node j : n.getAllSuccessors())
 				{
-					result = opt.merge(result, opt.transfer(n));
+					result = opt.meet(result, opt.transfer(n));
 				}
 				//Union with old to keep monotonicity 
 				int oldCount = n.getOut().size();

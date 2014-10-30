@@ -9,4 +9,4 @@
         (add r1 r1 r3)
         (br r1 3 3) )
     (3  (ld r5 x)
-        (ret r5) ) )
+        (ret r5) ) ) )

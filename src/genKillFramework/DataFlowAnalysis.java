@@ -16,7 +16,7 @@ public abstract class DataFlowAnalysis<T>
 	
 	public abstract Set<T> kill(Node n);
 
-	public abstract Set<T> merge(Set<T> s1, Set<T> s2);
+	public abstract Set<T> meet(Set<T> s1, Set<T> s2);
 	
 	public abstract Set<Register> transfer(Node n);
 	
