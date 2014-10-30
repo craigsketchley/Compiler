@@ -15,7 +15,7 @@ import IntermediateLanguage.Program;
 public class Optimiser
 {
 	/**
-	 * Hidding the default constructor.
+	 * Hiding the default constructor.
 	 */
 	private Optimiser(){};
 	
