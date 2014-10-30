@@ -161,53 +161,32 @@ public class ControlFlowGraph
 	
 	public String toString()
 	{
-		String output = "digraph " + originalFunction.id + " {\n";
+		StringBuffer output = new StringBuffer("digraph " + originalFunction.id + " {\n");
 		
-		LinkedList<Node> queue = new LinkedList<>();
-		ArrayList<Node> visited = new ArrayList<>();
-		
-		queue.add(start);
-		
+		List<Node> nodes = bfs(true);
 		HashMap<Node, Character> nodeChars = new HashMap<>();
-		
 		char current = 'A';
 		
 		// Setup all nodes with unique characters...
-		while (!queue.isEmpty())
-		{
-			Node n = queue.poll();
-			visited.add(n);
-			
-			// Watch out for the start/end nodes with no instructions...
-			output += "\t" + current + " [label=\"" + n + "\"];\n";				
-			
+		for (Node n : nodes) {
+			output.append("\t" + current + " [label=\"" + n + "\"];\n");
 			nodeChars.put(n, current++);
-			
-			for (Node s : n.getAllSuccessors())
-			{
-				if (!visited.contains(s)) {
-					queue.add(s);
-				}
-			}
 		}
 		
-		output += '\n';
+		output.append('\n');
 				
 		// Iterate through visited nodes, print all the links...
-		for (Node currentNode : visited) {
+		for (Node currentNode : nodes) {
 			Set<Node> successors = currentNode.getAllSuccessors();
-			
-//			System.out.println(currentNode);
-//			System.out.println(successors);
 			for (Node neighbour : successors) {
-				output += "\t" +
+				output.append("\t" +
 						nodeChars.get(currentNode) + " -> " +
-						nodeChars.get(neighbour) + ";\n";
+						nodeChars.get(neighbour) + ";\n");
 			}
 		}
-		output += "}\n";
+		output.append("}\n");
 		
-		return output;
+		return output.toString();
 	}
 	
 	/**
