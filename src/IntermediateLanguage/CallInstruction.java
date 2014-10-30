@@ -1,6 +1,5 @@
 package IntermediateLanguage;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CallInstruction implements Instruction {

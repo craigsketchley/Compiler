@@ -1,15 +1,14 @@
 package IntermediateLanguage;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class BrInstruction implements Instruction {
-	
+
 	public Register register;
 	public int blockTrue;
 	public int blockFalse;
-	
+
 	public BrInstruction(Register register, int blockTrue, int blockFalse) {
 		this.register = register;
 		this.blockTrue = blockTrue;
