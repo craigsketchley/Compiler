@@ -30,7 +30,7 @@ public class BinOpInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Arrays.asList(dest);
+	public Register getAssignedRegister() {
+		return dest;
 	}
 }

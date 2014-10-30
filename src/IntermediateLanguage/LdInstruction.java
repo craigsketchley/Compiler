@@ -1,6 +1,5 @@
 package IntermediateLanguage;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,8 +24,8 @@ public class LdInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Arrays.asList(register);
+	public Register getAssignedRegister() {
+		return register;
 	}
 
 }

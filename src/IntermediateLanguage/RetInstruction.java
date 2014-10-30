@@ -1,7 +1,6 @@
 package IntermediateLanguage;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class RetInstruction implements Instruction {
@@ -23,8 +22,8 @@ public class RetInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Collections.emptyList();
+	public Register getAssignedRegister() {
+		return null;
 	}
 
 }

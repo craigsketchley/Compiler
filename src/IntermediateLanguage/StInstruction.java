@@ -1,14 +1,13 @@
 package IntermediateLanguage;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class StInstruction implements Instruction {
-	
+
 	public String id;
 	public Register register;
-	
+
 	public StInstruction(String id, Register register) {
 		this.id = id;
 		this.register = register;
@@ -25,8 +24,8 @@ public class StInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Collections.emptyList();
+	public Register getAssignedRegister() {
+		return null;
 	}
 
 }
