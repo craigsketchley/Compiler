@@ -1,10 +1,10 @@
 package CFG;
 
-import genKillFramework.Optimisation;
+import genKillFramework.DataFlowAnalysis;
 
 public interface ControlFlowInformation
 {
-	public void addInfo(ControlFlow);
+	public void addInfo();
 	
 	public void deleteInfo();
 	

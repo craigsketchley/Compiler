@@ -8,7 +8,7 @@ import java.util.Set;
 import CFG.*;
 import IntermediateLanguage.Register;
 
-public abstract class Optimisation<T>
+public abstract class DataFlowAnalysis<T>
 {
 	public boolean isForward;
 	

@@ -1,6 +1,6 @@
 package CFG;
 
-import genKillFramework.Optimisation;
+import genKillFramework.DataFlowAnalysis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,7 +173,6 @@ public class ControlFlowGraph
 		// Start a digraph
 		StringBuilder output = new StringBuilder(
 				String.format("digraph %s {\n", originalFunction.id));
-
 		// Setup all nodes with unique characters...
 		for(Node n : allNodes) {
 			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
@@ -271,6 +270,5 @@ public class ControlFlowGraph
 		}
 		return ordered;
 	}
-
 
 } 

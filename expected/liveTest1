@@ -1,0 +1,26 @@
+digraph spec {
+	A [label="0 (ld r1 x) : set []"];
+	B [label="0 (br r1 1 2) : set [r1]"];
+	C [label="1 (lc r2 1) : set []"];
+	D [label="1 (add r1 r1 r2) : set [r2, r1]"];
+	E [label="1 (br r1 3 3) : set [r1]"];
+	F [label="2 (ld r2 x) : set []"];
+	G [label="2 (lc r3 2) : set []"];
+	H [label="2 (add r1 r2 r3) : set [r3, r2]"];
+	I [label="2 (br r1 3 3) : set [r1]"];
+	J [label="3 (ld r5 x) : set []"];
+	K [label="3 (ret r5) : set [r5]"];
+
+	A -> B;
+	B -> F;
+	B -> C;
+	C -> D;
+	D -> E;
+	E -> J;
+	F -> G;
+	G -> H;
+	H -> I;
+	I -> J;
+	J -> K;
+	K -> null;
+}

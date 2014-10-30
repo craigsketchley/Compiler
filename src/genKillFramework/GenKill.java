@@ -16,12 +16,12 @@ import IntermediateLanguage.Register;
 public class GenKill
 {
 	private ControlFlowGraph cfg;
-	private Optimisation<Register> opt;
+	private DataFlowAnalysis<Register> opt;
 	private Map<Node, ControlFlowInformation> outMap;
 	private Map<Node, ControlFlowInformation> inMap; 
 	
 	
-	public GenKill(ControlFlowGraph cfg, Optimisation<Register> opt)
+	public GenKill(ControlFlowGraph cfg, DataFlowAnalysis<Register> opt)
 	{
 		this.cfg = cfg; 
 		this.opt = opt;

@@ -8,7 +8,7 @@ import IntermediateLanguage.*;
 import CFG.Node;
 import IntermediateLanguage.Instruction;
 
-public class LiveVariableOptimisation extends Optimisation<Register>
+public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 {
 
 	@Override
