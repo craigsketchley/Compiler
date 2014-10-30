@@ -92,11 +92,11 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 			isChanged = false;
 			for(Node n : bfsOrdering)
 			{
+				in.put(n, transfer(n));
+			}
+			for(Node n : bfsOrdering)
+			{
 				int oldCount = out.get(n).size(); 
-				for(Node j : n.getAllSuccessors())
-				{
-					in.put(j, transfer(j));
-				}
 				//Merges with the current out set of the node to maintain MONOTONICITY
 				out.get(n).addAll(meet(n));
 				if(oldCount != out.get(n).size())
