@@ -11,22 +11,36 @@ public class DeadCodeEliminationOptimisationTest
 {
 
 	@Test
-	public void test()
+	public void testAssignmentSpec()
 	{
-		Program input = Parser.parse("input/assignmentSpecExample");
-		Program expected = Parser.parse("expected/dceTest1");
+		Program input = Parser.parse("input/deadCodeAssignmentSpec");
+		Program expected = Parser.parse("expected/deadCodeAssignmentSpec");
 		
-		System.out.println(expected);
-		Program output = null;
-		try
-		{
-			output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(output);
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
 		assertEquals(expected.toString(), output.toString());
 	}
+
+	@Test
+	public void testUselessLoads()
+	{
+		Program input = Parser.parse("input/deadCodeUselessLoads");
+		Program expected = Parser.parse("expected/deadCodeUselessLoads");
+		
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
+		assertEquals(expected.toString(), output.toString());
+	}
+
+	@Test
+	public void testUselessBinOps()
+	{
+		Program input = Parser.parse("input/deadCodeUselessBinOp");
+		Program expected = Parser.parse("expected/deadCodeUselessBinOp");
+		
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
+		assertEquals(expected.toString(), output.toString());
+	}
+
 }

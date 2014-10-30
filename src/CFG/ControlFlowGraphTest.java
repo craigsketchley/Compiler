@@ -32,18 +32,7 @@ public class ControlFlowGraphTest
 	@Test
 	public void testNoOptimisation2()
 	{
-		Program program = Parser.parse("input/unreachableBlockExample");
-		for (Function function : program.functions) {
-			ControlFlowGraph cfg = new ControlFlowGraph(function);
-			Function outputFunction = cfg.convertToFunction();
-			assertEquals(function.toString(), outputFunction.toString());
-		}
-	}
-	
-	@Test
-	public void testNoOptimisation3()
-	{
-		Program program = Parser.parse("input/assignmentSpecExample");
+		Program program = Parser.parse("input/unreachableCodeBlock1");
 		for (Function function : program.functions) {
 			ControlFlowGraph cfg = new ControlFlowGraph(function);
 			Function outputFunction = cfg.convertToFunction();
@@ -52,13 +41,30 @@ public class ControlFlowGraphTest
 	}
 	
 	/**
-	 * Removing an unreachable block test.
+	 * Removing an unreachable code tests.
 	 */
+	
 	@Test
-	public void testRemoveUnreachableBlock1()
+	public void testRemoveUnreachableCodeBlock1()
 	{
-		Program programInput = Parser.parse("input/unreachableBlockExample");
-		Program programOutput = Parser.parse("expected/unreachableBlockExample");
+		Program programInput = Parser.parse("input/unreachableCodeBlock1");
+		Program programOutput = Parser.parse("expected/unreachableCodeBlock1");
+		for (int i = 0; i < programInput.functions.size(); i++) {
+			Function functionIn = programInput.functions.get(i);
+			Function functionOut = programOutput.functions.get(i);
+			
+			ControlFlowGraph cfg = new ControlFlowGraph(functionIn);
+			cfg.removeUnreachableCode();
+			
+			assertEquals(cfg.convertToFunction().toString(), functionOut.toString());
+		}
+	}
+
+	@Test
+	public void testRemoveUnreachableCodeBlock2()
+	{
+		Program programInput = Parser.parse("input/unreachableCodeBlock2");
+		Program programOutput = Parser.parse("expected/unreachableCodeBlock2");
 		for (int i = 0; i < programInput.functions.size(); i++) {
 			Function functionIn = programInput.functions.get(i);
 			Function functionOut = programOutput.functions.get(i);
@@ -80,30 +86,9 @@ public class ControlFlowGraphTest
 		for (Function function : program.functions) {
 			ControlFlowGraph cfg = new ControlFlowGraph(function);
 			
-			System.out.println(cfg);
-
-			List<Node> removeNodes = new LinkedList<Node>();
 			
-			for (Node n : cfg.getAllNodes())
-			{
-				if (!(n.getInstruction() instanceof BrInstruction) &&
-					!(n.getInstruction() instanceof RetInstruction) &&
-					!n.isSentinel())
-				{
-					removeNodes.add(n);
-				}
-			}
-			
-			for (Node n : removeNodes)
-			{
-				try {
-					cfg.removeNode(n);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			System.out.println(cfg);
 		}
 	}
+
 
 }

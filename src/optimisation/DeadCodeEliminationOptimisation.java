@@ -13,7 +13,7 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 {
 
 	@Override
-	public void runOptimisation(ControlFlowGraph cfg) throws Exception
+	public void runOptimisation(ControlFlowGraph cfg)
 	{
 		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis(cfg);
 		liveVariableAnalyser.analyse();
@@ -22,23 +22,27 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 		Iterator<Node> it = nodeList.iterator();
 		while(it.hasNext())
 		{
-			Node n = it.next();		
+			Node n = it.next();
 			if(n.isSentinel())
 			{
-				continue;		
+				continue;
 			}
 			
-			Register assignedReg = n.getInstruction().getAssignedRegister();		
+			Register assignedReg = n.getInstruction().getAssignedRegister();
 			if(assignedReg != null)
 			{
 				if(!n.getOut().contains(assignedReg))
 				{
-					cfg.removeNode(n);
+					try {
+						cfg.removeNode(n);
+					} catch (Exception e) {
+						System.out.println("Something went wrong when trying to remove a node.");
+						e.printStackTrace();
+						System.exit(-1);
+					}
 				}
 			}					
 		}	
-	}
-	
-	
+	}	
 	
 }

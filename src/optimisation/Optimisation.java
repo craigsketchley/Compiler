@@ -5,7 +5,7 @@ import IntermediateLanguage.*;
 
 public abstract class Optimisation
 {
-	public Program optimise(Program p) throws Exception
+	public Program optimise(Program p)
 	{
 		Program result = new Program();
 		for(Function f : p.functions)
@@ -17,5 +17,5 @@ public abstract class Optimisation
 		return result;
 	}
 	
-	public abstract void runOptimisation (ControlFlowGraph cfg) throws Exception;
+	public abstract void runOptimisation (ControlFlowGraph cfg);
 }

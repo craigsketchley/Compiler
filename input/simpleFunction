@@ -1,0 +1,5 @@
+( (simple (x)
+    (0  (ld r1 x)
+    	(lc r2 1)
+    	(add r3 r1 r2)
+        (ret r3) ) ) )
