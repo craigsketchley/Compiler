@@ -6,5 +6,5 @@ public interface Instruction
 {
 	public List<Register> getReferencedRegisters();
 	
-	public List<Register> getAssignedRegisters();
+	public Register getAssignedRegister();
 }

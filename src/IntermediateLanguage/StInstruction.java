@@ -25,8 +25,8 @@ public class StInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Collections.emptyList();
+	public Register getAssignedRegister() {
+		return null;
 	}
 
 }

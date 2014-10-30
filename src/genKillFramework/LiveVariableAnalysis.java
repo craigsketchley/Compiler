@@ -34,8 +34,9 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 		if(!n.isSentinel())
 		{
 			Instruction instruction = n.getInstruction();
-			List<Register> killedRegisters = instruction.getAssignedRegisters();	
-			result.addAll(killedRegisters);
+			Register killedReg = instruction.getAssignedRegister();	
+			if(killedReg != null)
+				result.add(killedReg);
 		}
 		
 		return result;

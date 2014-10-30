@@ -25,8 +25,8 @@ public class LdInstruction implements Instruction {
 	}
 
 	@Override
-	public List<Register> getAssignedRegisters() {
-		return Arrays.asList(register);
+	public Register getAssignedRegister() {
+		return register;
 	}
 
 }
