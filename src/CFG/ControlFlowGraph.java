@@ -23,7 +23,8 @@ public class ControlFlowGraph
 	public Node start; //sentinel node before the entry point of the function
 	public Node end; //sentinel node reached from all return statements
 	public Function originalFunction; //part of the original AST 
-	public ArrayList<Integer> originalBlockIdSequence;
+	public List<Integer> originalBlockIdSequence;
+	public List<Node> allNodes; //holds all live nodes, updated if optimised.
 	
 
 	/**
@@ -36,12 +37,13 @@ public class ControlFlowGraph
 		this.end = new Node();
 		this.originalFunction = function;
 		this.originalBlockIdSequence = new ArrayList<>();
+		this.allNodes = new ArrayList<>();
 		
-		ArrayList<Node> tempNodeList = new ArrayList<Node>();
 		HashMap<Integer, Node> tempBlockMap = new HashMap<Integer, Node>(); 
 		
 		List<Block> blocks = originalFunction.blocks;
 
+		//Process the instructions into CFG nodes.
 		for(int i = 0; i < blocks.size(); ++i)
 		{	
 			List<Instruction> instructions = blocks.get(i).instructions;
@@ -62,15 +64,14 @@ public class ControlFlowGraph
 						n.addPredecessor(start);
 					}
 				}
-				tempNodeList.add(n);		
+				this.allNodes.add(n);		
 			}
 		}
 		
-		//Create the links
-		
-		for(int i = 0; i < tempNodeList.size(); ++i)
+		//Create the links between CFG nodes.
+		for(int i = 0; i < this.allNodes.size(); ++i)
 		{
-			Node n = tempNodeList.get(i);
+			Node n = this.allNodes.get(i);
 			Instruction st = n.getInstruction();
 			
 			//if the statement is a break instruction
@@ -95,10 +96,10 @@ public class ControlFlowGraph
 			}
 			
 			//otherwise, it is followed by the next one, if we are not at the end
-			else if(i < tempNodeList.size() - 1)
+			else if(i < this.allNodes.size() - 1)
 			{
-				n.addSuccessor(tempNodeList.get(i + 1));
-				tempNodeList.get(i + 1).addPredecessor(n);
+				n.addSuccessor(this.allNodes.get(i + 1));
+				this.allNodes.get(i + 1).addPredecessor(n);
 			}
 			
 			//otherwise, error? or end of function without return?
@@ -112,14 +113,15 @@ public class ControlFlowGraph
 	public void removeUnreachableCode()
 	{
 		//perform a dfs to find all reachable nodes
-		List<Node> ordering = dfs(true);
+		//update all nodes to include only reachable.
+		allNodes = dfs(true);
 		
 		//for each reachable node
-		for(Node n : ordering) {
+		for(Node n : allNodes) {
 			//iterate over all predecessors, cutting links from unreachable nodes
 			Iterator<Node> it = n.getAllPredecessors().iterator();
 			while(it.hasNext()) {
-				if(!ordering.contains(it.next())) {
+				if(!allNodes.contains(it.next())) {
 					it.remove();
 				}
 			}
@@ -130,9 +132,7 @@ public class ControlFlowGraph
 	}
 	
 	/**
-	 * @return the reachable nodes of the function as an AST
-	 * 
-	 * TODO: perhaps this should output the whole CFG, not just reachable nodes
+	 * @return the reachable nodes of the function as an AST.
 	 */
 	public Function convertToFunction()
 	{
@@ -143,7 +143,7 @@ public class ControlFlowGraph
 		 * for the appropriate block. We're guaranteed to populate each block
 		 * in the correct order.
 		 */
-		for(Node n : dfs(true)) {
+		for(Node n : allNodes) {
 			int id = n.getBlockId();
 			if(!blockMap.containsKey(id)) {
 				blockMap.put(id, new Block(id));
@@ -162,22 +162,20 @@ public class ControlFlowGraph
 	}
 		
 	/**
-	 * String representation of the CFG, suitable for use with graphviz
-	 * 
-	 * TODO: perhaps this should output the whole CFG, not just reachable nodes
+	 * String representation of the CFG, suitable for use with graphviz.
 	 */
 	public String toString()
 	{
-		List<Node> reachable = dfs(true);
 		HashMap<Node, Character> nodeChars = new HashMap<Node, Character>();
-		char current = 'A'; //TODO: limited to 26 values?
+		//TODO: limited to 26 values? Use multiple chars depending on how many required? 'AAA'
+		char current = 'A';
 
 		// Start a digraph
 		StringBuilder output = new StringBuilder(
 				String.format("digraph %s {\n", originalFunction.id));
 
 		// Setup all nodes with unique characters...
-		for(Node n : reachable) {
+		for(Node n : allNodes) {
 			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
 			nodeChars.put(n, current);
 			current++;
@@ -185,7 +183,7 @@ public class ControlFlowGraph
 		output.append('\n');
 
 		// Iterate through visited nodes, print all the links...
-		for(Node n : reachable) {
+		for(Node n : allNodes) {
 			for(Node m : n.getAllSuccessors()) {
 				output.append(String.format("\t%c -> %c;\n",
 						nodeChars.get(n), nodeChars.get(m)));
