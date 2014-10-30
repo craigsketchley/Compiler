@@ -18,11 +18,11 @@ import IntermediateLanguage.RetInstruction;
 
 public class ControlFlowGraph 
 {
-	public Node start; //sentinel node before the entry point of the function
-	public Node end; //sentinel node reached from all return statements
-	public Function originalFunction; //part of the original AST 
-	public List<Integer> originalBlockIdSequence;
-	public List<Node> allNodes; //holds all live nodes, updated if optimised.
+	private Node start; //sentinel node before the entry point of the function
+	private Node end; //sentinel node reached from all return statements
+	private Function originalFunction; //part of the original AST 
+	private List<Integer> originalBlockIdSequence;
+	private List<Node> allNodes; //holds all live nodes, updated if optimised.
 	
 
 	/**
@@ -226,39 +226,6 @@ public class ControlFlowGraph
 		return function;
 	}
 		
-	/**
-	 * String representation of the CFG, suitable for use with graphviz.
-	 */
-	public String toString()
-	{
-		HashMap<Node, Character> nodeChars = new HashMap<Node, Character>();
-		//TODO: limited to 26 values? Use multiple chars depending on how many required? 'AAA'
-		char current = 'A';
-
-		// Start a digraph
-		StringBuilder output = new StringBuilder(
-				String.format("digraph %s {\n", originalFunction.id));
-		// Setup all nodes with unique characters...
-		for(Node n : allNodes) {
-			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
-			nodeChars.put(n, current);
-			current++;
-		}
-		output.append('\n');
-
-		// Iterate through visited nodes, print all the links...
-		for(Node n : allNodes) {
-			for(Node m : n.getAllSuccessors()) {
-				output.append(String.format("\t%c -> %c;\n",
-						nodeChars.get(n), nodeChars.get(m)));
-			}
-		}
-		// End the digraph scope
-		output.append("}\n");
-		
-		return output.toString();
-	}
-	
 	/** TODO
 	 * (misplaced) notes for liveness
 	 * 
@@ -334,6 +301,50 @@ public class ControlFlowGraph
 			}
 		}
 		return ordered;
+	}
+	
+	/**
+	 * Returns the list of all the nodes within the CFG.
+	 * 
+	 * @return list of all the nodes in the CFG
+	 */
+	public List<Node> getAllNodes()
+	{
+		return allNodes;
+	}
+	
+	/**
+	 * String representation of the CFG, suitable for use with graphviz.
+	 */
+	@Override
+	public String toString()
+	{
+		HashMap<Node, Character> nodeChars = new HashMap<Node, Character>();
+		//TODO: limited to 26 values? Use multiple chars depending on how many required? 'AAA'
+		char current = 'A';
+
+		// Start a digraph
+		StringBuilder output = new StringBuilder(
+				String.format("digraph %s {\n", originalFunction.id));
+		// Setup all nodes with unique characters...
+		for(Node n : allNodes) {
+			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
+			nodeChars.put(n, current);
+			current++;
+		}
+		output.append('\n');
+
+		// Iterate through visited nodes, print all the links...
+		for(Node n : allNodes) {
+			for(Node m : n.getAllSuccessors()) {
+				output.append(String.format("\t%c -> %c;\n",
+						nodeChars.get(n), nodeChars.get(m)));
+			}
+		}
+		// End the digraph scope
+		output.append("}\n");
+		
+		return output.toString();
 	}
 
 } 
