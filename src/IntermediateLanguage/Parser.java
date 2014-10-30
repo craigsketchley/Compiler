@@ -148,37 +148,7 @@ public class Parser
 		{
 			//Scan the instruction using space separator
 			scan.useDelimiter(" ");
-			
-			//The instruction must start with a (, then the type
-			scan.next("\\(");
-			String op = scan.next();
-			
-			//Build the appropriate instruction type
-			Instruction instr;
-			switch(op)
-			{
-			case "ret": instr = new RetInstruction(parseReg(scan)); break;
-			case "ld": instr = new LdInstruction(parseReg(scan), parseId(scan)); break;
-			case "lc": instr = new LcInstruction(parseReg(scan), scan.nextInt()); break;
-			case "st": instr = new StInstruction(parseId(scan), parseReg(scan)); break;
-			case "br": instr = new BrInstruction(parseReg(scan), scan.nextInt(), scan.nextInt()); break;
-			case "call":
-				Register dest = parseReg(scan);
-				String id = scan.next(ID);
-				//keep reading arguments until we reach the end of the statement )
-				ArrayList<Register> args = new ArrayList<Register>();
-				while(scan.hasNext(REG))
-				{
-					args.add(parseReg(scan));
-				}
-				instr = new CallInstruction(dest, id, args); break;
-			default: instr = new BinOpInstruction(op, parseReg(scan), parseReg(scan), parseReg(scan));
-			//default: throw new ParseException("Instruction type not recognised: " + op);
-			}
-			
-			//Add the instruction to the list, then read the trailing )
-			block.instructions.add(instr);
-			scan.next("\\)");
+			block.instructions.add(parseInstruction(scan));
 			
 			//Set the delimiter back to ) again, so we can check for another instruction
 			scan.useDelimiter("\\)");
@@ -192,6 +162,46 @@ public class Parser
 
 		return block;
 		
+	}
+	
+	public static Instruction parseInstruction(String instruction)
+	{
+		return parseInstruction(new Scanner(instruction));
+	}
+	
+	public static Instruction parseInstruction(Scanner scan)
+	{
+		//The instruction must start with a (, then the type
+		scan.next("\\(");
+		String op = scan.next();
+		
+		//Build the appropriate instruction type
+		Instruction instr;
+		switch(op)
+		{
+		case "ret": instr = new RetInstruction(parseReg(scan)); break;
+		case "ld": instr = new LdInstruction(parseReg(scan), parseId(scan)); break;
+		case "lc": instr = new LcInstruction(parseReg(scan), scan.nextInt()); break;
+		case "st": instr = new StInstruction(parseId(scan), parseReg(scan)); break;
+		case "br": instr = new BrInstruction(parseReg(scan), scan.nextInt(), scan.nextInt()); break;
+		case "call":
+			Register dest = parseReg(scan);
+			String id = scan.next(ID);
+			//keep reading arguments until we reach the end of the statement )
+			ArrayList<Register> args = new ArrayList<Register>();
+			while(scan.hasNext(REG))
+			{
+				args.add(parseReg(scan));
+			}
+			instr = new CallInstruction(dest, id, args); break;
+		default: instr = new BinOpInstruction(op, parseReg(scan), parseReg(scan), parseReg(scan));
+		//default: throw new ParseException("Instruction type not recognised: " + op);
+		}
+		
+		//then read the trailing ), then return the instruction
+		scan.next("\\)");
+
+		return instr;
 	}
 	
 	/**

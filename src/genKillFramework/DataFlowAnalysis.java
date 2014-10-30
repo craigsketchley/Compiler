@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import CFG.*;
-import IntermediateLanguage.Register;
 
 /**
  * Encapsulates the Gen/Kill framework for a data flow analysis.
@@ -21,8 +20,8 @@ import IntermediateLanguage.Register;
  */
 public abstract class DataFlowAnalysis<T>
 {
-	protected Map<Node, Set<T>> in;
-	protected Map<Node, Set<T>> out;
+	protected Map<Node, T> in;
+	protected Map<Node, T> out;
 	ControlFlowGraph cfg;
 	
 	/**
@@ -32,15 +31,8 @@ public abstract class DataFlowAnalysis<T>
 	public DataFlowAnalysis(ControlFlowGraph cfg)
 	{
 		this.cfg = cfg;
-		in = new HashMap<Node, Set<T>>();
-		out = new HashMap<Node, Set<T>>();
-		
-		for(Node n : cfg.getAllNodes())
-		{
-			in.put(n, new HashSet<T>());
-			out.put(n, new HashSet<T>());
-		}
-		
+		in = new HashMap<Node, T>();
+		out = new HashMap<Node, T>();
 	}
 	
 	/**
@@ -51,7 +43,7 @@ public abstract class DataFlowAnalysis<T>
 	 * @param n
 	 * @return
 	 */
-	public abstract Set<T> gen(Node n);
+	public abstract T gen(Node n);
 	
 	/**
 	 * The Kill operation of the Gen/Kill framework.
@@ -61,7 +53,7 @@ public abstract class DataFlowAnalysis<T>
 	 * @param n
 	 * @return
 	 */
-	public abstract Set<T> kill(Node n);
+	public abstract T kill(Node n);
 
 	/**
 	 * The meet operator of the Gen/Kill framework.
@@ -74,7 +66,7 @@ public abstract class DataFlowAnalysis<T>
 	 * 
 	 * @param n
 	 */
-	public abstract Set<T> meet(Node n);
+	public abstract T meet(Node n);
 
 	/**
 	 * The transfer function of the Gen/Kill framework.
@@ -84,12 +76,12 @@ public abstract class DataFlowAnalysis<T>
 	 * 
 	 * @param n
 	 */
-	public abstract Set<T> transfer(Node n);
+	public abstract T transfer(Node n);
 	
 	/**
 	 * Given a control flow graph, it will analyse it and produce an analysis
 	 * result as a mapping from nodes to information.
 	 * @return
 	 */
-	public abstract Map<Node, Set<T>> analyse();
+	public abstract Map<Node, T> analyse();
 }
