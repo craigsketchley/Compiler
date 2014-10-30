@@ -1,24 +1,48 @@
 package genKillFramework;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import CFG.*;
+import IntermediateLanguage.Register;
 
-public interface DataFlowAnalysis<T>
+public abstract class DataFlowAnalysis<T>
 {
-	public Set<T> gen(Node n);
+	protected Map<Node, Set<T>> in;
+	protected Map<Node, Set<T>> out;
+	ControlFlowGraph cfg;
 	
-	public Set<T> kill(Node n);
+	public DataFlowAnalysis(ControlFlowGraph cfg)
+	{
+		this.cfg = cfg;
+		in = new HashMap<Node, Set<T>>();
+		out = new HashMap<Node, Set<T>>();
+		
+		for(Node n : cfg.getAllNodes())
+		{
+			in.put(n, new HashSet<T>());
+			out.put(n, new HashSet<T>());
+		}
+		
+	}
+	
+	public abstract Set<T> gen(Node n);
+	
+	public abstract Set<T> kill(Node n);
 
 	/* Handles the OUT[B] = meet(IN[B]) 
 	 * or IN[B] = meet(OUT[B]) internally for each node
 	 */
-	public void meet(Node n);
+	public abstract Set<T> meet(Node n);
 
 	/* Handles the transfer IN[B] = transfer(OUT[B]) 
 	 * or OUT[B] = transfer(IN[B]) internally for each node
 	 */
-	public void transfer(Node n);
+	public abstract Set<T> transfer(Node n);
 	
-	public void analyse(ControlFlowGraph cfg);
+	public abstract Map<Node, Set<T>> analyse();
+	
+	
 }
