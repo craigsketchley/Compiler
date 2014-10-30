@@ -1,7 +1,5 @@
 package CFG;
 
-import genKillFramework.DataFlowAnalysis;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -131,6 +129,69 @@ public class ControlFlowGraph
 			 * the unreachable nodes will be garbage collected
 			 */
 		}
+	}
+	
+	/**
+	 * Given a node, remove the node from this CFG.
+	 * @throws Exception 
+	 * 
+	 * TODO: Use custom exceptions.
+	 */
+	public void removeNode(Node inNode) throws Exception
+	{
+		if (!allNodes.contains(inNode))
+		{
+			throw new Exception(String.format("CFG does not contain the provided node: %s", inNode));
+		}
+		
+		if (inNode.isSentinel())
+		{
+			throw new Exception("Cannot remove the start or end node");
+		}
+		
+		// TODO: Currently cannot remove branch statements explicitly, handled by unreachable code?
+		if (inNode.getInstruction() instanceof BrInstruction)
+		{
+			throw new Exception(String.format("Cannot remove branch instruction: %s", inNode));
+		}
+		
+		// TODO: Currently cannot remove return statements explicitly, handled by unreachable code?
+		if (inNode.getInstruction() instanceof RetInstruction)
+		{
+			throw new Exception(String.format("Cannot remove return instruction: %s", inNode));
+		}
+		
+		// Find the node in the CFG, and remove it by updating links...
+		Set<Node> predecessors = inNode.getAllPredecessors();
+		Set<Node> successors = inNode.getAllSuccessors();
+		
+		if (successors.size() > 1)
+		{
+			// Something went horribly wrong. Should only have 1 successor.
+			throw new Exception(
+				String.format("This instruction should have more than 1 successor! %s", inNode));
+		}
+		
+		Node successor = successors.iterator().next(); // Should only contain 1 element.
+		
+		// Detach inNode from successor.
+		successor.removePredecessor(inNode);
+		inNode.removeSuccessor(successor);
+		
+		// For all the inNodes predecessors...
+		for (Node predecessor : predecessors)
+		{
+			// Detach inNode from predecessor.
+			predecessor.removeSuccessor(inNode);
+			inNode.removePredecessor(predecessor);
+			
+			// Hook up inNodes successor and predecessor.
+			predecessor.addSuccessor(successor);
+			successor.addPredecessor(predecessor);
+		}
+		
+		// Remove it from the allNodes reference.
+		allNodes.remove(inNode);
 	}
 	
 	/**
