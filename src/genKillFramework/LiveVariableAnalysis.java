@@ -3,12 +3,13 @@ package genKillFramework;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import IntermediateLanguage.*;
 
+import IntermediateLanguage.*;
+import CFG.ControlFlowGraph;
 import CFG.Node;
 import IntermediateLanguage.Instruction;
 
-public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
+public class LiveVariableAnalysis implements DataFlowAnalysis<Register>
 {
 
 	@Override
@@ -58,6 +59,33 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 		result.removeAll(kill(n));
 		result.addAll(gen(n));
 		n.getIn().addAll(result);		
+	}
+
+	@Override
+	public void analyse(ControlFlowGraph cfg)
+	{
+		boolean isChanged = true; 
+		
+		/*From the end of the CFG*/
+		List<Node> bfsOrdering = cfg.bfs(false);
+		
+		while(isChanged)
+		{
+			isChanged = false;
+			for(Node n : bfsOrdering)
+			{
+				int oldCount = n.getOut().size(); 
+				for(Node j : n.getAllSuccessors())
+				{
+					transfer(j);
+				}
+				meet(n);
+				if(oldCount != n.getOut().size())
+				{
+					isChanged = true; 
+				}
+			}
+		}
 	}
 
 }

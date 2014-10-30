@@ -1,12 +1,11 @@
 package optimisation;
 
-import genKillFramework.GenKill;
 import CFG.ControlFlowGraph;
 import IntermediateLanguage.*;
 
 public abstract class Optimisation
 {
-	public Program optimise(Program p)
+	public Program optimise(Program p) throws Exception
 	{
 		Program result = new Program();
 		for(Function f : p.functions)
@@ -18,5 +17,5 @@ public abstract class Optimisation
 		return result;
 	}
 	
-	public abstract ControlFlowGraph runOptimisation (ControlFlowGraph cfg);
+	public abstract ControlFlowGraph runOptimisation (ControlFlowGraph cfg) throws Exception;
 }

@@ -22,7 +22,15 @@ public class DeadCodeEliminationOptimisationTest
 		Program expected = Parser.parse("expected/dTest1");
 		
 		System.out.println(expected);
-		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		Program output = null;
+		try
+		{
+			output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(output);
 		assertEquals(expected.toString(), output.toString());
 	}

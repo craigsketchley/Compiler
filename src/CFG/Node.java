@@ -1,6 +1,5 @@
 package CFG;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,14 +62,14 @@ public class Node
 		this.predecessors.add(p);
 	}
 	
-	public void clearPredecessors()
-	{
-		predecessors = new HashSet<Node>();
-	}
-	
 	public void removePredecessor(Node p)
 	{
 		predecessors.remove(p);
+	}
+	
+	public void clearPredecessors()
+	{
+		predecessors = new HashSet<Node>();
 	}
 	
 	public int getBlockId()
@@ -81,6 +80,16 @@ public class Node
 	public void addSuccessor(Node successor)
 	{
 		this.successors.add(successor);
+	}
+	
+	public void removeSuccessor(Node p)
+	{
+		successors.remove(p);
+	}
+	
+	public void clearSuccessors()
+	{
+		successors = new HashSet<Node>();
 	}
 	
 	@Override

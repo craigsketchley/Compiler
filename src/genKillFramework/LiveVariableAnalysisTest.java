@@ -39,8 +39,7 @@ public class LiveVariableAnalysisTest
 			System.out.println(expected);
 			
 			LiveVariableAnalysis lv = new LiveVariableAnalysis();
-			GenKill gk = new GenKill(cfg, lv);
-			gk.analyseBackward();
+			lv.analyse(cfg);
 			
 			System.out.println(cfg);
 

@@ -1,7 +1,5 @@
 package CFG;
 
-import genKillFramework.DataFlowAnalysis;
-
 public interface ControlFlowInformation
 {
 	public void addInfo();

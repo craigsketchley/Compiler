@@ -1,6 +1,5 @@
 package optimisation;
 
-import genKillFramework.GenKill;
 import genKillFramework.LiveVariableAnalysis;
 
 import java.util.List;
@@ -13,10 +12,10 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 {
 
 	@Override
-	public ControlFlowGraph runOptimisation(ControlFlowGraph cfg)
+	public ControlFlowGraph runOptimisation(ControlFlowGraph cfg) throws Exception
 	{
-		GenKill gk = new GenKill(cfg, new LiveVariableAnalysis());
-		gk.analyseBackward();
+		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis();
+		liveVariableAnalyser.analyse(cfg);
 		
 		List<Node> nodeList = cfg.bfs(true);
 		for(Node n : nodeList)
