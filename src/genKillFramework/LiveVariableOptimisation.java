@@ -16,7 +16,7 @@ public class LiveVariableOptimisation extends Optimisation<Register>
 	{
 		Set<Register> result = new HashSet<Register>();
 		
-		if(!n.isPlaceholder())
+		if(!n.isSentinel())
 		{
 			Instruction instruction = n.getInstruction();
 			List<Register> usedRegisters = instruction.getReferencedRegisters();	
@@ -31,7 +31,7 @@ public class LiveVariableOptimisation extends Optimisation<Register>
 	{
 		Set<Register> result = new HashSet<Register>();
 		
-		if(!n.isPlaceholder())
+		if(!n.isSentinel())
 		{
 			Instruction instruction = n.getInstruction();
 			List<Register> killedRegisters = instruction.getAssignedRegisters();	
