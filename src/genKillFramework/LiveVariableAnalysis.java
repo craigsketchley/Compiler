@@ -43,24 +43,21 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 	}
 
 	@Override
-	public Set<Register> meet(Set<Register> s1, Set<Register> s2)
+	public void meet(Node n)
 	{
-		Set<Register> result = new HashSet<Register>();
-		result.addAll(s1);
-		result.addAll(s2);
-		
-		return result;
-		
+		for(Node j : n.getAllSuccessors())
+		{
+			n.getIn().addAll(j.getIn());
+		}
 	}
 	
-	public Set<Register> transfer(Node n)
+	public void transfer(Node n)
 	{
 		Set<Register> result = new HashSet<Register>();
 		result.addAll(n.getOut());
 		result.removeAll(kill(n));
 		result.addAll(gen(n));
-		return result;
-		
+		n.getIn().addAll(result);		
 	}
 
 }

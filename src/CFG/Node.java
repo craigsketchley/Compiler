@@ -12,7 +12,8 @@ public class Node
 	private int blockId; 
 	private Instruction instruction;
 	//private ControlFlowInformation in;
-	private Set<Register> out; 
+	private Set<Register> in; 
+	private Set<Register> out; //TODO: Need to generalize this to an interface
 	private Set<Node> successors; 
 	private Set<Node> predecessors; 
 	
@@ -91,6 +92,16 @@ public class Node
 	public Set<Register> getOut()
 	{
 		return out;
+	}
+
+	public Set<Register> getIn()
+	{
+		return in;
+	}
+
+	public void setIn(Set<Register> in)
+	{
+		this.in = in;
 	}
 		
 }

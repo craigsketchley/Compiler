@@ -39,16 +39,16 @@ public class GenKill
 			isChanged = false;
 			for(Node n : bfsOrdering)
 			{
-				Set<Register> result = new HashSet<Register>();
+				int oldCount = n.getOut().size(); 
 				for(Node j : n.getAllSuccessors())
 				{
-					result = opt.meet(result, opt.transfer(j));
+					opt.transfer(j);
 				}
-				//Union with old to keep monotonicity 
-				int oldCount = n.getOut().size();
-				n.getOut().addAll(result);
+				opt.meet(n);
 				if(oldCount != n.getOut().size())
+				{
 					isChanged = true; 
+				}
 			}
 		}
 		
