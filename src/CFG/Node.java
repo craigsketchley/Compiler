@@ -36,6 +36,7 @@ public class Node
 		successors = new HashSet<Node>();
 		predecessors = new HashSet<Node>();
 		out = new HashSet<Register>();
+		in = new HashSet<Register>();
 	}
 	
 	public boolean isSentinel()

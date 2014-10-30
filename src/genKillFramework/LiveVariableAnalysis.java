@@ -37,7 +37,9 @@ public class LiveVariableAnalysis implements DataFlowAnalysis<Register>
 			Instruction instruction = n.getInstruction();
 			Register killedReg = instruction.getAssignedRegister();	
 			if(killedReg != null)
+			{
 				result.add(killedReg);
+			}
 		}
 		
 		return result;
@@ -48,7 +50,7 @@ public class LiveVariableAnalysis implements DataFlowAnalysis<Register>
 	{
 		for(Node j : n.getAllSuccessors())
 		{
-			n.getIn().addAll(j.getIn());
+			n.getOut().addAll(j.getIn());
 		}
 	}
 	

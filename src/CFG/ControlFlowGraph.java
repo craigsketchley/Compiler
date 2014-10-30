@@ -178,8 +178,10 @@ public class ControlFlowGraph
 		successor.removePredecessor(inNode);
 		
 		// For all the inNodes predecessors...
-		for (Node predecessor : predecessors)
+		Iterator<Node> it = predecessors.iterator();
+		while(it.hasNext())
 		{
+			Node predecessor = it.next();
 			// Detach inNode from predecessor.
 			predecessor.removeSuccessor(inNode);
 			
@@ -188,6 +190,8 @@ public class ControlFlowGraph
 			successor.addPredecessor(predecessor);
 		}
 		
+		/*Removing references to predecessors of the removed node*/
+		inNode.clearPredecessors();
 		// Remove it from the allNodes reference.
 		allNodes.remove(inNode);
 	}
