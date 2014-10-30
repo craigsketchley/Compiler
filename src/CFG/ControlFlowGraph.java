@@ -141,7 +141,8 @@ public class ControlFlowGraph
 	{
 		if (!allNodes.contains(inNode))
 		{
-			throw new Exception(String.format("CFG does not contain the provided node: %s", inNode));
+			throw new Exception(
+					String.format("CFG does not contain the provided node: %s", inNode));
 		}
 		
 		if (inNode.isSentinel())
@@ -165,25 +166,22 @@ public class ControlFlowGraph
 		Set<Node> predecessors = inNode.getAllPredecessors();
 		Set<Node> successors = inNode.getAllSuccessors();
 		
-		if (successors.size() > 1)
+		if (successors.size() != 1)
 		{
 			// Something went horribly wrong. Should only have 1 successor.
 			throw new Exception(
-				String.format("This instruction should have more than 1 successor! %s", inNode));
+				String.format("This instruction should have only 1 successor! %s", inNode));
 		}
-		
 		Node successor = successors.iterator().next(); // Should only contain 1 element.
 		
 		// Detach inNode from successor.
 		successor.removePredecessor(inNode);
-		inNode.removeSuccessor(successor);
 		
 		// For all the inNodes predecessors...
 		for (Node predecessor : predecessors)
 		{
 			// Detach inNode from predecessor.
 			predecessor.removeSuccessor(inNode);
-			inNode.removePredecessor(predecessor);
 			
 			// Hook up inNodes successor and predecessor.
 			predecessor.addSuccessor(successor);
