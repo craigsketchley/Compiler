@@ -27,7 +27,7 @@ public class GenKill
 		this.opt = opt;
 	}
 	
-	public void optimiseBackward()
+	public void analyseBackward()
 	{
 		boolean isChanged = true; 
 		
