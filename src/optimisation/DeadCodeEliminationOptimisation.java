@@ -4,6 +4,8 @@ import genKillFramework.LiveVariableAnalysis;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import CFG.ControlFlowGraph;
 import CFG.Node;
@@ -16,7 +18,7 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 	public void runOptimisation(ControlFlowGraph cfg) throws Exception
 	{
 		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis(cfg);
-		liveVariableAnalyser.analyse();
+		Map<Node, Set<Register>> dataFlowInfo = liveVariableAnalyser.analyse();
 		List<Node> nodeList = cfg.bfs(true);
 	
 		Iterator<Node> it = nodeList.iterator();
@@ -31,7 +33,7 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 			Register assignedReg = n.getInstruction().getAssignedRegister();		
 			if(assignedReg != null)
 			{
-				if(!n.getOut().contains(assignedReg))
+				if(!dataFlowInfo.get(n).contains(assignedReg))
 				{
 					cfg.removeNode(n);
 				}

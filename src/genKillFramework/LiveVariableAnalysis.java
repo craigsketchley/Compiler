@@ -58,7 +58,7 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 		
 		for(Node j : n.getAllSuccessors())
 		{
-			out.addAll(j.getIn());
+			out.addAll(in.get(j));
 		}
 		
 		return out;
@@ -67,7 +67,7 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Register>
 	public Set<Register> transfer(Node n)
 	{
 		Set<Register> in = new HashSet<Register>();
-		in.addAll(n.getOut());
+		in.addAll(out.get(n));
 		in.removeAll(kill(n));
 		in.addAll(gen(n));
 		return in;		

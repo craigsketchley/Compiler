@@ -11,8 +11,8 @@ public class Node
 	private int blockId; 
 	private Instruction instruction;
 	//private ControlFlowInformation in;
-	private Set<Register> in; 
-	private Set<Register> out; //TODO: Need to generalize this to an interface
+//	private Set<Register> in; 
+//	private Set<Register> out; //TODO: Need to generalize this to an interface
 	private Set<Node> successors; 
 	private Set<Node> predecessors; 
 	
@@ -35,8 +35,8 @@ public class Node
 		this.instruction = instruction;
 		successors = new HashSet<Node>();
 		predecessors = new HashSet<Node>();
-		out = new HashSet<Register>();
-		in = new HashSet<Register>();
+//		out = new HashSet<Register>();
+//		in = new HashSet<Register>();
 	}
 	
 	public boolean isSentinel()
@@ -96,22 +96,22 @@ public class Node
 	@Override
 	public String toString()
 	{
-		return String.format("%d %s : set %s", blockId, instruction, out);
+		return String.format("%d %s ", blockId, instruction);
 	}
 
-	public Set<Register> getOut()
-	{
-		return out;
-	}
-
-	public Set<Register> getIn()
-	{
-		return in;
-	}
-
-	public void setIn(Set<Register> in)
-	{
-		this.in = in;
-	}
+//	public Set<Register> getOut()
+//	{
+//		return out;
+//	}
+//
+//	public Set<Register> getIn()
+//	{
+//		return in;
+//	}
+//
+//	public void setIn(Set<Register> in)
+//	{
+//		this.in = in;
+//	}
 		
 }

@@ -84,7 +84,7 @@ public class ControlFlowGraphTest
 
 			List<Node> removeNodes = new LinkedList<Node>();
 			
-			for (Node n : cfg.allNodes)
+			for (Node n : cfg.getAllNodes())
 			{
 				if (!(n.getInstruction() instanceof BrInstruction) &&
 					!(n.getInstruction() instanceof RetInstruction) &&
