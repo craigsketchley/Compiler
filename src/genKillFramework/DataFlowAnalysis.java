@@ -12,9 +12,9 @@ import CFG.*;
  * 
  * Implement this interface to generate a specific data flow analysis.
  * 
+ * @author Joe Godbehere
  * @author Ricky Ratnayake
  * @author Craig Sketchley
- * @author Joe Godbehere
  *
  * @param <T> The type of information stored for the data flow analysis.
  */

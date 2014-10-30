@@ -16,6 +16,15 @@ import IntermediateLanguage.Function;
 import IntermediateLanguage.Instruction;
 import IntermediateLanguage.RetInstruction;
 
+/**
+ * Holds the Control Flow Graph for a given function from the AST. It can run
+ * unreachable code optimisation. 
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class ControlFlowGraph 
 {
 	private Node start; //sentinel node before the entry point of the function

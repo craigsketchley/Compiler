@@ -11,6 +11,15 @@ import CFG.ControlFlowGraph;
 import CFG.Node;
 import IntermediateLanguage.Register;
 
+/**
+ * Applies the dead code elimination optimisation. This uses Live Variable
+ * Analysis to determine dead code.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class DeadCodeEliminationOptimisation extends Optimisation
 {
 
