@@ -2,8 +2,6 @@ package CFG;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import IntermediateLanguage.*;
@@ -46,6 +44,7 @@ public class ControlFlowGraphTest
 		for (Function function : program.functions) {
 			ControlFlowGraph cfg = new ControlFlowGraph(function);
 			Function outputFunction = cfg.convertToFunction();
+			System.out.println(cfg);
 			assertEquals(function.toString(), outputFunction.toString());
 		}
 	}
@@ -57,7 +56,7 @@ public class ControlFlowGraphTest
 	public void testRemoveUnreachableBlock1()
 	{
 		Program programInput = Parser.parse("input/unreachableBlockExample");
-		Program programOutput = Parser.parse("output/unreachableBlockExample");
+		Program programOutput = Parser.parse("expected/unreachableBlockExample");
 		for (int i = 0; i < programInput.functions.size(); i++) {
 			Function functionIn = programInput.functions.get(i);
 			Function functionOut = programOutput.functions.get(i);
