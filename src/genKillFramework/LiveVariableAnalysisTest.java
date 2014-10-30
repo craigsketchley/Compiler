@@ -40,10 +40,11 @@ public class LiveVariableAnalysisTest
 			
 			LiveVariableAnalysis lv = new LiveVariableAnalysis();
 			lv.analyse(cfg);
-			
+//			
 			System.out.println(cfg);
 
-			//String actual = cfg.toString();
+			String actual = cfg.toString();
+			assertTrue(actual.replaceAll("\\s+","").equalsIgnoreCase(expected.replaceAll("\\s+","")));
 			//assertEquals(actual.toString(), expected.toString());
 		}
 		

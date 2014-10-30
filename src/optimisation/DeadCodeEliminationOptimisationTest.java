@@ -19,7 +19,7 @@ public class DeadCodeEliminationOptimisationTest
 	public void test()
 	{
 		Program input = Parser.parse("input/assignmentSpecExample");
-		Program expected = Parser.parse("expected/dTest1");
+		Program expected = Parser.parse("expected/dceTest1");
 		
 		System.out.println(expected);
 		Program output = null;
