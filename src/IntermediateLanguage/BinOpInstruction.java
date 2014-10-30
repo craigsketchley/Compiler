@@ -5,14 +5,16 @@ import java.util.List;
 
 /* This is likely to change later into an interface (implemented by different operations */
 
-public class BinOpInstruction implements Instruction {
+public class BinOpInstruction implements Instruction
+{
 	
-	public String op;
-	public Register dest;
-	public Register lhs;
-	public Register rhs;
+	public String op; //the operation
+	public Register dest; //register to write to
+	public Register lhs; //left argument
+	public Register rhs; //right argument
 	
-	public BinOpInstruction(String op, Register dest, Register lhs, Register rhs) {
+	public BinOpInstruction(String op, Register dest, Register lhs, Register rhs)
+	{
 		this.op = op;
 		this.dest = dest;
 		this.lhs = lhs;
@@ -20,17 +22,20 @@ public class BinOpInstruction implements Instruction {
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return String.format("(%s %s %s %s)", op, dest, lhs, rhs);
 	}
 
 	@Override
-	public List<Register> getReferencedRegisters() {
+	public List<Register> getReferencedRegisters()
+	{
 		return Arrays.asList(lhs, rhs);
 	}
 
 	@Override
-	public Register getAssignedRegister() {
+	public Register getAssignedRegister()
+	{
 		return dest;
 	}
 }

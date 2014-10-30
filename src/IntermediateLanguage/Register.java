@@ -1,26 +1,41 @@
 package IntermediateLanguage;
 
-public class Register{
+public class Register
+{
 	
-	public int register;
+	public int register; //the register number
 	
-	public Register(int register) {
+	public Register(int register)
+	{
 		this.register = register;
 	}
 	
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "r" + register;
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if (other == null) return false;
-	    if (other == this) return true;
-	    if (!(other instanceof Register))return false;
-	    Register otherReg = (Register)other;
-	
-		return (otherReg.register == this.register);
+	public boolean equals(Object other)
+	{
+		if (other == null)
+		{
+			//cannot match null
+			return false;
+		}
+	    if (other == this)
+	    {
+	    	//same object
+	    	return true;
+	    }
+	    if (!(other instanceof Register))
+	    {
+	    	//can't compare with anything but Registers
+	    	return false;
+	    }
+	    //compare the register values
+		return ( ((Register)other).register == this.register);
 	}
 	
 	@Override

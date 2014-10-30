@@ -3,30 +3,35 @@ package IntermediateLanguage;
 import java.util.Arrays;
 import java.util.List;
 
-public class BrInstruction implements Instruction {
+public class BrInstruction implements Instruction
+{
 
-	public Register register;
-	public int blockTrue;
-	public int blockFalse;
+	public Register register; //register used for decision
+	public int blockTrue; //block to move to if true
+	public int blockFalse; //block to move to if false
 
-	public BrInstruction(Register register, int blockTrue, int blockFalse) {
+	public BrInstruction(Register register, int blockTrue, int blockFalse)
+	{
 		this.register = register;
 		this.blockTrue = blockTrue;
 		this.blockFalse = blockFalse;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return String.format("(br %s %d %d)", register, blockTrue, blockFalse);
 	}
 
 	@Override
-	public List<Register> getReferencedRegisters() {
+	public List<Register> getReferencedRegisters()
+	{
 		return Arrays.asList(register);
 	}
 
 	@Override
-	public Register getAssignedRegister() {
+	public Register getAssignedRegister()
+	{
 		return null;
 	}
 }
