@@ -132,7 +132,7 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		return result;
 	}
 
-	public boolean updateMeet(Map<Node, HashMap<Register, Lattice<String>>> map, Node n)
+	public boolean updateDataFlowInfo(Map<Node, HashMap<Register, Lattice<String>>> map, Node n)
 	{
 		int size = map.get(n).size();
 		map.get(n).putAll(meet(n));

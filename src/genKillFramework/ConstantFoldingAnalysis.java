@@ -108,7 +108,7 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	}
 
 	@Override
-	public boolean updateMeet(Map<Register, Lattice<Integer>> map, Node n)
+	public boolean updateDataFlowInfo(Map<Register, Lattice<Integer>> map, Node n)
 	{
 		// TODO Auto-generated method stub
 		return false;
@@ -214,7 +214,6 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 
 }

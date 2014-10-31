@@ -86,7 +86,7 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 	}
 
 	@Override
-	public boolean updateMeet(Map<Node, Set<Register>> map, Node n)
+	public boolean updateDataFlowInfo(Map<Node, Set<Register>> map, Node n)
 	{
 		int size = map.get(n).size();
 		//Merges with the current out set of the node to maintain MONOTONICITY
