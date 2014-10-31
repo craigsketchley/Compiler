@@ -16,6 +16,24 @@ import cfg.Node;
 
 /**
  * Applies the redundant load optimisation.
+ * 
+ * See LoadVariableAnalysis for details of the gen / kill / meet / transfer
+ * 
+ * Once we have the analysis data, we look for uses of registers that
+ * we can safely rewrite. For each statement, we look at all referenced
+ * registers. If one of these registers corresponds to a register in the
+ * analysis data stored for this node, then we look for other registers
+ * holding the same data.
+ * 
+ * We select the register with the lowest id, which holds the variable.
+ * Justification: A nice heuristic to maximise the optimisations would
+ * be to use the oldest register, since this should cover the most uses.
+ * However, identifying this in a language which supports looping is
+ * non-trivial. By consistently choosing the register with lowest id,
+ * which is likely to be the oldest, we're reasonably likely to get some
+ * optimisations.
+ * 
+ * The register is rewritten, if a suitable register was found.
  */
 public class RedundantLoadOptimisation extends Optimisation
 {
@@ -50,16 +68,13 @@ public class RedundantLoadOptimisation extends Optimisation
 						(dataFlowNode.get(reg).getState() == Lattice.State.KNOWN) )
 				{
 					Lattice<String> value = dataFlowNode.get(reg);
-					//See if any other registers are in the same state.
-					//If so, select the one with lowest ID? TODO: better analysis!
+					/* See if any other registers are in the same state. If so,
+					 * choose the one with lowest ID. See longer description above
+					 * for a justification of this choice
+					 */
 					Register rewriteReg = reg;
 					for(Register other : dataFlowNode.keySet())
 					{
-//						System.out.println(String.format(
-//								"comparing %s=%s, %s=%s, %s",
-//								reg, value, other, dataFlowNode.get(other),
-//								dataFlowNode.get(other).equals(value)
-//								));
 						if(dataFlowNode.get(other).equals(value))
 						{
 							if(other.register < rewriteReg.register)
@@ -70,20 +85,12 @@ public class RedundantLoadOptimisation extends Optimisation
 					}
 					//If we chose a different register
 					if(rewriteReg != reg)
-					//if(rewriteReg.register != reg.register)
 					{
+						//Then we can rewrite the statement to remove a redundant load!
 						n.getInstruction().rewriteReferencedRegisters(reg, rewriteReg);
 					}
 				}
 			}
 		}
-		
-		//TODO: remove before submission, just debugging info
-		System.out.println("***PRINTING MAP***");
-		for(Node k : cfg.getAllNodes())
-		{
-			System.out.println(String.format("Node: %s - Map: %s", k, dataFlowInfo.get(k)));
-		}
-
 	}	
 }
