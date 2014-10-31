@@ -35,7 +35,8 @@ public class ControlFlowGraph
 	
 
 	/**
-	 * Construct a CFG based on a given function
+	 * Construct a CFG based on a given function.
+	 * 
 	 * @param function
 	 */
 	public ControlFlowGraph(Function function)
@@ -134,7 +135,7 @@ public class ControlFlowGraph
 	
 	/**
 	 * This optimisation attempts to remove any unreachable code,
-	 * using a DFS
+	 * using a DFS.
 	 */
 	public void removeUnreachableCode()
 	{
@@ -159,6 +160,10 @@ public class ControlFlowGraph
 	
 	/**
 	 * Given a node, remove the node from this CFG.
+	 * 
+	 * Cannot be called on a sentinal Node or a Node containing a
+	 * BrInstruction, RetInstruction.
+	 * 
 	 * @throws Exception 
 	 * 
 	 * TODO: Use custom exceptions?
@@ -223,7 +228,9 @@ public class ControlFlowGraph
 	}
 	
 	/**
-	 * @return the reachable nodes of the function as an AST.
+	 * Converts and outputs the current state of the Control Flow Graph as a function.
+	 * 
+	 * @return the reachable nodes of the control flow graph as a function AST.
 	 */
 	public Function convertToFunction()
 	{
@@ -272,6 +279,8 @@ public class ControlFlowGraph
 	 */
 	
 	/**
+	 * A Breadth First Search (BFS) of the Control Flow Graph.
+	 * 
 	 * @param forward
 	 * @return returns a breadth first search ordering from start->end or end->start
 	 */
@@ -301,6 +310,8 @@ public class ControlFlowGraph
 	}
 
 	/**
+	 * A Depth First Search (DFS) of the Control Flow Graph.
+	 * 
 	 * @param forward
 	 * @return returns a depth first search ordering from start->end or end->start
 	 */
@@ -340,7 +351,8 @@ public class ControlFlowGraph
 	}
 	
 	/**
-	 * String representation of the CFG, suitable for use with graphviz.
+	 * Override of the toString method. Outputs a representation of the CFG,
+	 * suitable for use with graphviz.
 	 */
 	@Override
 	public String toString()

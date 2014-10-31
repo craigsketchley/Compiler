@@ -8,6 +8,16 @@ import java.util.Set;
 
 import cfg.*;
 
+/**
+ * Runs a simple Available Expressions analysis. Not currently used for any optimisation.
+ * 
+ * TODO: Remove?
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 {	
 	/**

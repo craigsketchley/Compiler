@@ -5,14 +5,20 @@ import intermediateLanguage.*;
 
 import org.junit.Test;
 
+/**
+ * Tests the Control Flow Graph class.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class ControlFlowGraphTest
 {
 
 	/**
 	 * Test the input function is the same as the output function
 	 * if no optimisation has been performed.
-	 * 
-	 * TODO: Should we implement an equals method for functions?
 	 */
 	@Test
 	public void testNoOptimisation1()
@@ -25,6 +31,10 @@ public class ControlFlowGraphTest
 		}
 	}
 	
+	/**
+	 * Test the input function is the same as the output function
+	 * if no optimisation has been performed.
+	 */
 	@Test
 	public void testNoOptimisation2()
 	{
@@ -37,9 +47,8 @@ public class ControlFlowGraphTest
 	}
 	
 	/**
-	 * Removing an unreachable code tests.
+	 * Removing an unreachable code test.
 	 */
-	
 	@Test
 	public void testRemoveUnreachableCodeBlock1()
 	{
@@ -56,6 +65,9 @@ public class ControlFlowGraphTest
 		}
 	}
 
+	/**
+	 * Removing an unreachable code test.
+	 */
 	@Test
 	public void testRemoveUnreachableCodeBlock2()
 	{
@@ -72,6 +84,9 @@ public class ControlFlowGraphTest
 		}
 	}
 	
+	/**
+	 * Removing an unreachable code with double return statement test.
+	 */
 	@Test
 	public void testRemoveUnreachableCodeDoubleReturn()
 	{
@@ -97,7 +112,7 @@ public class ControlFlowGraphTest
 		Program program = Parser.parse("input/factorialExample");
 		for (Function function : program.functions) {
 			ControlFlowGraph cfg = new ControlFlowGraph(function);
-			
+			// TODO:?
 			
 		}
 	}

@@ -10,6 +10,14 @@ import org.junit.Test;
 
 import cfg.*;
 
+/**
+ * Tests the Available Expressions analysis.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class AvailableExpressionsAnalysisTest {
 
 	@Before
