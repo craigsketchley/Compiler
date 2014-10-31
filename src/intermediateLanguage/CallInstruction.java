@@ -26,7 +26,7 @@ public class CallInstruction implements Instruction
 	@Override
 	public List<Register> getReferencedRegisters()
 	{
-		return args; //TODO: deep copy?
+		return args;
 	}
 
 	@Override

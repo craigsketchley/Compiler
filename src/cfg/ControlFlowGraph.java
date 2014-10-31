@@ -188,13 +188,13 @@ public class ControlFlowGraph
 			throw new RuntimeException("Cannot remove the start or end node");
 		}
 		
-		// TODO: Currently cannot remove branch statements explicitly, handled by unreachable code?
+		// Currently cannot remove branch statements explicitly, handled by unreachable code.
 		if (inNode.getInstruction() instanceof BrInstruction)
 		{
 			throw new RuntimeException(String.format("Cannot remove branch instruction: %s", inNode));
 		}
 		
-		// TODO: Currently cannot remove return statements explicitly, handled by unreachable code?
+		// Currently cannot remove return statements explicitly, handled by unreachable code.
 		if (inNode.getInstruction() instanceof RetInstruction)
 		{
 			throw new RuntimeException(String.format("Cannot remove return instruction: %s", inNode));
