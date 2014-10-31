@@ -5,6 +5,15 @@ import intermediateLanguage.Instruction;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Node for the Control Flow Graph. Holds a single instruction per node of
+ * the CFG. Nodes can also by sentinal nodes (start/end) for the CFG.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class Node
 {
 	private int blockId; 
