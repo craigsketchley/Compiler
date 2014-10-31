@@ -1,5 +1,6 @@
 package genKillFramework;
 
+import genKillFramework.DataFlowAnalysis.Direction;
 import intermediateLanguage.BinOpInstruction;
 import intermediateLanguage.Instruction;
 import intermediateLanguage.LcInstruction;
@@ -26,14 +27,14 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	@Override
 	public Map<Register, Lattice<Integer>> gen(Node n)
 	{
-		/* Constant folding does not use Gen / Kill framework */ 
+		/* Constant folding does not use Gen-Kill framework */ 
 		return null;
 	}
 
 	@Override
 	public Map<Register, Lattice<Integer>> kill(Node n)
 	{
-		// TODO Auto-generated method stub
+		/* Constant folding does not use Gen-Kill framework */
 		return null;
 	}
 
@@ -63,53 +64,43 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 				else
 				{
 					//Register exists in the result map, we should monotonically merge
-					result.put(k, newVal.merge(predMap.get(k)));
+					result.get(k).merge(predMap.get(k));
 				}
-				
-			}
-			
-			
-		}
-		
-		
+			}	
+		}		
 		return result;
-		
-//		Iterator<Node> it = n.getAllPredecessors().iterator();
-//		if(!it.hasNext())
-//		{
-//			//no predecessors
-//			return result;
-//		}
-//		//start with everything from first node
-//		result.putAll(out.get(it.next()));
-//		registerIntersection.addAll(out.get(it.next()).keySet());
-//		//then intersect the rest
-//		while(it.hasNext())
-//		{
-//			registerIntersection.retainAll(out.get(it.next()).keySet());
-//		}
-//		
-//		//now we need to see if we know the values
-//		for(Register key : registerIntersection)
-//		{
-//			it = n.getAllPredecessors().iterator();
-//			Lattice<String> value = out.get(it.next()).get(key);
-//			while(it.hasNext())
-//			{
-//				value.merge(out.get(it.next()).get(key));
-//			}
-//			if(value.getState() == Lattice.State.KNOWN)
-//			{
-//				result.put(key, value); //TODO: should we always put this in? e.g. when TOP?
-//			}
-//		}
-//		
-//		return result;
 	}
 
 	@Override
-	public boolean updateMeet(Map<Register, Lattice<Integer>> map, Node n)
+	public boolean updateMeet(Map<Node, Map<Register, Lattice<Integer>>> map,
+			Node n)
 	{
+		//Perform the meet operation and track if any variables change from old IN[]
+		boolean isUpdated = false;
+		Map<Register, Lattice<Integer>> newIn = meet(n);
+		for(Node pred : n.getAllPredecessors())
+		{
+			Map<Register, Lattice<Integer>> predMap = out.get(pred);
+			//For all Registers in the predecessor merge the Lattice into result
+			for(Register k : predMap.keySet())
+			{
+				if(!result.containsKey(k) || result.get(k).isStateBottom())
+				{
+					//Implies Register is undefined in the result
+					Lattice<Integer> newVal = new Lattice<Integer>(Lattice.State.BOTTOM);
+					result.put(k, newVal.merge(predMap.get(k)));
+				}
+				else
+				{
+					//Register exists in the result map, we should monotonically merge
+					result.get(k).merge(predMap.get(k));
+				}
+			}	
+		}		
+		
+		
+		
+		Map<Register, Lattice<Integer>> 
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -211,9 +202,10 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	@Override
 	public Map<Node, Map<Register, Lattice<Integer>>> analyse()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return analyse(Direction.FORWARDS);
 	}
+
+
 
 
 
