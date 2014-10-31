@@ -22,14 +22,15 @@ import IntermediateLanguage.Register;
  */
 public class DeadCodeEliminationOptimisation extends Optimisation
 {
-
+	
 	@Override
 	public void runOptimisation(ControlFlowGraph cfg)
 	{
 		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis(cfg);
-		Map<Node, Set<Register>> dataFlowInfo = liveVariableAnalyser.analyse();
+		Map<Node, Set<Register>> liveVariableInfo = liveVariableAnalyser.analyse();
 		List<Node> nodeList = cfg.getAllNodes();
-	
+		
+		
 		Iterator<Node> it = nodeList.iterator();
 		while(it.hasNext())
 		{
@@ -39,10 +40,11 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 				continue;
 			}
 			
+			/*Removes assignments to registers that are not used in the program*/
 			Register assignedReg = n.getInstruction().getAssignedRegister();
 			if(assignedReg != null)
 			{
-				if(!dataFlowInfo.get(n).contains(assignedReg))
+				if(!liveVariableInfo.get(n).contains(assignedReg))
 				{
 					try {
 						cfg.removeNode(n);
