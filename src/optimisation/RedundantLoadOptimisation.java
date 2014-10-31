@@ -16,6 +16,11 @@ import cfg.Node;
 
 /**
  * Applies the redundant load optimisation.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
  */
 public class RedundantLoadOptimisation extends Optimisation
 {

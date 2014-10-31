@@ -19,8 +19,6 @@ public class UnreachableCodeOptimisationTest {
 	/**
 	 * Test the input function is the same as the output function
 	 * if no optimisation has been performed.
-	 * 
-	 * TODO: Should we implement an equals method for functions?
 	 */
 	@Test
 	public void testNoOptimisation1()
@@ -33,6 +31,10 @@ public class UnreachableCodeOptimisationTest {
 		assertEquals(inProgram.toString(), origProgram.toString());
 	}
 	
+	/**
+	 * Test the input function is the same as the output function
+	 * if no optimisation has been performed.
+	 */
 	@Test
 	public void testNoOptimisation2()
 	{
@@ -45,9 +47,8 @@ public class UnreachableCodeOptimisationTest {
 	}
 	
 	/**
-	 * Removing an unreachable code tests.
+	 * Remove a unreachable code test.
 	 */
-	
 	@Test
 	public void testRemoveUnreachableCodeBlock1()
 	{
@@ -59,6 +60,9 @@ public class UnreachableCodeOptimisationTest {
 		assertEquals(programInput.toString(), programOutput.toString());
 	}
 
+	/**
+	 * Remove a unreachable code test.
+	 */
 	@Test
 	public void testRemoveUnreachableCodeBlock2()
 	{
@@ -70,6 +74,9 @@ public class UnreachableCodeOptimisationTest {
 		assertEquals(programInput.toString(), programOutput.toString());
 	}
 	
+	/**
+	 * Remove a unreachable double return code test.
+	 */
 	@Test
 	public void testRemoveUnreachableCodeDoubleReturn()
 	{
