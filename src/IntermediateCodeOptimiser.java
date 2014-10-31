@@ -17,10 +17,11 @@ import intermediateLanguage.*;
  * OVERVIEW: Intermediate Language Compiler Optimiser
  * USAGE: IntermediateCodeOptimiser inFile [-o[utput] outFile] [-O1 -O2 -O3]
  * OPTIMISATIONS:
- * 	-O   All Optimisations
+ * 	-O   Optimisations 1,2,3 
  * 	-O1  Unreachable Code Removal
  * 	-O2  Dead Code Elimination
  * 	-O3  Redundant Load Elimination
+ *  -O4  Constant Propagation
  * 
  * @author Joe Godbehere
  * @author Ricky Ratnayake
@@ -29,7 +30,7 @@ import intermediateLanguage.*;
  */
 public class IntermediateCodeOptimiser
 {
-	private static int NUM_POSSIBLE_OPTIMISATIONS = 3;
+	private static int NUM_POSSIBLE_OPTIMISATIONS = 4;
 	private static int maxIterations = 3;
 	private static Program inputProgram = null; 
 	private static String inputFile = null;
@@ -41,7 +42,7 @@ public class IntermediateCodeOptimiser
 	 */
 	public static enum OptFlag
 	{
-		UNREACHABLE, DEAD_CODE, REDUNDANT_LOAD
+		UNREACHABLE, DEAD_CODE, REDUNDANT_LOAD, CONSTANT_PROPAGATION
 	}
 	
 	/**
@@ -73,10 +74,11 @@ public class IntermediateCodeOptimiser
         .append("OVERVIEW: Intermediate Language Compiler Optimiser\n\n")
         .append("USAGE: IntermediateCodeOptimiser inFile [-o[utput] outFile] [-O1 -O2 -O3]\n\n")
         .append("OPTIMISATIONS:\n")
-        .append("\t-O \tAll Optimisations\n")
+        .append("\t-O \tOptimisations 1,2,3\n")
         .append("\t-O1\tUnreachable Code Removal\n")
         .append("\t-O2\tDead Code Elimination\n")
         .append("\t-O3\tRedundant Load Elimination\n")
+        .append("\t-O4\tConstant Propagation\n")
         .toString();
 		
 		System.out.print(helpText);
@@ -134,6 +136,9 @@ public class IntermediateCodeOptimiser
 				break;
 			case "-O3":
 				opts.add(OptFlag.REDUNDANT_LOAD);
+				break;
+			case "-O4":
+				opts.add(OptFlag.CONSTANT_PROPAGATION);
 				break;
 			case "-output": case "-o":
 				//-o requires another argument, check it exists
@@ -199,6 +204,10 @@ public class IntermediateCodeOptimiser
 			{
 				inputProgram = Optimiser.optimise(inputProgram, new UnreachableCodeOptimisation());
 			}
+			if(opts.contains(OptFlag.CONSTANT_PROPAGATION))
+			{
+				inputProgram = Optimiser.optimise(inputProgram, new UnreachableCodeOptimisation());
+			}			
 	
 			//Stop iterating early, if the program didn't change
 			if(programCode.equals(inputProgram.toString()))
