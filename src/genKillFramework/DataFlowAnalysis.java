@@ -139,31 +139,39 @@ public abstract class DataFlowAnalysis<T>
 		List<Node> orderedNodes =
 				(direction == Direction.FORWARDS) ? cfg.bfs(true) : cfg.bfs(false);
 		
+		int count = 0;
 		//Run fixed point function
 		while(changed)
 		{
+			System.out.println("Interation : " + count);
 			//Indicate whether a change has been seen
 			changed = false;
-			
+			System.out.println("<<Transfer>>");
 			//Run transfer function on all nodes
 			for(Node n : orderedNodes)
 			{
 				//Note that if the Meet data didn't change, this won't, so there's
 				//no requirement to check for changes at this point
 				Map<Node, T> map = (direction == Direction.FORWARDS) ? out : in;
+				System.out.println(String.format("Before : Node: %s - Map: %s", n, map.get(n)));
 				map.put(n, transfer(n));
+				System.out.println(String.format("After : Node: %s - Map: %s", n, map.get(n)));
 			}
 
+			System.out.println("<<update DF>>");
 			//Run meet function on all nodes, checking for a change
 			for(Node n : orderedNodes)
 			{
 				//Merge with all previous inputs to maintain MONOTONICITY
 				Map<Node, T> map = (direction == Direction.FORWARDS) ? in : out;
+				System.out.println(String.format("Before : Node: %s - Map: %s", n, map.get(n)));
 				if(updateDataFlowInfo(map, n))
 				{
 					changed = true;
 				}
+				System.out.println(String.format("After : Node: %s - Map: %s", n, map.get(n)));
 			}
+			count++;
 		}
 		
 		return (direction == Direction.FORWARDS) ? in : out;
