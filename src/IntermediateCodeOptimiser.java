@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import cfg.*;
 import optimisation.*;
 import intermediateLanguage.*;
 
