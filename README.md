@@ -8,9 +8,9 @@ This is an implementation of a Compiler Optimiser for the Intermediate Language 
 
 Use the provided script `optimise.sh`. This can be used... _describe the steps_.
 
-The documentation can be found online [here](http://craigsketchley.github.io/COMP3109_Assignment3/docs/) or within the [`docs` folder](docs/).
+### Documentation
 
-### File/Folder Structure
+The code is heavily commented. JavaDoc HTML documentation has been generated from these and they can be found [online here](http://craigsketchley.github.io/COMP3109_Assignment3/docs/) or within the [`docs` folder](docs/).
 
 Packages:
 
@@ -32,8 +32,6 @@ The contains the parser and classes required for the AST
 lattice
 This contains a class for generic lattice objects (essentially a wrapper that adds the TOP and BOTTOM states to a type, and methods to correctly and monotonically merge lattice values. 
 
-
-    
 ## Contributors
 
 - Joe Godbehere (312160976)

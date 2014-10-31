@@ -6,10 +6,7 @@ import intermediateLanguage.LcInstruction;
 import intermediateLanguage.Register;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import lattice.Lattice;
 import cfg.ControlFlowGraph;
@@ -21,19 +18,24 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	public ConstantFoldingAnalysis(ControlFlowGraph cfg)
 	{
 		super(cfg);
+		for(Node n : cfg.getAllNodes())
+		{
+			in.put(n, new HashMap<Register, Lattice<Integer>>());
+			out.put(n, new HashMap<Register, Lattice<Integer>>());
+		}
 	}
 
 	@Override
 	public Map<Register, Lattice<Integer>> gen(Node n)
 	{
-		/* Constant folding does not use Gen / Kill framework */ 
+		/* Constant folding does not use Gen-Kill framework */ 
 		return null;
 	}
 
 	@Override
 	public Map<Register, Lattice<Integer>> kill(Node n)
 	{
-		// TODO Auto-generated method stub
+		/* Constant folding does not use Gen-Kill framework */
 		return null;
 	}
 
@@ -63,55 +65,66 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 				else
 				{
 					//Register exists in the result map, we should monotonically merge
-					result.put(k, newVal.merge(predMap.get(k)));
+					result.get(k).merge(predMap.get(k));
 				}
+			}	
+		}		
+		return result;
+	}
+	
+	@Override
+	public boolean updateDataFlowInfo(
+			Map<Node, Map<Register, Lattice<Integer>>> map, Node n)
+	{
+		//Perform the meet operation and track if any variables change from old IN[]
+		boolean isUpdated = false;
+		Map<Register, Lattice<Integer>> newIn = meet(n);
+		
+		for(Register k : newIn.keySet())
+		{
+			if(!map.get(n).containsKey(k))
+			{
+				//Implies Register is undefined in the result
+				System.out.println("new key : " + k);
+				Lattice<Integer> newVal = new Lattice<Integer>(Lattice.State.BOTTOM);
+				map.get(n).put(k, newVal.merge(newIn.get(k)));
+				isUpdated = true;
 				
 			}
-			
-			
-		}
-		
-		
-		return result;
-		
-//		Iterator<Node> it = n.getAllPredecessors().iterator();
-//		if(!it.hasNext())
-//		{
-//			//no predecessors
-//			return result;
-//		}
-//		//start with everything from first node
-//		result.putAll(out.get(it.next()));
-//		registerIntersection.addAll(out.get(it.next()).keySet());
-//		//then intersect the rest
-//		while(it.hasNext())
-//		{
-//			registerIntersection.retainAll(out.get(it.next()).keySet());
-//		}
-//		
-//		//now we need to see if we know the values
-//		for(Register key : registerIntersection)
-//		{
-//			it = n.getAllPredecessors().iterator();
-//			Lattice<String> value = out.get(it.next()).get(key);
-//			while(it.hasNext())
-//			{
-//				value.merge(out.get(it.next()).get(key));
-//			}
-//			if(value.getState() == Lattice.State.KNOWN)
-//			{
-//				result.put(key, value); //TODO: should we always put this in? e.g. when TOP?
-//			}
-//		}
-//		
-//		return result;
-	}
-
-	@Override
-	public boolean updateDataFlowInfo(Map<Register, Lattice<Integer>> map, Node n)
-	{
-		// TODO Auto-generated method stub
-		return false;
+			else
+			{
+				//Register exists in the result map, we should monotonically merge
+				
+				//Save Old Lattice information for update checking
+				Lattice.State oldState = map.get(n).get(k).getState();
+				Integer oldVal = null;
+				if(oldState == Lattice.State.KNOWN)
+				{
+					oldVal = map.get(n).get(k).getValue();
+				}
+				
+				map.get(n).get(k).merge(newIn.get(k));
+				
+				//Lattice has changed if state has changed or value has changed
+				if(oldState == map.get(n).get(k).getState())
+				{
+					if(oldState == Lattice.State.KNOWN && oldVal == map.get(n).get(k).getValue())
+					{
+						isUpdated = false;
+					}
+					else
+					{
+						isUpdated = false;
+					}
+				}
+				else
+				{
+					isUpdated = true;
+				}
+			}
+		}	
+		System.out.println(isUpdated);
+		return isUpdated;
 	}
 
 	@Override
@@ -121,14 +134,25 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 		Map<Register, Lattice<Integer>> inMap = in.get(n);
 		
 		
-		/*Dependant on the Instruction type at the Node*/
+		//The Result is dependant on the Instruction type at the Node*/
+		Instruction instruction = null;
+		Register assignedReg = null;
 		
-		Instruction instruction = n.getInstruction();
-		Register assignedReg = instruction.getAssignedRegister();
+		if(!n.isSentinel())
+		{
+			instruction = n.getInstruction();
+			assignedReg = instruction.getAssignedRegister();
+		}
+		else
+		{
+			return result;
+		}
 	
 		Lattice<Integer> assignedRegValue = new Lattice<Integer>(Lattice.State.BOTTOM);
 		
 		//Start analysis with the existing Data Flow Information
+		//System.out.println(n);
+		//System.out.println(inMap);
 		result.putAll(inMap);
 		if(assignedReg == null)
 		{
@@ -211,9 +235,9 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	@Override
 	public Map<Node, Map<Register, Lattice<Integer>>> analyse()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return analyse(Direction.FORWARDS);
 	}
+
 
 
 }

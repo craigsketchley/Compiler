@@ -6,6 +6,14 @@ import intermediateLanguage.Program;
 
 import org.junit.Test;
 
+/**
+ * Test the remove redundant loads optimisation.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class RedundantLoadOptimisationTest {
 
 	@Test

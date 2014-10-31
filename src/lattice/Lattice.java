@@ -196,4 +196,9 @@ public class Lattice<T>
 	{
 		return (state == State.BOTTOM);
 	}
+	
+	public boolean isStateKnown()
+	{
+		return (state == State.KNOWN);
+	}
 }

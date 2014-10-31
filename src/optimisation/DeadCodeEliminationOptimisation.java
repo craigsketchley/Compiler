@@ -11,8 +11,14 @@ import cfg.Node;
 
 /**
  * Applies the dead code elimination optimisation. This uses Live Variable
- * Analysis to determine dead code. See inline comments to understand the
- * optimisation steps.
+ * Analysis to determine dead code, see that for further details on that
+ * analysis.
+ * 
+ * Once we have completed the live variable analysis, this returns the analysis
+ * information in the form a map from Node to Set of Registers. We iterate
+ * through all the nodes within the CFG, checking if any assignment doesn't
+ * contain a live variable at that point. This means that the assignment is not
+ * required, and can therefore be removed from the CFG.
  * 
  * @author Joe Godbehere
  * @author Ricky Ratnayake

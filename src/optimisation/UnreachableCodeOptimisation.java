@@ -15,6 +15,7 @@ public class UnreachableCodeOptimisation extends Optimisation {
 
 	@Override
 	public void runOptimisation(ControlFlowGraph cfg) {
+		// Simply call the method available on the cfg.
 		cfg.removeUnreachableCode();
 	}
 
