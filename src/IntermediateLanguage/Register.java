@@ -5,11 +5,24 @@ public class Register
 	
 	public int register; //the register number
 	
+	/**
+	 * Constructor
+	 * @param register number
+	 */
 	public Register(int register)
 	{
 		this.register = register;
 	}
-	
+
+	/**
+	 * Copy constructor
+	 * @param register to copy
+	 */
+	public Register(Register register)
+	{
+		this.register = register.register;
+	}
+
 	@Override
 	public String toString()
 	{

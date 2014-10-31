@@ -34,4 +34,18 @@ public class BrInstruction implements Instruction
 	{
 		return null;
 	}
+	
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		//nothing to do
+		return;
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		this.register = new Register(register);
+	}
+	
 }

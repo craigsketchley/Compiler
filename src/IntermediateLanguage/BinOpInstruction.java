@@ -32,10 +32,29 @@ public class BinOpInstruction implements Instruction
 	{
 		return Arrays.asList(lhs, rhs);
 	}
-
+	
 	@Override
 	public Register getAssignedRegister()
 	{
 		return dest;
+	}
+	
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		if(lhs.equals(from))
+		{
+			lhs = new Register(to);
+		}
+		if(rhs.equals(to))
+		{
+			rhs = new Register(to);
+		}
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		dest = new Register(register);
 	}
 }

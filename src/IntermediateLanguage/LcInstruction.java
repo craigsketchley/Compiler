@@ -33,4 +33,20 @@ public class LcInstruction implements Instruction
 		return register;
 	}
 
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		if(register.equals(from))
+		{
+			register = new Register(to);
+		}
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		//nothing to do
+		return;
+	}
+
 }
