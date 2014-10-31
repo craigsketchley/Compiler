@@ -2,7 +2,7 @@ package optimisation;
 
 import static org.junit.Assert.*;
 import intermediateLanguage.Parser;
-import intermediateLanguage.Program;
+import intermediateLanguage.*;
 
 import org.junit.Test;
 
@@ -14,6 +14,17 @@ public class DeadCodeEliminationOptimisationTest
 	{
 		Program input = Parser.parse("input/deadCodeAssignmentSpec");
 		Program expected = Parser.parse("expected/deadCodeAssignmentSpec");
+		
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
+		assertEquals(expected.toString(), output.toString());
+	}
+	
+	@Test
+	public void testAssignmentSpec2()
+	{
+		Program input = Parser.parse("input/deadCodeAssignmentSpec2");
+		Program expected = Parser.parse("expected/deadCodeAssignmentSpec2");
 		
 		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
 		

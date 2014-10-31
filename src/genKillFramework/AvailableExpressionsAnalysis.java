@@ -3,18 +3,16 @@ package genKillFramework;
 import intermediateLanguage.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import cfg.*;
 
 public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
-{
-	boolean computed;
-	
+{	
 	/**
-	 * Construct an Available Expressions Analysis. It will be able to perform
+	 * Construct an Available Expressions Analysis.
+	 * 
 	 * @param cfg
 	 */
 	public AvailableExpressionsAnalysis(ControlFlowGraph cfg)
@@ -26,8 +24,6 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 			in.put(n, new HashSet<String>());
 			out.put(n, new HashSet<String>());
 		}
-		
-		this.computed = false;
 	}
 
 	@Override
@@ -105,50 +101,16 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 	@Override
 	public Map<Node, Set<String>> analyse()
 	{
-		if (computed) {
-			// Saves recomputation.
-			return out;
-		}
-		
-		boolean isChanged = true;
-		
-		// From the end of the CFG
-		List<Node> bfsOrdering = cfg.bfs(true);
-		
-		Set<String> temp = null;
-		
-		while(isChanged)
-		{
-			isChanged = false;
-			
-			for (Node n : bfsOrdering)
-			{
-				System.out.println(n);
-				// Calculate the IN of the node.
-				temp = meet(n);
-				in.put(n, temp);
-				
-				// Save the size of the old OUT for comparison.
-				int oldCount = out.get(n).size();
-				
-				// Calculate the OUT of the current node.
-				temp = transfer(n);
-				out.put(n, temp);
-				
-				// If OUT has changed, flag it so we repeat.
-				isChanged = oldCount != out.get(n).size();
-			}
-		}
-		
-		computed = true;
-		
-		return out;
+		return analyse(Direction.FORWARDS);
 	}
 
 	@Override
 	public boolean updateMeet(Map<Node, Set<String>> map, Node n) {
-		// TODO Auto-generated method stub
-		return false;
+		int size = map.get(n).size();
+		//Merges with the current out set of the node to maintain MONOTONICITY
+		map.get(n).addAll(meet(n));
+		//The set changed iff the size changed
+		return size != map.get(n).size();
 	}
 	
 }

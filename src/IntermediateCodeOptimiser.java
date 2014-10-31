@@ -1,5 +1,3 @@
-import intermediateLanguage.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -8,11 +6,14 @@ import java.util.Set;
 
 import cfg.*;
 import optimisation.*;
+import intermediateLanguage.*;
 
 /**
  * Command line interface for the optimiser
  * 
- * Accepts an input file name and some optional arguments.
+ * The main entry point to the program. This contains the `main` method and
+ * parses the command line arguments to optimise the provided input file into
+ * an output file, according to the optimisation flags.
  *
  * OVERVIEW: Intermediate Language Compiler Optimiser
  * USAGE: IntermediateCodeOptimiser inFile [-o[utput] outFile] [-O1 -O2 -O3]
@@ -43,11 +44,11 @@ public class IntermediateCodeOptimiser
 	{
 		UNREACHABLE, DEAD_CODE, REDUNDANT_LOAD
 	}
-
+	
 	/**
-	 * The main entry point to the program
+	 * The main entry point to the program.
 	 * 
-	 * @param args The command line arguments
+	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args)
 	{

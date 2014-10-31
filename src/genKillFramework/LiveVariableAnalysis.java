@@ -11,8 +11,23 @@ import java.util.Set;
 import cfg.ControlFlowGraph;
 import cfg.Node;
 
+/**
+ * Anaylses a ControlFlowGraph for Live Variables. 
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {
+	/**
+	 * Constructs a LiveVariableAnalysis given a ControlFlowGraph (CFG).
+	 * 
+	 * Once constructed, call the {@link #analyse()} method to initiate analysis and return a mapping from a Node in the CFG to Set<Register>.
+	 * 
+	 * @param cfg the control flow graph.
+	 */
 	public LiveVariableAnalysis(ControlFlowGraph cfg)
 	{
 		super(cfg);
@@ -60,14 +75,14 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 	@Override
 	public Set<Register> meet(Node n)
 	{
-		Set<Register> out = new HashSet<Register>();
+		Set<Register> result = new HashSet<Register>();
 		
 		for(Node j : n.getAllSuccessors())
 		{
-			out.addAll(in.get(j));
+			result.addAll(in.get(j));
 		}
 		
-		return out;
+		return result;
 	}
 
 	@Override
@@ -83,11 +98,11 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 	@Override
 	public Set<Register> transfer(Node n)
 	{
-		Set<Register> in = new HashSet<Register>();
-		in.addAll(out.get(n));
-		in.removeAll(kill(n));
-		in.addAll(gen(n));
-		return in;		
+		Set<Register> result = new HashSet<Register>();
+		result.addAll(out.get(n));
+		result.removeAll(kill(n));
+		result.addAll(gen(n));
+		return result;		
 	}
 
 	@Override

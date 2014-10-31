@@ -13,7 +13,7 @@ public interface Instruction
 	 */
 	public List<Register> getReferencedRegisters();
 
-	/**
+	/** 
 	 * @return the register modified by the instruction (or null)
 	 */
 	public Register getAssignedRegister();

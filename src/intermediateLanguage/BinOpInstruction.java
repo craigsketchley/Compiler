@@ -57,4 +57,27 @@ public class BinOpInstruction implements Instruction
 	{
 		dest = new Register(register);
 	}
+	
+	/** 
+	 * Calculate the value of the result of the binary operation given fixed register values
+	 * @param leftVal 		left register value
+	 * @param rightVal      right register value
+	 * @return
+	 */
+	public int calculateValue(int leftValue, int rightValue) throws Exception
+	{
+		switch(op)
+		{
+		case "add":
+			return leftValue + rightValue;
+		case "mul":
+			return leftValue * rightValue;
+		case "div":
+			return leftValue / rightValue;
+		case "sub":
+			return leftValue - rightValue;
+		default:
+			throw new Exception("Binary Operation not defined");
+		}
+	}
 }
