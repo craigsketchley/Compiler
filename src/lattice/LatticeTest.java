@@ -4,6 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Test the Lattice implementation.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class LatticeTest {
 
 	/**
