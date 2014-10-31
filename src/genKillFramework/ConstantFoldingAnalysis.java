@@ -85,7 +85,6 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 			if(!map.get(n).containsKey(k))
 			{
 				//Implies Register is undefined in the result
-				System.out.println("new key : " + k);
 				Lattice<Integer> newVal = new Lattice<Integer>(Lattice.State.BOTTOM);
 				map.get(n).put(k, newVal.merge(newIn.get(k)));
 				isUpdated = true;
@@ -123,7 +122,6 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 				}
 			}
 		}	
-		System.out.println(isUpdated);
 		return isUpdated;
 	}
 
@@ -151,8 +149,6 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 		Lattice<Integer> assignedRegValue = new Lattice<Integer>(Lattice.State.BOTTOM);
 		
 		//Start analysis with the existing Data Flow Information
-		//System.out.println(n);
-		//System.out.println(inMap);
 		result.putAll(inMap);
 		if(assignedReg == null)
 		{
