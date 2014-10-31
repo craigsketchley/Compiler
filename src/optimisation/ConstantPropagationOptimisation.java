@@ -3,11 +3,11 @@ package optimisation;
 import genKillFramework.ConstantFoldingAnalysis;
 import intermediateLanguage.BinOpInstruction;
 import intermediateLanguage.Instruction;
+import intermediateLanguage.LcInstruction;
 import intermediateLanguage.Register;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +49,7 @@ public class ConstantPropagationOptimisation extends Optimisation
 			{
 				Register refRegLeft = instruction.getReferencedRegisters().get(0);
 				Register refRegRight = instruction.getReferencedRegisters().get(1);
+				Register assignedReg = instruction.getAssignedRegister();
 				
 				//Determine the State of the referenced Registers
 				//If they don't appear in the Data Flow Info then it is implied to be Undefined/BOTTOM
@@ -63,7 +64,15 @@ public class ConstantPropagationOptimisation extends Optimisation
 					refRegRightLattice = dataFlowInfo.get(n).get(refRegRight);
 				}
 				
-				if(refRegLeftLattice.isKnown() && refRegRightLattice.isKnown())
+				if(refRegLeftLattice.isStateKnown() && refRegRightLattice.isStateKnown())
+				{
+					//If both registers have known constant values then we replace the 
+					//binary operation with a load constant into the same assigned register
+					int calculatedVal = (BinOpInstruction instruction).calculateValue(left)
+				//	LcInstruction lcInsturction = new LcInstruction(assignedReg, )
+				//	n.setInstruction(new LcInstruction((BinOpInstruction instruction).)
+					
+				}
 				
 			}
 			else

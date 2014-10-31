@@ -9,14 +9,11 @@ public class Node
 {
 	private int blockId; 
 	private Instruction instruction;
-	//private ControlFlowInformation in;
-//	private Set<Register> in; 
-//	private Set<Register> out; //TODO: Need to generalize this to an interface
 	private Set<Node> successors; 
 	private Set<Node> predecessors; 
 	
 	/**
-	 * default constructor
+	 * Default constructor
 	 * returns a sentinel node with invalid block id (-1) and null statement
 	 */
 	public Node()
@@ -25,8 +22,11 @@ public class Node
 	}
 	
 	/**
-	 * @param blockId
-	 * @param st
+	 * Creates a Node which holds a reference to the original code block from the source code
+	 * and one instruction
+	 * 
+	 * @param blockId corresponding block from Intermediate Code
+	 * @param instruction intermediate code instruction
 	 */
 	public Node(int blockId, Instruction instruction)
 	{
@@ -34,10 +34,12 @@ public class Node
 		this.instruction = instruction;
 		successors = new HashSet<Node>();
 		predecessors = new HashSet<Node>();
-//		out = new HashSet<Register>();
-//		in = new HashSet<Register>();
 	}
 	
+	/**
+	 * Check if the Node is a sentinel, i.e. Entry and Exit nodes in the CFG
+	 * @return true
+	 */
 	public boolean isSentinel()
 	{
 		return instruction == null;
@@ -46,6 +48,11 @@ public class Node
 	public Instruction getInstruction()
 	{
 		return instruction;
+	}
+	
+	public void setInstruction(Instruction instr)
+	{
+		instruction = instr;
 	}
 	
 	public Set<Node> getAllSuccessors()
@@ -97,20 +104,4 @@ public class Node
 	{
 		return String.format("%d %s ", blockId, instruction);
 	}
-
-//	public Set<Register> getOut()
-//	{
-//		return out;
-//	}
-//
-//	public Set<Register> getIn()
-//	{
-//		return in;
-//	}
-//
-//	public void setIn(Set<Register> in)
-//	{
-//		this.in = in;
-//	}
-		
 }
