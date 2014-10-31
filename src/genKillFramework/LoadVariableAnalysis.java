@@ -1,16 +1,16 @@
 package genKillFramework;
 
+import intermediateLanguage.*;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import IntermediateLanguage.*;
-import CFG.ControlFlowGraph;
-import CFG.Node;
-import IntermediateLanguage.Instruction;
-import Lattice.Lattice;
+import lattice.Lattice;
+import cfg.ControlFlowGraph;
+import cfg.Node;
 
 public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lattice<String>>>
 {

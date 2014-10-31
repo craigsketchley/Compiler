@@ -1,9 +1,9 @@
-package CFG;
+package cfg;
+
+import intermediateLanguage.Instruction;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import IntermediateLanguage.Instruction;
 
 public class Node
 {

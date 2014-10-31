@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import CFG.*;
+import cfg.*;
 
 /**
  * Encapsulates the Gen/Kill framework for a data flow analysis.

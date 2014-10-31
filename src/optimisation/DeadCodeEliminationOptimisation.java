@@ -1,15 +1,15 @@
 package optimisation;
 
 import genKillFramework.LiveVariableAnalysis;
+import intermediateLanguage.Register;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import CFG.ControlFlowGraph;
-import CFG.Node;
-import IntermediateLanguage.Register;
+import cfg.ControlFlowGraph;
+import cfg.Node;
 
 /**
  * Applies the dead code elimination optimisation. This uses Live Variable

@@ -1,14 +1,15 @@
 package genKillFramework;
 
+import intermediateLanguage.Instruction;
+import intermediateLanguage.Register;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import CFG.ControlFlowGraph;
-import CFG.Node;
-import IntermediateLanguage.Instruction;
-import IntermediateLanguage.Register;
+import cfg.ControlFlowGraph;
+import cfg.Node;
 
 public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {

@@ -1,10 +1,9 @@
-package CFG;
+package cfg;
 
 import static org.junit.Assert.*;
+import intermediateLanguage.*;
 
 import org.junit.Test;
-
-import IntermediateLanguage.*;
 
 public class ControlFlowGraphTest
 {

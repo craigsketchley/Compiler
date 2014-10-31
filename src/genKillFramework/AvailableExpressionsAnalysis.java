@@ -1,12 +1,13 @@
 package genKillFramework;
 
+import intermediateLanguage.*;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import CFG.*;
-import IntermediateLanguage.*;
+import cfg.*;
 
 public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 {
@@ -20,32 +21,10 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 	{
 		super(cfg);
 		
-		// Go through adding all expressions to each set.
-		Set<String> allExpressions = new HashSet<String>();
-		for (Node n : cfg.getAllNodes())
-		{
-			Instruction instruction = n.getInstruction();
-			if (instruction instanceof LdInstruction) {
-				// Get variable (expression) from ld instruction.
-				String expression = ((LdInstruction)instruction).variable;
-				// TODO: If using more complicated expressions, we would need
-				// to check if any variables being assigned.
-				allExpressions.add(expression);
-			}
-		}		
-		
 		for(Node n : cfg.getAllNodes())
 		{
-			if (n.isSentinel())
-			{ // Empty set for the start/end sentinals
-				in.put(n, new HashSet<String>());
-				out.put(n, new HashSet<String>());
-			}
-			else
-			{ // Universal Set for all others.
-				in.put(n, new HashSet<String>(allExpressions));
-				out.put(n, new HashSet<String>(allExpressions));				
-			}
+			in.put(n, new HashSet<String>());
+			out.put(n, new HashSet<String>());
 		}
 		
 		this.computed = false;
@@ -55,7 +34,7 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 	public Set<String> gen(Node n)
 	{
 		// TODO: Using only LdInsructions
-		Set<String> generatedInfo = new HashSet<String>();
+		Set<String> result = new HashSet<String>();
 		
 		if(!n.isSentinel())
 		{
@@ -65,18 +44,18 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 				String expression = ((LdInstruction)instruction).variable;
 				// TODO: If using more complicated expressions, we would need
 				// to check if any variables being assigned.
-				generatedInfo.add(expression);
+				result.add(expression);
 			}
 		}
 		
-		return generatedInfo;
+		return result;
 	}
 
 	@Override
 	public Set<String> kill(Node n)
 	{
 		// TODO: Looking for St instructions only.
-		Set<String> infoToKill = new HashSet<String>();
+		Set<String> result = new HashSet<String>();
 		
 		if(!n.isSentinel())
 		{
@@ -84,36 +63,43 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 			if (instruction instanceof StInstruction) {
 				// Get variable (expression) from ld instruction.
 				String expression = ((StInstruction)instruction).id;
-				infoToKill.add(expression);
+				result.add(expression);
 			}
 		}
 		
-		return infoToKill;
+		return result;
 	}
 
 	@Override
 	public Set<String> meet(Node n)
 	{
-		Set<String> in = new HashSet<String>();
+		Set<String> result = new HashSet<String>();
+		Set<Node> p = n.getAllPredecessors();
 		
-		// Sets the IN to the intersection of all the preceding OUTs.
-		for(Node m : n.getAllSuccessors())
-		{
-			in.retainAll(out.get(m));
+		if (p.size() > 0) {
+			Node[] predecessors = p.toArray(new Node[p.size()]);
+			
+			result = out.get(predecessors[0]); // Must have at least 1 elem.
+				
+			// Sets the IN to the intersection of all the preceding OUTs.
+			for(int i = 1; i < p.size(); i++)
+			{
+				result.retainAll(out.get(predecessors[i]));
+			}
+		
 		}
-		
-		return in;
+		return result;
 	}
 	
 	public Set<String> transfer(Node n)
 	{
-		Set<String> out = new HashSet<String>();
+		Set<String> result = new HashSet<String>();
 		
-		out.addAll(in.get(n));
-		out.removeAll(kill(n));
-		out.addAll(gen(n));
+		result.addAll(in.get(n));
+		result.removeAll(kill(n));
+		result.addAll(gen(n));
 		
-		return out;
+		return result;
 	}
 
 	@Override
@@ -126,7 +112,7 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 		
 		boolean isChanged = true;
 		
-		/*From the end of the CFG*/
+		// From the end of the CFG
 		List<Node> bfsOrdering = cfg.bfs(true);
 		
 		Set<String> temp = null;
@@ -157,6 +143,12 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 		computed = true;
 		
 		return out;
+	}
+
+	@Override
+	public boolean updateMeet(Map<Node, Set<String>> map, Node n) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

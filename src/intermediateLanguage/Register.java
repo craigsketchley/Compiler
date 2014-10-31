@@ -1,4 +1,4 @@
-package IntermediateLanguage;
+package intermediateLanguage;
 
 public class Register
 {

@@ -1,7 +1,7 @@
 package optimisation;
 
-import CFG.ControlFlowGraph;
-import IntermediateLanguage.*;
+import intermediateLanguage.*;
+import cfg.ControlFlowGraph;
 
 /**
  * Defines the Optimisation class. Any type of optimisation must be a subclass

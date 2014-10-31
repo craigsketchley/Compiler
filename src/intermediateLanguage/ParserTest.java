@@ -1,4 +1,4 @@
-package IntermediateLanguage;
+package intermediateLanguage;
 
 import static org.junit.Assert.*;
 

@@ -1,6 +1,6 @@
 package optimisation;
 
-import IntermediateLanguage.Program;
+import intermediateLanguage.Program;
 
 /**
  * Optimiser offers a static method to optimise a program.

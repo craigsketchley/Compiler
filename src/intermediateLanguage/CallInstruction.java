@@ -1,4 +1,4 @@
-package IntermediateLanguage;
+package intermediateLanguage;
 
 import java.util.List;
 
