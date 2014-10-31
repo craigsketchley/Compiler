@@ -68,57 +68,25 @@ public class ConstantPropagationOptimisation extends Optimisation
 				{
 					//If both registers have known constant values then we replace the 
 					//binary operation with a load constant into the same assigned register
-					int calculatedVal = (BinOpInstruction instruction).calculateValue(left)
-				//	LcInstruction lcInsturction = new LcInstruction(assignedReg, )
-				//	n.setInstruction(new LcInstruction((BinOpInstruction instruction).)
-					
+					int leftVal = refRegLeftLattice.getValue();
+					int rightVal = refRegRightLattice.getValue();
+					int calculatedVal;
+					try
+					{
+						calculatedVal = ((BinOpInstruction) instruction).calculateValue(leftVal, rightVal);
+						LcInstruction lcInsturction = new LcInstruction(assignedReg, calculatedVal);
+						n.setInstruction(lcInsturction);
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+						System.exit(1);
+					}
 				}
-				
 			}
 			else
 			{
 				continue;
 			}
-			//Get the set of referenced registers, these are the ones we might change
-			Set<Register> referencedReg = new HashSet<Register>(n.getInstruction().getReferencedRegisters());
-
-			//Get the dataFlow info for this node (just for convenience)
-			HashMap<Register, Lattice<String>> dataFlowNode = dataFlowInfo.get(n);
-			
-			//For each register referenced by the instruction
-			for(Register reg : referencedReg)
-			{
-				//See if this register is known to be in a specific state
-				if( dataFlowNode.containsKey(reg) &&
-						(dataFlowNode.get(reg).getState() == Lattice.State.KNOWN) )
-				{
-					Lattice<String> value = dataFlowNode.get(reg);
-					/* See if any other registers are in the same state. If so,
-					 * choose the one with lowest ID. See longer description above
-					 * for a justification of this choice
-					 */
-					Register rewriteReg = reg;
-					for(Register other : dataFlowNode.keySet())
-					{
-						if(dataFlowNode.get(other).equals(value))
-						{
-							if(other.register < rewriteReg.register)
-							{
-								rewriteReg = other;
-							}
-						}
-					}
-					//If we chose a different register
-					if(rewriteReg != reg)
-					{
-						//Then we can rewrite the statement to remove a redundant load!
-						n.getInstruction().rewriteReferencedRegisters(reg, rewriteReg);
-					}
-				}
-			}
 		}
 	}	
-		
-	}
-
 }
