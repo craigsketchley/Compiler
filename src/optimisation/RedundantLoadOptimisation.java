@@ -34,6 +34,11 @@ import cfg.Node;
  * optimisations.
  * 
  * The register is rewritten, if a suitable register was found.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
  */
 public class RedundantLoadOptimisation extends Optimisation
 {
