@@ -3,17 +3,7 @@ package intermediateLanguage;
 import static org.junit.Assert.*;
 import intermediateLanguage.Parser.ParseException;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import optimisation.Optimiser;
-import optimisation.RedundantLoadOptimisation;
-
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class ParserTest
 {
