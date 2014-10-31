@@ -70,39 +70,41 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 		}		
 		return result;
 	}
-
+	
 	@Override
-	public boolean updateMeet(Map<Node, Map<Register, Lattice<Integer>>> map,
-			Node n)
+	public boolean updateDataFlowInfo(
+			Map<Node, Map<Register, Lattice<Integer>>> map, Node n)
 	{
 		//Perform the meet operation and track if any variables change from old IN[]
 		boolean isUpdated = false;
 		Map<Register, Lattice<Integer>> newIn = meet(n);
-		for(Node pred : n.getAllPredecessors())
+		
+		for(Register k : newIn.keySet())
 		{
-			Map<Register, Lattice<Integer>> predMap = out.get(pred);
-			//For all Registers in the predecessor merge the Lattice into result
-			for(Register k : predMap.keySet())
+			if(!map.containsKey(k))
 			{
-				if(!result.containsKey(k) || result.get(k).isStateBottom())
+				//Implies Register is undefined in the result
+				Lattice<Integer> newVal = new Lattice<Integer>(Lattice.State.BOTTOM);
+				map.get(n).put(k, newVal.merge(newIn.get(k)));
+				isUpdated = true;
+				
+			}
+			else
+			{
+				//Register exists in the result map, we should monotonically merge
+				Lattice<Integer> oldVal = new Lattice<Integer>(map.get(n).get(k).getState());
+				if(!oldVal.isStateBottom() || !oldVal.isStateTop())
 				{
-					//Implies Register is undefined in the result
-					Lattice<Integer> newVal = new Lattice<Integer>(Lattice.State.BOTTOM);
-					result.put(k, newVal.merge(predMap.get(k)));
+					oldVal.setValue(map.get(n).get(k).getValue());
 				}
-				else
+				map.get(n).get(k).merge(newIn.get(k));
+				if(!oldVal.equals(map.get(n).get(k)))
 				{
-					//Register exists in the result map, we should monotonically merge
-					result.get(k).merge(predMap.get(k));
+					isUpdated = true;
 				}
-			}	
-		}		
-		
-		
-		
-		Map<Register, Lattice<Integer>> 
-		// TODO Auto-generated method stub
-		return false;
+			}
+		}	
+		return isUpdated;
 	}
 
 	@Override
@@ -204,8 +206,6 @@ public class ConstantFoldingAnalysis extends DataFlowAnalysis<Map<Register, Latt
 	{
 		return analyse(Direction.FORWARDS);
 	}
-
-
 
 
 

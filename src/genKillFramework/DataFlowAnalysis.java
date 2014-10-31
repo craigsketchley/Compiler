@@ -49,7 +49,7 @@ public abstract class DataFlowAnalysis<T>
 	 * Creates the in and out information mappings for the given control flow
 	 * graph.
 	 * 
-	 * @param cfg
+	 * @param cfg the control flow graph to analyse.
 	 */
 	public DataFlowAnalysis(ControlFlowGraph cfg)
 	{
@@ -63,8 +63,8 @@ public abstract class DataFlowAnalysis<T>
 	 * 
 	 * Returns the set of information that is generated for the given node.
 	 * 
-	 * @param n
-	 * @return
+	 * @param n the node to identify the Gen set for.
+	 * @return the data flow information to Gen for the given node.
 	 */
 	public abstract T gen(Node n);
 	
@@ -73,8 +73,8 @@ public abstract class DataFlowAnalysis<T>
 	 * 
 	 * Returns the set of information to be killed for the given node.
 	 * 
-	 * @param n
-	 * @return
+	 * @param n the Node to identify the kill set for.
+	 * @return the data flow information to Kill for the given node.
 	 */
 	public abstract T kill(Node n);
 
@@ -87,17 +87,19 @@ public abstract class DataFlowAnalysis<T>
 	 * Handles the OUT[B] = meet(IN[B]) 
 	 * or IN[B] = meet(OUT[B]) internally for each node
 	 * 
-	 * @param n
+	 * @param n the node on which to apply the meet function.
+	 * @return the data flow information after the meet operation has been
+	 * applied.
 	 */
 	public abstract T meet(Node n);
 
 	/**
 	 * Update the map with meet data of node n
-	 * @param map
-	 * @param n
+	 * @param map the map to update (IN/OUT) for the given node
+	 * @param n the node to update the data flow information
 	 * @return true if the map size changed
 	 */
-	public abstract boolean updateMeet(Map<Node, T> map, Node n);
+	public abstract boolean updateDataFlowInfo(Map<Node, T> map, Node n);
 
 	/**
 	 * The transfer function of the Gen/Kill framework.
@@ -105,7 +107,9 @@ public abstract class DataFlowAnalysis<T>
 	 * Handles the transfer IN[B] = transfer(OUT[B]) 
 	 * or OUT[B] = transfer(IN[B]) internally for each node
 	 * 
-	 * @param n
+	 * @param n the node on which to apply the transfer function.
+	 * @return the data flow information after the transfer function has been
+	 * applied.
 	 */
 	public abstract T transfer(Node n);
 	
@@ -113,15 +117,17 @@ public abstract class DataFlowAnalysis<T>
 	 * Given a control flow graph, it will analyse it and produce an analysis
 	 * result as a mapping from nodes to information.
 	 * 
-	 * @return
+	 * @return returns a mapping from node to data flow information, depending
+	 * on the implemented analysis.
 	 */
 	public abstract Map<Node, T> analyse();
 
 	/**
-	 * Given a control flow graph and a direction to analyse it, it will analyse
-	 * it and produce an analysis result as a mapping from nodes to information
+	 * Given a control flow graph and a direction to analyse it, it will
+	 * analyse it and produce an analysis result as a mapping from nodes to
+	 * information
 	 * 
-	 * @param direction
+	 * @param direction indicates the direction the analysis is performed.
 	 * @return returns a mapping from node to data flow information, depending
 	 * on the implemented analysis.
 	 */
@@ -153,7 +159,7 @@ public abstract class DataFlowAnalysis<T>
 			{
 				//Merge with all previous inputs to maintain MONOTONICITY
 				Map<Node, T> map = (direction == Direction.FORWARDS) ? in : out;
-				if(updateMeet(map, n))
+				if(updateDataFlowInfo(map, n))
 				{
 					changed = true;
 				}

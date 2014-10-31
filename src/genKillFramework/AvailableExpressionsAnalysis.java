@@ -115,7 +115,7 @@ public class AvailableExpressionsAnalysis extends DataFlowAnalysis<Set<String>>
 	}
 
 	@Override
-	public boolean updateMeet(Map<Node, Set<String>> map, Node n) {
+	public boolean updateDataFlowInfo(Map<Node, Set<String>> map, Node n) {
 		int size = map.get(n).size();
 		//Merges with the current out set of the node to maintain MONOTONICITY
 		map.get(n).addAll(meet(n));
