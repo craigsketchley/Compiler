@@ -20,6 +20,16 @@ import java.util.Stack;
  * Holds the Control Flow Graph for a given function from the AST. It can run
  * unreachable code optimisation. 
  * 
+ * The CFG has sentinel nodes linked to the entry, and to all exit points of
+ * the function. Additionally, links in the graph are bidirectional. This
+ * allows us to easily traverse the CFG in either direction.
+ * 
+ * Each node in the graph represents a single command, allowing for highly
+ * granular optimisations.
+ * 
+ * Each node stores its original block ID, and we remember the sequence in
+ * which they were read. This allows rebuilding of the AST from the CFG.
+ * 
  * @author Joe Godbehere
  * @author Ricky Ratnayake
  * @author Craig Sketchley
@@ -33,11 +43,10 @@ public class ControlFlowGraph
 	private List<Integer> originalBlockIdSequence;
 	private List<Node> allNodes; //holds all live nodes, updated if optimised.
 	
-
 	/**
 	 * Construct a CFG based on a given function.
 	 * 
-	 * @param function
+	 * @param function The function to analyse
 	 */
 	public ControlFlowGraph(Function function)
 	{
@@ -161,36 +170,34 @@ public class ControlFlowGraph
 	/**
 	 * Given a node, remove the node from this CFG.
 	 * 
-	 * Cannot be called on a sentinal Node or a Node containing a
+	 * Cannot be called on a sentinel Node or a Node containing a
 	 * BrInstruction, RetInstruction.
 	 * 
-	 * @throws Exception 
-	 * 
-	 * TODO: Use custom exceptions?
+	 * @throws RuntimeException 
 	 */
-	public void removeNode(Node inNode) throws Exception
+	public void removeNode(Node inNode) throws RuntimeException
 	{
 		if (!allNodes.contains(inNode))
 		{
-			throw new Exception(
+			throw new RuntimeException(
 					String.format("CFG does not contain the provided node: %s", inNode));
 		}
 		
 		if (inNode.isSentinel())
 		{
-			throw new Exception("Cannot remove the start or end node");
+			throw new RuntimeException("Cannot remove the start or end node");
 		}
 		
 		// TODO: Currently cannot remove branch statements explicitly, handled by unreachable code?
 		if (inNode.getInstruction() instanceof BrInstruction)
 		{
-			throw new Exception(String.format("Cannot remove branch instruction: %s", inNode));
+			throw new RuntimeException(String.format("Cannot remove branch instruction: %s", inNode));
 		}
 		
 		// TODO: Currently cannot remove return statements explicitly, handled by unreachable code?
 		if (inNode.getInstruction() instanceof RetInstruction)
 		{
-			throw new Exception(String.format("Cannot remove return instruction: %s", inNode));
+			throw new RuntimeException(String.format("Cannot remove return instruction: %s", inNode));
 		}
 		
 		// Find the node in the CFG, and remove it by updating links...
@@ -200,7 +207,7 @@ public class ControlFlowGraph
 		if (successors.size() != 1)
 		{
 			// Something went horribly wrong. Should only have 1 successor.
-			throw new Exception(
+			throw new RuntimeException(
 				String.format("This instruction should have only 1 successor! %s", inNode));
 		}
 		Node successor = successors.iterator().next(); // Should only contain 1 element.
@@ -259,29 +266,10 @@ public class ControlFlowGraph
 		return function;
 	}
 		
-	/** TODO
-	 * (misplaced) notes for liveness
-	 * 
-	 * 2 point lattice (live or not live)
-	 * - represented as the set "out", where existence in set == live
-	 * 
-	 * at node n, each iteration:
-	 * 	union for each successor node m:
-	 * 			{registers_referenced_by_m} union { out_m / registers_set_by_m }
-	 *  union out_n (allowing for fixed-point iteration)
-	 *  
-	 *  Note that the order in which we evaluate the nodes in each iteration is irrelevant
-	 *  as registers_referenced_by_m will build up eventually.
-	 *  going from end to start will be faster, but we can't guarantee a perfect order, since
-	 *  the graph may have cycles.
-	 *  
-	 *  A BFS would be a reasonable heuristic for an ordering
-	 */
-	
 	/**
 	 * A Breadth First Search (BFS) of the Control Flow Graph.
 	 * 
-	 * @param forward
+	 * @param forward if true, traverse from start->end, else from end->start
 	 * @return returns a breadth first search ordering from start->end or end->start
 	 */
 	public List<Node> bfs(boolean forward) {
@@ -312,7 +300,7 @@ public class ControlFlowGraph
 	/**
 	 * A Depth First Search (DFS) of the Control Flow Graph.
 	 * 
-	 * @param forward
+	 * @param forward if true, traverse from start->end, else from end->start
 	 * @return returns a depth first search ordering from start->end or end->start
 	 */
 	public List<Node> dfs(boolean forward) {
@@ -357,18 +345,19 @@ public class ControlFlowGraph
 	@Override
 	public String toString()
 	{
-		HashMap<Node, Character> nodeChars = new HashMap<Node, Character>();
-		//TODO: limited to 26 values? Use multiple chars depending on how many required? 'AAA'
-		char current = 'A';
+		HashMap<Node, String> nodeLabels = new HashMap<Node, String>();
 
 		// Start a digraph
 		StringBuilder output = new StringBuilder(
 				String.format("digraph %s {\n", originalFunction.id));
-		// Setup all nodes with unique characters...
+
+		// Create all nodes with unique labels
+		int index = 0;
 		for(Node n : allNodes) {
-			output.append(String.format("\t%c [label=\"%s\"];\n", current, n));
-			nodeChars.put(n, current);
-			current++;
+			String label = "n" + index;
+			output.append(String.format("\t%c [label=\"%s\"];\n", label, n));
+			nodeLabels.put(n, label);
+			++index;
 		}
 		output.append('\n');
 
@@ -376,7 +365,7 @@ public class ControlFlowGraph
 		for(Node n : allNodes) {
 			for(Node m : n.getAllSuccessors()) {
 				output.append(String.format("\t%c -> %c;\n",
-						nodeChars.get(n), nodeChars.get(m)));
+						nodeLabels.get(n), nodeLabels.get(m)));
 			}
 		}
 		// End the digraph scope

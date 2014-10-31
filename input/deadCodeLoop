@@ -1,0 +1,11 @@
+( (loop10 (x)			// Adds 10 iteratively to x
+    (0  (ld r1 x)
+    	(ld r9 x)
+    	(ld r2 x)
+    	(lc r3 10)
+    	(add r3 r2 r3) )       // Fall through, no br/ret
+    (1  (lc r3 1)
+    	(add r1 r1 r2)
+		(sub r4 r3 r1)
+        (br r4 1 2) )
+    (2  (ret r1) ) ) )

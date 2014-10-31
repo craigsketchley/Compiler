@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import cfg.*;
 import optimisation.*;
 import intermediateLanguage.*;
 
@@ -117,7 +116,7 @@ public class IntermediateCodeOptimiser
 		}
 
 		//Parse any remaining arguments
-		new HashSet<OptFlag>();
+		opts = new HashSet<OptFlag>();
 		for(int i = 1; i < args.length; ++i)
 		{
 			switch(args[i])
@@ -175,6 +174,12 @@ public class IntermediateCodeOptimiser
 	 */
 	public static void runOptimisations()
 	{
+		//Do an initial unreachable code optimisation, for efficiency
+		if(opts.contains(OptFlag.UNREACHABLE))
+		{
+			inputProgram = Optimiser.optimise(inputProgram, new UnreachableCodeOptimisation());
+		}
+
 		//Run the optimisations at most maxIterations times
 		for(int i = 0; i < maxIterations; ++i)
 		{
@@ -182,10 +187,6 @@ public class IntermediateCodeOptimiser
 			String programCode = inputProgram.toString();
 	
 			//Run the specified optimisations
-			if(opts.contains(OptFlag.UNREACHABLE))
-			{
-				inputProgram = Optimiser.optimise(inputProgram, new UnreachableCodeOptimisation());
-			}
 			if(opts.contains(OptFlag.REDUNDANT_LOAD))
 			{
 				inputProgram = Optimiser.optimise(inputProgram, new RedundantLoadOptimisation());
@@ -193,6 +194,10 @@ public class IntermediateCodeOptimiser
 			if(opts.contains(OptFlag.DEAD_CODE))
 			{
 				inputProgram = Optimiser.optimise(inputProgram, new DeadCodeEliminationOptimisation());
+			}
+			if(opts.contains(OptFlag.UNREACHABLE))
+			{
+				inputProgram = Optimiser.optimise(inputProgram, new UnreachableCodeOptimisation());
 			}
 	
 			//Stop iterating early, if the program didn't change
