@@ -1,5 +1,5 @@
 ( (factorial (n)
-    (0  (ld r1 n)
+    (0  (ld r1 n) //(lc r1 0)
         (lc r2 0)
         (eq r3 r1 r2)
         (st cond r3)

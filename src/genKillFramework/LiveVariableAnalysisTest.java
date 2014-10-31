@@ -57,6 +57,33 @@ public class LiveVariableAnalysisTest
 		
 	}
 
+	@Test
+	public void testDoubleReturn()
+	{
+		Program input = Parser.parse("input/deadCodeDoubleReturn");
+	
+		for (Function function : input.functions) {
+			ControlFlowGraph cfg = new ControlFlowGraph(function);
+				
+			LiveVariableAnalysis lv = new LiveVariableAnalysis(cfg);
+			Map<Node, Set<Register>> output = lv.analyse();
+
+			System.out.println(cfg);
+
+			System.out.println("***PRINTING MAP***");
+			for(Node k : cfg.getAllNodes())
+			{
+				System.out.println(String.format("Node: %s - Map: %s", k, output.get(k)));
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	static String readFile(String path) 
 			  throws IOException 
 	{

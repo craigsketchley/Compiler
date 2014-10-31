@@ -1,6 +1,7 @@
 package CFG;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -85,15 +86,32 @@ public class ControlFlowGraph
 			//if the statement is a break instruction
 			if(st instanceof BrInstruction)
 			{
+				//Get the block ID to branch to on true, and make sure it exists
 				int trueId = ((BrInstruction) st).blockTrue;
+				if(!tempBlockMap.containsKey(trueId))
+				{
+					throw new RuntimeException(
+							"Branch instruction to a block ID that does not exist: " + trueId);
+				}
+
+				//Get the block ID to branch to on false, and make sure it exists
 				int falseId = ((BrInstruction) st).blockFalse;
+				if(!tempBlockMap.containsKey(falseId))
+				{
+					throw new RuntimeException(
+							"Branch instruction to a block ID that does not exist: " + falseId);
+				}
+				
+				//Link this node to the node starting the true block
+				n.addSuccessor(tempBlockMap.get(trueId));
+				tempBlockMap.get(trueId).addPredecessor(n);
+
+				//If the true/false blocks are different, link to the false block too
 				if(falseId != trueId)
 				{
-					n.addSuccessor(tempBlockMap.get(trueId));
-					tempBlockMap.get(trueId).addPredecessor(n);
+					n.addSuccessor(tempBlockMap.get(falseId));
+					tempBlockMap.get(falseId).addPredecessor(n);
 				}
-				n.addSuccessor(tempBlockMap.get(falseId));
-				tempBlockMap.get(falseId).addPredecessor(n);
 			}
 			
 			//otherwise, if the statement is a return instruction, it is followed by end
@@ -319,7 +337,7 @@ public class ControlFlowGraph
 	 */
 	public List<Node> getAllNodes()
 	{
-		return allNodes;
+		return new ArrayList<Node>(allNodes);
 	}
 	
 	/**

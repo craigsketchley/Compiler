@@ -133,6 +133,12 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		return in;
 	}
 
+	public boolean updateMeet(Map<Node, HashMap<Register, Lattice<String>>> map, Node n)
+	{
+		int size = map.get(n).size();
+		map.get(n).putAll(meet(n));
+		return size != map.get(n).size();
+	}
 	
 	public HashMap<Register, Lattice<String>> transfer(Node n)
 	{
@@ -175,35 +181,6 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 	@Override
 	public Map<Node, HashMap<Register, Lattice<String>>> analyse()
 	{
-		boolean changed = true; 
-		
-		/*From the start of the CFG*/
-		List<Node> bfsOrdering = cfg.bfs(true);
-		
-		while(changed)
-		{
-			changed = false;
-			for(Node n : bfsOrdering)
-			{
-				//Merge with all previous inputs to maintain MONOTONICITY
-				int size = in.get(n).size();
-				in.get(n).putAll(meet(n));
-				if(size != in.get(n).size())
-				{
-					changed = true;
-				}
-			}
-			for(Node n : bfsOrdering)
-			{
-				int size = out.get(n).size();
-				out.put(n, transfer(n));
-				if(size != out.get(n).size())
-				{
-					changed = true;
-				}
-			}
-		}
-		
-		return out;
+		return analyse(Direction.FORWARDS);
 	}
 }

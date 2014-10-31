@@ -2,10 +2,13 @@ package genKillFramework;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import CFG.*;
+import IntermediateLanguage.Register;
+import Lattice.Lattice;
 
 /**
  * Encapsulates the Gen/Kill framework for a data flow analysis.
@@ -20,6 +23,13 @@ import CFG.*;
  */
 public abstract class DataFlowAnalysis<T>
 {
+	/**
+	 * Enum to represent the direction of the analysis
+	 * FORWARDS : From entry point to exit point
+	 * BACKWARDS : From exit point to entry point
+	 */
+	public enum Direction {FORWARDS, BACKWARDS}
+	
 	protected Map<Node, T> in;
 	protected Map<Node, T> out;
 	ControlFlowGraph cfg;
@@ -69,6 +79,14 @@ public abstract class DataFlowAnalysis<T>
 	public abstract T meet(Node n);
 
 	/**
+	 * Update the map with meet data of node n
+	 * @param map
+	 * @param n
+	 * @return true if the map size changed
+	 */
+	public abstract boolean updateMeet(Map<Node, T> map, Node n);
+
+	/**
 	 * The transfer function of the Gen/Kill framework.
 	 * 
 	 * Handles the transfer IN[B] = transfer(OUT[B]) 
@@ -84,4 +102,49 @@ public abstract class DataFlowAnalysis<T>
 	 * @return
 	 */
 	public abstract Map<Node, T> analyse();
+
+	/**
+	 * Given a control flow graph and a direction to analyse it, it will analyse
+	 * it and produce an analysis result as a mapping from nodes to information
+	 * @param direction
+	 * @return
+	 */
+	public Map<Node, T> analyse(Direction direction)
+	{
+		boolean changed = true;
+		
+		//Get an ordering of the nodes by BFS, traversing in the given direction
+		List<Node> orderedNodes =
+				(direction == Direction.FORWARDS) ? cfg.bfs(true) : cfg.bfs(false);
+		
+		//Run fixed point function
+		while(changed)
+		{
+			//Indicate whether a change has been seen
+			changed = false;
+			
+			//Run transfer function on all nodes
+			for(Node n : orderedNodes)
+			{
+				//Note that if the Meet data didn't change, this won't, so there's
+				//no requirement to check for changes at this point
+				Map<Node, T> map = (direction == Direction.FORWARDS) ? out : in;
+				map.put(n, transfer(n));
+			}
+
+			//Run meet function on all nodes, checking for a change
+			for(Node n : orderedNodes)
+			{
+				//Merge with all previous inputs to maintain MONOTONICITY
+				Map<Node, T> map = (direction == Direction.FORWARDS) ? in : out;
+				if(updateMeet(map, n))
+				{
+					changed = true;
+				}
+			}
+		}
+		
+		return out;
+	}
+
 }
