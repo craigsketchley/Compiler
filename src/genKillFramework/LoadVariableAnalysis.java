@@ -49,8 +49,8 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		else if(instruction instanceof LdInstruction)
 		{
 			generatedInfo.put(
-					((StInstruction) instruction).register,
-					new Lattice<String>(((StInstruction) instruction).id));
+					((LdInstruction) instruction).register,
+					new Lattice<String>(((LdInstruction) instruction).variable));
 		}
 		//other variable assignment, gen (register, TOP)
 		/*else
@@ -84,10 +84,10 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 					new Lattice<String>(((StInstruction) instruction).id));
 		}
 		//other variable assignment, gen (register, TOP)
-		else
+		else if(instruction.getAssignedRegister() != null)
 		{
 			generatedInfo.put(
-					((StInstruction) instruction).register,
+					instruction.getAssignedRegister(),
 					new Lattice<String>(Lattice.State.TOP));
 		}
 		return generatedInfo;

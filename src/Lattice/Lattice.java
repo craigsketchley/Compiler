@@ -111,5 +111,26 @@ public class Lattice<T>
 		}
 	}
 	
+	public String toString()
+	{
+		switch(state)
+		{
+		case TOP: return "TOP";
+		case BOTTOM: return "TOP";
+		case KNOWN: return value.toString();
+		}
+		return "Invalid state";
+	}
 	
+	public boolean equals(Lattice<T> other) {
+		if(other.getState() != this.getState())
+		{
+			return false;
+		}
+		if(state == State.KNOWN)
+		{
+			return value.equals(other.value);
+		}
+		return false; //not enough information
+	}
 }

@@ -3,6 +3,7 @@ package optimisation;
 import genKillFramework.LoadVariableAnalysis;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,21 +36,52 @@ public class RedundantLoadOptimisation extends Optimisation
 				continue;
 			}
 			
-//			Register assignedReg = n.getInstruction().getAssignedRegister();
-//			if(assignedReg != null)
-//			{
-//				if(!dataFlowInfo.get(n).contains(assignedReg))
-//				{
-//					try {
-//						cfg.removeNode(n);
-//					} catch (Exception e) {
-//						System.out.println("Something went wrong when trying to remove a node.");
-//						e.printStackTrace();
-//						System.exit(-1);
-//					}
-//				}
-//			}					
-		}	
+			//Get the set of referenced registers, these are the ones we might change
+			Set<Register> referencedReg = new HashSet<Register>(n.getInstruction().getReferencedRegisters());
+
+			//Get the dataFlow info for this node (just for convenience)
+			HashMap<Register, Lattice<String>> dataFlowNode = dataFlowInfo.get(n);
+			
+			//For each register referenced by the instruction
+			for(Register reg : referencedReg)
+			{
+				//See if this register is known to be in a specific state
+				if( dataFlowNode.containsKey(reg) &&
+						(dataFlowNode.get(reg).getState() == Lattice.State.KNOWN) )
+				{
+					Lattice<String> value = dataFlowNode.get(reg);
+					//See if any other registers are in the same state.
+					//If so, select the one with lowest ID? TODO: better analysis!
+					Register rewriteReg = reg;
+					for(Register other : dataFlowNode.keySet())
+					{
+//						System.out.println(String.format(
+//								"comparing %s=%s, %s=%s, %s",
+//								reg, value, other, dataFlowNode.get(other),
+//								dataFlowNode.get(other).equals(value)
+//								));
+						if(dataFlowNode.get(other).equals(value))
+						{
+							if(other.register < rewriteReg.register)
+							{
+								rewriteReg = other;
+							}
+						}
+					}
+					//If we chose a different register
+					if(rewriteReg != reg)
+					//if(rewriteReg.register != reg.register)
+					{
+						n.getInstruction().rewriteReferencedRegisters(reg, rewriteReg);
+					}
+				}
+			}
+		}
+		System.out.println("***PRINTING MAP***");
+		for(Node k : cfg.getAllNodes())
+		{
+			System.out.println(String.format("Node: %s - Map: %s", k, dataFlowInfo.get(k)));
+		}
+
 	}	
-	
 }
