@@ -34,7 +34,7 @@ public class ConstantPropagationOptimisation extends Optimisation
 		Map<Node, Map<Register, Lattice<Integer>>> dataFlowInfo = ConstantFoldingAnalyser.analyse();
 		
 		List<Node> nodeList = cfg.getAllNodes();
-		
+
 		for(Node n : nodeList)
 		{
 			if(n.isSentinel())
@@ -55,11 +55,11 @@ public class ConstantPropagationOptimisation extends Optimisation
 				//If they don't appear in the Data Flow Info then it is implied to be Undefined/BOTTOM
 				Lattice<Integer> refRegLeftLattice = new Lattice<Integer>(Lattice.State.BOTTOM); 
 				Lattice<Integer> refRegRightLattice = new Lattice<Integer>(Lattice.State.BOTTOM);
-				if(dataFlowInfo.containsKey(refRegLeft))
+				if(dataFlowInfo.get(n).containsKey(refRegLeft))
 				{
 					refRegLeftLattice = dataFlowInfo.get(n).get(refRegLeft);
 				}
-				if(dataFlowInfo.containsKey(refRegRight))
+				if(dataFlowInfo.get(n).containsKey(refRegRight))
 				{
 					refRegRightLattice = dataFlowInfo.get(n).get(refRegRight);
 				}

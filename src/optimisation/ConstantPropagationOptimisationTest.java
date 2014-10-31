@@ -13,13 +13,11 @@ public class ConstantPropagationOptimisationTest
 	 * Tests our implementation works for the example provided in the spec.
 	 */
 	@Test
-	public void testAssignmentSpec()
+	public void test()
 	{
 		Program input = Parser.parse("input/constantPropagationBinOps");
 		Program expected = Parser.parse("expected/constantPropagationBinOps");
-		
-		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
-		
+		Program output = Optimiser.optimise(input, new ConstantPropagationOptimisation());
 		assertEquals(expected.toString(), output.toString());
 	}
 
