@@ -18,8 +18,8 @@ public abstract class Optimisation
 	 * Given a program, this will return a new program with the optimisation
 	 * applied by any subclass.
 	 * 
-	 * @param p
-	 * @return
+	 * @param p the program required to optimise
+	 * @return the program after optimisation has been applied
 	 */
 	public final Program optimise(Program p)
 	{
@@ -36,7 +36,7 @@ public abstract class Optimisation
 	/**
 	 * Must be implemented by any subclass. Holds the details of the optimisation specific operations.
 	 * 
-	 * @param cfg
+	 * @param cfg the control flow graph to modify with the optimisation
 	 */
-	public abstract void runOptimisation(ControlFlowGraph cfg);
+	protected abstract void runOptimisation(ControlFlowGraph cfg);
 }
