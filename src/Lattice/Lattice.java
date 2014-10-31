@@ -110,4 +110,6 @@ public class Lattice<T>
 			throw new UnknownLatticeState("Value not TOP, KNOWN or BOTTOM");
 		}
 	}
+	
+	
 }
