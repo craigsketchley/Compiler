@@ -32,4 +32,20 @@ public class LdInstruction implements Instruction {
 		return register;
 	}
 
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		//nothing to do
+		return;
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		if(this.register.equals(register))
+		{
+			this.register = new Register(register);
+		}
+	}
+	
 }

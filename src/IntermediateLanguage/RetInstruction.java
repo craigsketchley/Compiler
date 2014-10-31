@@ -30,4 +30,20 @@ public class RetInstruction implements Instruction {
 		return null;
 	}
 
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		if(register.equals(from))
+		{
+			register = new Register(to);
+		}
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		//nothing to do
+		return;
+	}
+
 }
