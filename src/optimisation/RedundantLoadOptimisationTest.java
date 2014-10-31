@@ -27,14 +27,17 @@ public class RedundantLoadOptimisationTest {
 	public void testAssignmentSpec() {
 
 		Program input = Parser.parse("input/redundantLoadsAssignmentSpec");
-		//Program expected = Parser.parse("expected/redundantLoad");
-		System.out.println(input);
+		Program expected = Parser.parse("expected/redundantLoadsAssignmentSpec");
+		
+//		System.out.println(input);
 		
 		Program output = Optimiser.optimise(input, new RedundantLoadOptimisation());
-		System.out.println(output);
-		output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
-		System.out.println(output);
-		//assertEquals(expected.toString(), output.toString());
+//		System.out.println(output);
+		
+		assertEquals(expected.toString(), output.toString());
+
+//		output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+//		System.out.println(output);
 
 	}
 

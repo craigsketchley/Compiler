@@ -95,7 +95,7 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 	@Override
 	public HashMap<Register, Lattice<String>> meet(Node n)
 	{
-		HashMap<Register, Lattice<String>> in = new HashMap<Register, Lattice<String>>();
+		HashMap<Register, Lattice<String>> result = new HashMap<Register, Lattice<String>>();
 		
 		Set<Register> registerIntersection = new HashSet<Register>();
 		
@@ -104,7 +104,7 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		if(!it.hasNext())
 		{
 			//no predecessors
-			return in;
+			return result;
 		}
 		//start with everything from first node
 		registerIntersection.addAll(out.get(it.next()).keySet());
@@ -125,11 +125,11 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 			}
 			if(value.getState() == Lattice.State.KNOWN)
 			{
-				in.put(key, value); //TODO: should we always put this in? e.g. when TOP?
+				result.put(key, value); //TODO: should we always put this in? e.g. when TOP?
 			}
 		}
 		
-		return in;
+		return result;
 	}
 
 	public boolean updateMeet(Map<Node, HashMap<Register, Lattice<String>>> map, Node n)
@@ -141,40 +141,42 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 	
 	public HashMap<Register, Lattice<String>> transfer(Node n)
 	{
-		HashMap<Register, Lattice<String>> out = new HashMap<Register, Lattice<String>>();
+		HashMap<Register, Lattice<String>> result =
+				new HashMap<Register, Lattice<String>>();
+
+		//initialise the result with the 'in' set
+		result.putAll(in.get(n));
 		
-		//start with the gen values
-		out.putAll(gen(n));
-		
-		//subtract kill from in
-		HashMap<Register, Lattice<String>> in = new HashMap<Register, Lattice<String>>();
-		in.putAll(this.in.get(n));
+		//subtract the 'kill' set from result
 		HashMap<Register, Lattice<String>> kill = kill(n);
 		for(Register killkey : kill.keySet())
 		{
+			//a null key represents a variable with wildcard register
 			if(killkey == null)
 			{
+				//remove all pairs matching the value
 				String killvalue = kill.get(killkey).getValue();
-				for(Register inkey : in.keySet())
+				for(Register inkey : result.keySet())
 				{
-					Lattice<String> invalue = in.get(inkey);
-					if((invalue.getState() == Lattice.State.KNOWN) &&
-							(invalue.getValue().equals(killvalue)))
+					Lattice<String> invalue = result.get(inkey);
+					//Lattice.equals is true iff both values are KNOWN and equal
+					if(invalue.equals(killvalue))
 					{
-						in.remove(inkey);
+						result.remove(inkey);
 					}
 				}
 			}
+			//non-null keys represent registers to remove
 			else
 			{
-				in.remove(killkey);
+				result.remove(killkey);
 			}
 		}
+
+		//union the 'gen' set into result
+		result.putAll(gen(n));
 		
-		//merge in the modified set
-		out.putAll(in);
-		
-		return out;		
+		return result;		
 	}
 
 	@Override
