@@ -42,6 +42,17 @@ public class DeadCodeEliminationOptimisationTest
 		
 		assertEquals(expected.toString(), output.toString());
 	}
+	
+	@Test
+	public void testUnreachable()
+	{
+		Program input = Parser.parse("input/deadCodeUnreachable");
+		Program expected = Parser.parse("expected/deadCodeUnreachable");
+		
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
+		assertEquals(expected.toString(), output.toString());
+	}
 
 	@Test
 	public void testDoubleReturn()

@@ -62,10 +62,11 @@ public class Parser
 		}
 		
 		//Pre-processing:
-		//Add spaces between word breaks (i.e. between ( and labels etc.)
+		//Strip comments
+		code = code.replaceAll("//[^\n]*", "");
+		//Add whitespace around brackets (i.e. between ( and labels etc.)
 		code = code.replaceAll("\\(", " ( ");
 		code = code.replaceAll("\\)", " ) ");
-		//code = code.replaceAll("\\b", " ");
 		//Replace all blocks of whitespace with single spaces
 		code = code.replaceAll("\\s+", " ");
 		

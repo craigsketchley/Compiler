@@ -34,4 +34,23 @@ public class CallInstruction implements Instruction
 	{
 		return register;
 	}
+
+	@Override
+	public void rewriteReferencedRegisters(Register from, Register to)
+	{
+		for(int i = 0; i < args.size(); ++i)
+		{
+			if(args.get(i).equals(from))
+			{
+				args.set(i, new Register(to));
+			}
+		}
+	}
+	
+	@Override
+	public void rewriteAssignedRegister(Register register)
+	{
+		this.register = new Register(register);
+	}
+
 }
