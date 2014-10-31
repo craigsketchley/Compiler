@@ -10,6 +10,7 @@ import CFG.ControlFlowGraph;
 import CFG.Node;
 import IntermediateLanguage.Instruction;
 import IntermediateLanguage.Register;
+import Lattice.Lattice;
 
 public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {
@@ -69,7 +70,18 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 		
 		return out;
 	}
-	
+
+	@Override
+	public boolean updateMeet(Map<Node, Set<Register>> map, Node n)
+	{
+		int size = map.get(n).size();
+		//Merges with the current out set of the node to maintain MONOTONICITY
+		map.get(n).addAll(meet(n));
+		//The set changed iff the size changed
+		return size != map.get(n).size();
+	}
+
+	@Override
 	public Set<Register> transfer(Node n)
 	{
 		Set<Register> in = new HashSet<Register>();
@@ -82,31 +94,7 @@ public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 	@Override
 	public Map<Node, Set<Register>> analyse()
 	{
-		boolean isChanged = true; 
-		
-		/*From the end of the CFG*/
-		List<Node> bfsOrdering = cfg.bfs(false);
-		
-		while(isChanged)
-		{
-			isChanged = false;
-			for(Node n : bfsOrdering)
-			{
-				in.put(n, transfer(n));
-			}
-			for(Node n : bfsOrdering)
-			{
-				int oldCount = out.get(n).size(); 
-				//Merges with the current out set of the node to maintain MONOTONICITY
-				out.get(n).addAll(meet(n));
-				if(oldCount != out.get(n).size())
-				{
-					isChanged = true; 
-				}
-			}
-		}
-		
-		return out;
+		return analyse(Direction.BACKWARDS);
 	}
 	
 }
