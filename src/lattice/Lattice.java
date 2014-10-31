@@ -32,31 +32,42 @@ public class Lattice<T>
 		}
 	}
 	
-	// member variables
 	private T value; //The actual value (if known)
 	private State state; //The state (TOP, BOTTOM, KNOWN)
 	
-	/** Constructor if the state is TOP or BOTTOM */
+	/**
+	 * Constructor for states TOP or BOTTOM (value is set to null)
+	 * @param state The initial state of the lattice
+	 */
 	public Lattice(State state)
 	{
 		this.value = null;
 		this.state = state;		
 	}
 	
-	/** Constructor if the value is known (KNOWN) */
+	/**
+	 * Constructor for known values (state is set to KNOWN)
+	 * @param value The initial value of the lattice
+	 */
 	public Lattice(T value)
 	{
 		this.value = value;
 		this.state = State.KNOWN;
 	}
 	
-	/** Retrieve the state */
+	/**
+	 * Retrieve the state.
+	 * @return the current state of the lattice
+	 */
 	public State getState()
 	{
 		return state;
 	}
 	
-	/** Retrieve the value. Throws exception if state is not MIDDLE */
+	/**
+	 * Retrieve the value. Throws an exception if state is not MIDDLE
+	 * @return the value of the state, if known
+	 */
 	public T getValue()
 	{
 		if(state == State.KNOWN)
@@ -65,12 +76,17 @@ public class Lattice<T>
 		}
 		else
 		{
-			throw new UnknownLatticeState("Tried to get a middle value, but state was TOP or BOTTOM");
+			throw new UnknownLatticeState(
+					"Tried to get a middle value, but state was TOP or BOTTOM");
 		}
 	}
 	
-	/** Return the result of merging another Value into this one.
-	 * Does not change the other value */
+	/**
+	 * Merges another lattice into this one (then returns itself)
+	 * Changes the called object, but not the argument
+	 * @param other Another lattice
+	 * @return itself, after merging in the other lattice
+	 */
 	public Lattice<T> merge(Lattice<T> other)
 	{
 		switch(this.getState())
@@ -111,17 +127,26 @@ public class Lattice<T>
 		}
 	}
 	
+	/**
+	 * Returns the string representation of the lattice:
+	 *  TOP, BOTTOM, or the known value itself
+	 */
 	public String toString()
 	{
 		switch(state)
 		{
 		case TOP: return "TOP";
-		case BOTTOM: return "TOP";
+		case BOTTOM: return "BOTTOM";
 		case KNOWN: return value.toString();
 		}
 		return "Invalid state";
 	}
 	
+	/**
+	 * Check equality of two lattice objects
+	 * @param other Another lattice object
+	 * @return true iff both are known and carry the same value
+	 */
 	public boolean equals(Lattice<T> other) {
 		if(other.getState() != this.getState())
 		{
@@ -134,18 +159,28 @@ public class Lattice<T>
 		return false; //not enough information
 	}
 	
+	/**
+	 * Sets the value (and updates the state to KNOWN)
+	 * @param val
+	 */
 	public void setValue(T val)
 	{
 		state = State.KNOWN;
 		value = val;
 	}
-	
+
+	/**
+	 * Sets the state to TOP (and nulls the value)
+	 */
 	public void setStateTop()
 	{
 		value = null;
 		state = State.TOP;
 	}
 	
+	/**
+	 * Sets the state to BOTTOM (and nulls the value)
+	 */
 	public void setStateBottom()
 	{
 		value = null;
