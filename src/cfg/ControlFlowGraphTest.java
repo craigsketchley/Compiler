@@ -102,20 +102,4 @@ public class ControlFlowGraphTest
 			assertEquals(cfg.convertToFunction().toString(), functionOut.toString());
 		}
 	}
-	
-	/**
-	 * Testing removing certain nodes.
-	 */
-	@Test
-	public void testRemovingCFGNodes()
-	{
-		Program program = Parser.parse("input/factorialExample");
-		for (Function function : program.functions) {
-			ControlFlowGraph cfg = new ControlFlowGraph(function);
-			// TODO:?
-			
-		}
-	}
-
-
 }
