@@ -11,8 +11,12 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * Parser
  * Provides static methods to support parsing of files into Programs
+ * 
+ * This is a simple implementation of a recursive descent parser.
+ * Note that this parser was written for Assignment 3.
+ * It is assumed that the input will be well formed (since testing
+ * was in the scope of Assignment 2.)
  */
 public class Parser
 {

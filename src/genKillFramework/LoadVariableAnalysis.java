@@ -12,6 +12,16 @@ import lattice.Lattice;
 import cfg.ControlFlowGraph;
 import cfg.Node;
 
+/**
+ * See comments in the abstract DataFlowAnalysis class for general information.
+ * Comments in this file will detail only details unique to this analysis.
+ * 
+ * LoadVariableAnalysis is used to analyse information about Variables loaded
+ * into registers.
+ * 
+ * Maps are stored for each node. If a register is in the map, then it is known
+ * to hold a specific variable.
+ */
 public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lattice<String>>>
 {
 	public LoadVariableAnalysis(ControlFlowGraph cfg)
@@ -24,6 +34,14 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		}
 	}
 
+	/**
+	 * See the overridden method documentation for general details.
+	 * 
+	 * In this case, only Load Variable instructions generate values. The
+	 * generated value is a mapping of the assigned register, and a Lattice
+	 * class object holding the information that this register is known to hold
+	 * the variable
+	 */
 	@Override
 	public HashMap<Register, Lattice<String>> gen(Node n)
 	{
@@ -51,16 +69,25 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 					((LdInstruction) instruction).register,
 					new Lattice<String>(((LdInstruction) instruction).variable));
 		}
-		//other variable assignment, gen (register, TOP)
-		/*else
-		{
-			generatedInfo.put(
-					((StInstruction) instruction).register,
-					new Lattice<String>(Lattice.State.TOP)); //TODO: placeholder for KNOWN expression?
-		}*/
+		/*
+		 * a logical extension to this code, would be to track other types of
+		 * assignment, such as constants, or expressions.
+		 */
+		
 		return generatedInfo;
 	}
 
+	/**
+	 * See the overridden method documentation for general details.
+	 * 
+	 * Store instructions should kill all register/value pairs matching the
+	 * variable. This is indicated in the output of this function by a
+	 * (null, value) pair.
+	 * 
+	 * Any assignment to a register should kill the register/value pair (if
+	 * it exists) matching that particular register. This is represented in the
+	 * output of this function by a (register, TOP) pair.
+	 */
 	@Override
 	public HashMap<Register, Lattice<String>> kill(Node n)
 	{
@@ -82,7 +109,7 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 					null,
 					new Lattice<String>(((StInstruction) instruction).id));
 		}
-		//other variable assignment, gen (register, TOP)
+		//other register assignment, gen (register, TOP)
 		else if(instruction.getAssignedRegister() != null)
 		{
 			generatedInfo.put(
@@ -92,6 +119,20 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		return generatedInfo;
 	}
 
+	/**
+	 * See the overridden method documentation for general details.
+	 * 
+	 * First we get the intersection of all the registers with information
+	 * available from the predecessor nodes. We use intersection because if
+	 * information is missing from any execution path, then we do not know enough
+	 * about that register to optimise it (BOTTOM.)
+	 * 
+	 * We then merge the lattices for each register that we have information for.
+	 * Merging KNOWN and KNOWN results in KNOWN if and only if the value is identical.
+	 * Otherwise, the lattice is promoted to TOP (superposition.) Any registers which
+	 * are still KNOWN (fixed) values after the merge are useful information, so we
+	 * store them.
+	 */
 	@Override
 	public HashMap<Register, Lattice<String>> meet(Node n)
 	{
@@ -125,13 +166,17 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 			}
 			if(value.getState() == Lattice.State.KNOWN)
 			{
-				result.put(key, value); //TODO: should we always put this in? e.g. when TOP?
+				result.put(key, value);
 			}
+			/* note that TOP values are no more useful to us than BOTTOM,
+			 * in this particular analysis, so we simply omit them.
+			 */
 		}
 		
 		return result;
 	}
 
+	@Override
 	public boolean updateDataFlowInfo(Map<Node, HashMap<Register, Lattice<String>>> map, Node n)
 	{
 		int size = map.get(n).size();
@@ -139,6 +184,20 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 		return size != map.get(n).size();
 	}
 	
+	/**
+	 * See the overridden method documentation for general details.
+	 * 
+	 * The transfer function is quite simple, just removing the pairs
+	 * indicated by the output of the kill function.
+	 * 
+	 * We start with the 'in' set, then work through the 'kill' set.
+	 * Any wildcards (null, value) require us to kill all pairs with that
+	 * value. Other pairs (register, value) just require us to kill that
+	 * register.
+	 * 
+	 * Finally, we add the 'gen' set (at most one pair, in this case.)
+	 */
+	@Override
 	public HashMap<Register, Lattice<String>> transfer(Node n)
 	{
 		HashMap<Register, Lattice<String>> result =
@@ -182,6 +241,7 @@ public class LoadVariableAnalysis extends DataFlowAnalysis<HashMap<Register, Lat
 	@Override
 	public Map<Node, HashMap<Register, Lattice<String>>> analyse()
 	{
+		//Analyse from start->end
 		return analyse(Direction.FORWARDS);
 	}
 }
