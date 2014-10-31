@@ -110,4 +110,27 @@ public class Lattice<T>
 			throw new UnknownLatticeState("Value not TOP, KNOWN or BOTTOM");
 		}
 	}
+	
+	public String toString()
+	{
+		switch(state)
+		{
+		case TOP: return "TOP";
+		case BOTTOM: return "TOP";
+		case KNOWN: return value.toString();
+		}
+		return "Invalid state";
+	}
+	
+	public boolean equals(Lattice<T> other) {
+		if(other.getState() != this.getState())
+		{
+			return false;
+		}
+		if(state == State.KNOWN)
+		{
+			return value.equals(other.value);
+		}
+		return false; //not enough information
+	}
 }

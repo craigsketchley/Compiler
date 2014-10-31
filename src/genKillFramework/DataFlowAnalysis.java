@@ -144,7 +144,7 @@ public abstract class DataFlowAnalysis<T>
 			}
 		}
 		
-		return out;
+		return (direction == Direction.FORWARDS) ? in : out;
 	}
 
 }
