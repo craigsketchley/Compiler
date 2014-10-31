@@ -133,4 +133,32 @@ public class Lattice<T>
 		}
 		return false; //not enough information
 	}
+	
+	public void setValue(T val)
+	{
+		state = State.KNOWN;
+		value = val;
+	}
+	
+	public void setStateTop()
+	{
+		value = null;
+		state = State.TOP;
+	}
+	
+	public void setStateBottom()
+	{
+		value = null;
+		state = State.BOTTOM;
+	}
+	
+	public boolean isStateTop()
+	{
+		return (state == State.TOP);
+	}
+	
+	public boolean isStateBottom()
+	{
+		return (state == State.BOTTOM);
+	}
 }

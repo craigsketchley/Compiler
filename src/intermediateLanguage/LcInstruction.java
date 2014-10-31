@@ -48,5 +48,10 @@ public class LcInstruction implements Instruction
 		//nothing to do
 		return;
 	}
+	
+	public int getConstant()
+	{
+		return value;
+	}
 
 }

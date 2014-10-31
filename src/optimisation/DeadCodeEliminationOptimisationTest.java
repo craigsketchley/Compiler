@@ -19,6 +19,17 @@ public class DeadCodeEliminationOptimisationTest
 		
 		assertEquals(expected.toString(), output.toString());
 	}
+	
+	@Test
+	public void testAssignmentSpec2()
+	{
+		Program input = Parser.parse("input/deadCodeAssignmentSpec2");
+		Program expected = Parser.parse("expected/deadCodeAssignmentSpec2");
+		
+		Program output = Optimiser.optimise(input, new DeadCodeEliminationOptimisation());
+		
+		assertEquals(expected.toString(), output.toString());
+	}
 
 	@Test
 	public void testUselessLoads()
