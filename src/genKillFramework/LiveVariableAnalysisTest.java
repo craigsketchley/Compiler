@@ -1,5 +1,7 @@
 package genKillFramework;
 
+import intermediateLanguage.*;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -9,9 +11,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import CFG.ControlFlowGraph;
-import CFG.Node;
-import IntermediateLanguage.*;
+import cfg.ControlFlowGraph;
+import cfg.Node;
 
 public class LiveVariableAnalysisTest
 {

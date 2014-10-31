@@ -1,4 +1,10 @@
-package CFG;
+package cfg;
+
+import intermediateLanguage.Block;
+import intermediateLanguage.BrInstruction;
+import intermediateLanguage.Function;
+import intermediateLanguage.Instruction;
+import intermediateLanguage.RetInstruction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,12 +15,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-
-import IntermediateLanguage.Block;
-import IntermediateLanguage.BrInstruction;
-import IntermediateLanguage.Function;
-import IntermediateLanguage.Instruction;
-import IntermediateLanguage.RetInstruction;
 
 /**
  * Holds the Control Flow Graph for a given function from the AST. It can run

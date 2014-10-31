@@ -1,11 +1,10 @@
 package optimisation;
 
 import static org.junit.Assert.*;
+import intermediateLanguage.Parser;
+import intermediateLanguage.Program;
 
 import org.junit.Test;
-
-import IntermediateLanguage.Parser;
-import IntermediateLanguage.Program;
 
 public class RedundantLoadOptimisationTest {
 

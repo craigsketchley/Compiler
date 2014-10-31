@@ -1,13 +1,13 @@
 package optimisation;
 
 import static org.junit.Assert.assertEquals;
+import intermediateLanguage.Function;
+import intermediateLanguage.Parser;
+import intermediateLanguage.Program;
 
 import org.junit.Test;
 
-import CFG.ControlFlowGraph;
-import IntermediateLanguage.Function;
-import IntermediateLanguage.Parser;
-import IntermediateLanguage.Program;
+import cfg.ControlFlowGraph;
 
 public class OptimiserTest {
 

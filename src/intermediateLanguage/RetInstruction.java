@@ -1,36 +1,33 @@
-package IntermediateLanguage;
+package intermediateLanguage;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-public class LcInstruction implements Instruction
-{
+public class RetInstruction implements Instruction {
 	
-	public Register register; //the register loaded into
-	public int value; //the constant loaded
+	public Register register; //register containing the return value
 	
-	public LcInstruction(Register register, int value)
+	public RetInstruction(Register register)
 	{
 		this.register = register;
-		this.value = value;
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return String.format("(lc %s %d)", register, value);
+		return String.format("(ret %s)", register);
 	}
 
 	@Override
 	public List<Register> getReferencedRegisters()
 	{
-		return Collections.emptyList();
+		return Arrays.asList(register);
 	}
 
 	@Override
 	public Register getAssignedRegister()
 	{
-		return register;
+		return null;
 	}
 
 	@Override
