@@ -44,9 +44,32 @@ public class Parser
 	}
 	
 	/**
-	 * Parser.parse
+	 * Preprocess a string of code, then produce a space delimited scanner
+	 * @param string of code
+	 * @return Scanner (space delimited)
+	 */
+	public static Scanner buildScanner(String code)
+	{
+		//Pre-processing:
+		//Strip comments
+		code = code.replaceAll("//[^\n]*", "");
+		//Add whitespace around brackets (i.e. between ( and labels etc.)
+		code = code.replaceAll("\\(", " ( ");
+		code = code.replaceAll("\\)", " ) ");
+		//Replace all blocks of whitespace with single spaces
+		code = code.replaceAll("\\s+", " ");
+
+		//Create a scanner, returning tokens separated by spaces
+		Scanner scan = new Scanner(code);
+		scan.useDelimiter(" ");
+		return scan;
+	}
+	
+	/**
 	 * Static method that accepts a file path and either returns a Program object,
 	 * or null, or throws an exception.
+	 * @param path to a file
+	 * @return a Program object
 	 */
 	public static Program parse(String path)
 	{
@@ -60,19 +83,18 @@ public class Parser
 			e.printStackTrace();
 			return null; //Error reading file
 		}
-		
-		//Pre-processing:
-		//Strip comments
-		code = code.replaceAll("//[^\n]*", "");
-		//Add whitespace around brackets (i.e. between ( and labels etc.)
-		code = code.replaceAll("\\(", " ( ");
-		code = code.replaceAll("\\)", " ) ");
-		//Replace all blocks of whitespace with single spaces
-		code = code.replaceAll("\\s+", " ");
-		
-		//Create a scanner, returning tokens separated by spaces
-		Scanner scan = new Scanner(code);
-		scan.useDelimiter(" ");
+		return parseString(code);
+	}
+	
+	/**
+	 * Static method that accepts a string of code and returns a Program object,
+	 * or null, or throws an exception.
+	 * @param code text
+	 * @return a Program object
+	 */
+	public static Program parseString(String code)
+	{
+		Scanner scan = buildScanner(code);
 		
 		//The program must start with a (
 		scan.next("\\(");
@@ -96,8 +118,20 @@ public class Parser
 	}
 	
 	/**
-	 * Parser.parseFunction
+	 * Alternative entry point into parseFunction(Scanner)
+	 * It just generates a scanner based on the given string of code
+	 * @param a String of code starting with a function 
+	 * @return a Function object
+	 */
+	public static Function parseFunction(String code)
+	{
+		return parseFunction(buildScanner(code));
+	}
+	
+	/**
 	 * Given a scanner, parse in the next function
+	 * @param a Scanner containing code
+	 * @return a Function object
 	 */
 	public static Function parseFunction(Scanner scan)
 	{
@@ -134,8 +168,20 @@ public class Parser
 	}
 	
 	/**
-	 * Parser.parseBlock
+	 * Alternative entry point into parseBlock(Scanner)
+	 * It just generates a scanner based on the given string of code
+	 * @param a String of code starting with a block
+	 * @return a Block object
+	 */
+	public static Block parseBlock(String code)
+	{
+		return parseBlock(buildScanner(code));
+	}
+	
+	/**
 	 * Given a scanner, parse in the next block
+	 * @param a Scanner containing code
+	 * @return a Block object
 	 */
 	public static Block parseBlock(Scanner scan)
 	{
@@ -167,11 +213,22 @@ public class Parser
 		
 	}
 	
-	public static Instruction parseInstruction(String instruction)
+	/**
+	 * Alternative entry point into parseInstruction(Scanner)
+	 * It just generates a scanner based on the given string of code
+	 * @param a String of code starting with an instruction 
+	 * @return an Instruction object
+	 */
+	public static Instruction parseInstruction(String code)
 	{
-		return parseInstruction(new Scanner(instruction));
+		return parseInstruction(buildScanner(code));
 	}
 	
+	/**
+	 * Given a scanner, parse in the next Instruction
+	 * @param a Scanner containing code
+	 * @return an Instruction object
+	 */
 	public static Instruction parseInstruction(Scanner scan)
 	{
 		//The instruction must start with a (, then the type
