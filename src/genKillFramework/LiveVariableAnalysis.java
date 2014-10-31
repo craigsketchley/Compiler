@@ -11,8 +11,23 @@ import java.util.Set;
 import cfg.ControlFlowGraph;
 import cfg.Node;
 
+/**
+ * Anaylses a ControlFlowGraph for Live Variables. 
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {
+	/**
+	 * Constructs a LiveVariableAnalysis given a ControlFlowGraph (CFG).
+	 * 
+	 * Once constructed, call the {@link #analyse()} method to initiate analysis and return a mapping from a Node in the CFG to Set<Register>.
+	 * 
+	 * @param cfg the control flow graph.
+	 */
 	public LiveVariableAnalysis(ControlFlowGraph cfg)
 	{
 		super(cfg);

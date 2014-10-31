@@ -1,5 +1,3 @@
-import intermediateLanguage.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -8,7 +6,19 @@ import java.util.Set;
 
 import cfg.*;
 import optimisation.*;
+import intermediateLanguage.*;
 
+/**
+ * 
+ * The main entry point to the program. This contains the `main` method and
+ * parses the command line arguments to optimise the provided input file into
+ * an output file, according to the optimisation flags.
+ * 
+ * @author Joe Godbehere
+ * @author Ricky Ratnayake
+ * @author Craig Sketchley
+ *
+ */
 public class IntermediateCodeOptimiser
 {
 	private static int NUM_POSSIBLE_OPTIMISATIONS = 3;
@@ -16,11 +26,19 @@ public class IntermediateCodeOptimiser
 	private static String outputFile;
 	private static Set<OptFlag> opts; 
 	
+	/**
+	 * Enumeration type to specify the type of optimisation required.
+	 */
 	public static enum OptFlag
 	{
 		UNREACHABLE, DEAD_CODE, REDUNDANT_LOAD
 	}
 	
+	/**
+	 * The main entry point to the program.
+	 * 
+	 * @param args The command line arguments.
+	 */
 	public static void main(String[] args)
 	{
 
@@ -142,6 +160,9 @@ public class IntermediateCodeOptimiser
 		}
 	}
 	
+	/**
+	 * Helper method to print out the command line help text.
+	 */
 	public static void printHelpText()
 	{
 		String toPrint = new StringBuilder()

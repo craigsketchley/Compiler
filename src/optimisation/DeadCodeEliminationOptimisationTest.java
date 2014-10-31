@@ -2,7 +2,7 @@ package optimisation;
 
 import static org.junit.Assert.*;
 import intermediateLanguage.Parser;
-import intermediateLanguage.Program;
+import intermediateLanguage.*;
 
 import org.junit.Test;
 

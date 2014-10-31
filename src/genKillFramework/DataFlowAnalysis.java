@@ -26,12 +26,29 @@ public abstract class DataFlowAnalysis<T>
 	 */
 	public enum Direction {FORWARDS, BACKWARDS}
 	
+	/**
+	 * A map from Nodes to data flow information, specific to the certain
+	 * analysis. Holds all the IN data flow information for all the nodes in
+	 * the CFG.
+	 */
 	protected Map<Node, T> in;
+	
+	/**
+	 * A map from Nodes to data flow information, specific to the certain
+	 * analysis. Holds all the OUT data flow information for all the nodes in
+	 * the CFG.
+	 */
 	protected Map<Node, T> out;
+	
+	/**
+	 * The Control Flow Graph for the constructed DataFlowAnalysis.
+	 */
 	ControlFlowGraph cfg;
 	
 	/**
-	 * Creates the in and out information mappings for the given control flow graph
+	 * Creates the in and out information mappings for the given control flow
+	 * graph.
+	 * 
 	 * @param cfg
 	 */
 	public DataFlowAnalysis(ControlFlowGraph cfg)
@@ -95,6 +112,7 @@ public abstract class DataFlowAnalysis<T>
 	/**
 	 * Given a control flow graph, it will analyse it and produce an analysis
 	 * result as a mapping from nodes to information.
+	 * 
 	 * @return
 	 */
 	public abstract Map<Node, T> analyse();
@@ -102,8 +120,10 @@ public abstract class DataFlowAnalysis<T>
 	/**
 	 * Given a control flow graph and a direction to analyse it, it will analyse
 	 * it and produce an analysis result as a mapping from nodes to information
+	 * 
 	 * @param direction
-	 * @return
+	 * @return returns a mapping from node to data flow information, depending
+	 * on the implemented analysis.
 	 */
 	public Map<Node, T> analyse(Direction direction)
 	{

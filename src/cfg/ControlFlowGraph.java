@@ -161,7 +161,7 @@ public class ControlFlowGraph
 	 * Given a node, remove the node from this CFG.
 	 * @throws Exception 
 	 * 
-	 * TODO: Use custom exceptions.
+	 * TODO: Use custom exceptions?
 	 */
 	public void removeNode(Node inNode) throws Exception
 	{
