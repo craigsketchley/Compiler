@@ -19,5 +19,3 @@ _Link to the HTML generated documentation, we could push this to a gh-pages._
 - Joe Godbehere (SID)
 - Ricky Ratnayake (SID)
 - Craig Sketchley (312127790)
-
-    
