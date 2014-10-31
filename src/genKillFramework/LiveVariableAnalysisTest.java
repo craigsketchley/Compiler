@@ -1,13 +1,9 @@
 package genKillFramework;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,12 +41,12 @@ public class LiveVariableAnalysisTest
 
 			System.out.println(cfg);
 
-			String actual = cfg.toString();
 			System.out.println("***PRINTING MAP***");
 			for(Node k : cfg.getAllNodes())
 			{
 				System.out.println(output.get(k));
 			}
+//			String actual = cfg.toString();
 			//assertTrue(actual.replaceAll("\\s+","").equalsIgnoreCase(expected.replaceAll("\\s+","")));
 //			assertEquals(expected, expected);
 		}

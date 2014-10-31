@@ -2,9 +2,6 @@ package optimisation;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Test;
 
 import CFG.ControlFlowGraph;

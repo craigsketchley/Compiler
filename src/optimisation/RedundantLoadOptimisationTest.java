@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import CFG.Node;
 import IntermediateLanguage.Parser;
 import IntermediateLanguage.Program;
 

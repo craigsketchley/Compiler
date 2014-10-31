@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import IntermediateLanguage.Instruction;
-import IntermediateLanguage.Register;
 
 public class Node
 {

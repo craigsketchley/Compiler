@@ -77,6 +77,8 @@ public class RedundantLoadOptimisation extends Optimisation
 				}
 			}
 		}
+		
+		//TODO: remove before submission, just debugging info
 		System.out.println("***PRINTING MAP***");
 		for(Node k : cfg.getAllNodes())
 		{

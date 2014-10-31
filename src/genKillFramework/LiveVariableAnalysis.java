@@ -1,6 +1,5 @@
 package genKillFramework;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import CFG.ControlFlowGraph;
 import CFG.Node;
 import IntermediateLanguage.Instruction;
 import IntermediateLanguage.Register;
-import Lattice.Lattice;
 
 public class LiveVariableAnalysis extends DataFlowAnalysis<Set<Register>>
 {
