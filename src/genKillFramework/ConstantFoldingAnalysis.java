@@ -1,16 +1,12 @@
 package genKillFramework;
 
-import genKillFramework.DataFlowAnalysis.Direction;
 import intermediateLanguage.BinOpInstruction;
 import intermediateLanguage.Instruction;
 import intermediateLanguage.LcInstruction;
 import intermediateLanguage.Register;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import lattice.Lattice;
 import cfg.ControlFlowGraph;

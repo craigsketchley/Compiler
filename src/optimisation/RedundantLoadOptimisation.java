@@ -17,7 +17,7 @@ import cfg.Node;
 /**
  * Applies the redundant load optimisation.
  * 
- * See LoadVariableAnalysis for details of the gen / kill / meet / transfer
+ * @see LoadVariableAnalysis for details of the gen / kill / meet / transfer
  * 
  * Once we have the analysis data, we look for uses of registers that
  * we can safely rewrite. For each statement, we look at all referenced

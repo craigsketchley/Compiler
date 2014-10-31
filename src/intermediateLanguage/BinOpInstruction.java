@@ -76,6 +76,12 @@ public class BinOpInstruction implements Instruction
 			return leftValue / rightValue;
 		case "sub":
 			return leftValue - rightValue;
+		case "lt":
+			return (leftValue < rightValue) ? 1:0;
+		case "gt":
+			return (leftValue > rightValue) ? 1:0;
+		case "eq":
+			return (leftValue == rightValue) ? 1:0;
 		default:
 			throw new Exception("Binary Operation not defined");
 		}
