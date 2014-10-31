@@ -117,7 +117,7 @@ public class IntermediateCodeOptimiser
 		}
 
 		//Parse any remaining arguments
-		new HashSet<OptFlag>();
+		opts = new HashSet<OptFlag>();
 		for(int i = 1; i < args.length; ++i)
 		{
 			switch(args[i])
