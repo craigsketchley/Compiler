@@ -76,6 +76,22 @@ public class ControlFlowGraphTest
 		}
 	}
 	
+	@Test
+	public void testRemoveUnreachableCodeDoubleReturn()
+	{
+		Program programInput = Parser.parse("input/unreachableCodeDoubleReturn");
+		Program programOutput = Parser.parse("expected/unreachableCodeDoubleReturn");
+		for (int i = 0; i < programInput.functions.size(); i++) {
+			Function functionIn = programInput.functions.get(i);
+			Function functionOut = programOutput.functions.get(i);
+			
+			ControlFlowGraph cfg = new ControlFlowGraph(functionIn);
+			cfg.removeUnreachableCode();
+			
+			assertEquals(cfg.convertToFunction().toString(), functionOut.toString());
+		}
+	}
+	
 	/**
 	 * Testing removing certain nodes.
 	 */

@@ -28,7 +28,7 @@ public class DeadCodeEliminationOptimisation extends Optimisation
 	{
 		LiveVariableAnalysis liveVariableAnalyser = new LiveVariableAnalysis(cfg);
 		Map<Node, Set<Register>> dataFlowInfo = liveVariableAnalyser.analyse();
-		List<Node> nodeList = cfg.bfs(true);
+		List<Node> nodeList = cfg.getAllNodes();
 	
 		Iterator<Node> it = nodeList.iterator();
 		while(it.hasNext())
