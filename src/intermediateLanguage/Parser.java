@@ -16,19 +16,25 @@ import java.util.regex.Pattern;
  */
 public class Parser
 {
-	// A pattern matching a legal variable or function name
+	/**
+	 * A pattern matching a legal variable or function name
+	 */
 	public final static Pattern ID = Pattern.compile("[a-zA-Z][a-zA-Z0-9]*");
 
-	//public final static Pattern NUM = Pattern.compile("-?[0-9]+"); just use nextInt
-	
-	// A pattern matching a legal register id
+	/**
+	 * A pattern matching a legal register id
+	 */
 	public final static Pattern REG = Pattern.compile("r[1-9][0-9]*");
 	
-	// A partial pattern (string) of the instruction labels
+	/**
+	 * A partial pattern (string) of the instruction labels
+	 */
 	public final static String OP_STR =
 			"(lc)|(ld)|(st)|(add)|(sub)|(mul)|(div)|(lt)|(gt)|(eq)|(br)|(ret)|(call)";
 	
-	// A pattern matching an instruction, *excluding* the trailing parenthesis!
+	/**
+	 * A pattern matching an instruction, *excluding* the trailing parenthesis!
+	 */
 	public final static Pattern INSTRUCTION = Pattern.compile(
 			String.format("\\s*\\( (%s) [^)]+", OP_STR));
 
@@ -47,7 +53,7 @@ public class Parser
 	
 	/**
 	 * Preprocess a string of code, then produce a space delimited scanner
-	 * @param string of code
+	 * @param code a string of code
 	 * @return Scanner (space delimited)
 	 */
 	public static Scanner buildScanner(String code)
@@ -88,7 +94,7 @@ public class Parser
 	/**
 	 * Static method that accepts a file path and either returns a Program object,
 	 * or null, or throws an exception.
-	 * @param path to a file
+	 * @param path the path to a file
 	 * @return a Program object
 	 */
 	public static Program parse(String path)
@@ -99,7 +105,7 @@ public class Parser
 	/**
 	 * Static method that accepts a string of code and returns a Program object,
 	 * or null, or throws an exception.
-	 * @param code text
+	 * @param code intermediate code, as a string
 	 * @return a Program object
 	 */
 	public static Program parseString(String code)
@@ -137,7 +143,7 @@ public class Parser
 	/**
 	 * Alternative entry point into parseFunction(Scanner)
 	 * It just generates a scanner based on the given string of code
-	 * @param a String of code starting with a function 
+	 * @param code a String of code starting with a function 
 	 * @return a Function object
 	 */
 	public static Function parseFunction(String code)
@@ -147,7 +153,7 @@ public class Parser
 	
 	/**
 	 * Given a scanner, parse in the next function
-	 * @param a Scanner containing code
+	 * @param scan a Scanner containing code
 	 * @return a Function object
 	 */
 	public static Function parseFunction(Scanner scan)
@@ -193,7 +199,7 @@ public class Parser
 	/**
 	 * Alternative entry point into parseBlock(Scanner)
 	 * It just generates a scanner based on the given string of code
-	 * @param a String of code starting with a block
+	 * @param code a String of code starting with a block
 	 * @return a Block object
 	 */
 	public static Block parseBlock(String code)
@@ -203,7 +209,7 @@ public class Parser
 	
 	/**
 	 * Given a scanner, parse in the next block
-	 * @param a Scanner containing code
+	 * @param scan a Scanner containing code
 	 * @return a Block object
 	 */
 	public static Block parseBlock(Scanner scan)
@@ -245,7 +251,7 @@ public class Parser
 	/**
 	 * Alternative entry point into parseInstruction(Scanner)
 	 * It just generates a scanner based on the given string of code
-	 * @param a String of code starting with an instruction 
+	 * @param code a String of code starting with an instruction 
 	 * @return an Instruction object
 	 */
 	public static Instruction parseInstruction(String code)
@@ -255,7 +261,7 @@ public class Parser
 	
 	/**
 	 * Given a scanner, parse in the next Instruction
-	 * @param a Scanner containing code
+	 * @param scan a Scanner containing code
 	 * @return an Instruction object
 	 */
 	public static Instruction parseInstruction(Scanner scan)
@@ -302,7 +308,7 @@ public class Parser
 	/**
 	 * Alternative entry point into parseId(Scanner)
 	 * It just generates a scanner based on the given string of code
-	 * @param a String of code starting with an ID
+	 * @param code a String of code starting with an ID
 	 * @return an ID object (String)
 	 */
 	public static String parseId(String code)
@@ -332,7 +338,7 @@ public class Parser
 	/**
 	 * Alternative entry point into parseReg(Scanner)
 	 * It just generates a scanner based on the given string of code
-	 * @param a String of code starting with a Register
+	 * @param code a String of code starting with a Register
 	 * @return a Register object
 	 */
 	public static Register parseReg(String code)
