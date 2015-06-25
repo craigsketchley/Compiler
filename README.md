@@ -1,5 +1,3 @@
-# COMP3109 Assignment 3
-
 ## Compiler Optimisation
 
 This is an implementation of a Compiler Optimiser for the Intermediate Language defined in the [assignment specification](A03-Optimizer.pdf).
